@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+<g>
+	<g>
+		<path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M12.0081,0.7705
+			c-6.21,0-11.2455,5.0351-11.2455,11.2455s5.0356,11.2455,11.2455,11.2455s11.2455-5.0351,11.2455-11.2455
+			S18.2181,0.7705,12.0081,0.7705L12.0081,0.7705z"/>
+	</g>
+	<polygon fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		8.9327,16.768 7.0215,10.8704 12.0208,7.2259 17.0212,11.0166 15.1119,16.768 	"/>
+	<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		16.3244,1.6288 12.0208,3.4621 7.7306,1.6128 	"/>
+	<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		3.4962,4.6671 3.9324,9.3606 0.8005,12.945 	"/>
+	<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		2.511,17.8622 7.0224,18.9012 9.4031,22.9582 	"/>
+	<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		14.6425,22.9512 17.0212,18.8992 21.6336,17.8336 	"/>
+	<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		23.2177,12.9211 20.1088,9.3577 20.5309,4.6797 	"/>
+	
+		<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="12.0208" y1="3.4621" x2="12.0208" y2="7.2259"/>
+	
+		<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="17.0212" y1="11.0166" x2="20.1088" y2="9.3577"/>
+	
+		<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="15.1119" y1="16.768" x2="17.0212" y2="18.8992"/>
+	
+		<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="8.9327" y1="16.768" x2="7.0224" y2="18.9012"/>
+	
+		<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="3.9324" y1="9.3606" x2="7.0215" y2="10.8704"/>
+</g>
+<rect x="-0.0061" y="0" fill="none" width="24" height="24"/>
+</svg>

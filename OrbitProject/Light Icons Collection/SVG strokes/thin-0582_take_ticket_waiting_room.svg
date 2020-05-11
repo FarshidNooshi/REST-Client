@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+<g>
+	<g>
+		<g>
+			
+				<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" x1="6.5332" y1="3.0055" x2="7.5332" y2="3.0055"/>
+			
+				<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.7897,3.5795" x1="11.1126" y1="3.0055" x2="14.6921" y2="3.0055"/>
+			
+				<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" x1="16.4818" y1="3.0055" x2="17.4818" y2="3.0055"/>
+		</g>
+	</g>
+	<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" points="10.4864,12.5001 6.8596,12.5001 
+		5.4864,10.9908 5.4864,4.3621 6.4909,3.0037 5.4864,1.648 5.4864,0.5001 	"/>
+	<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" points="18.4864,0.5001 18.4864,1.648 
+		17.4818,3.0037 18.4864,4.3621 18.4864,10.9908 17.5458,12.5001 13.4864,12.5001 	"/>
+	
+		<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" x1="20.4727" y1="0.5001" x2="3.4883" y2="0.5001"/>
+	<path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" d="M13.4864,15.5085v-4.5547
+		c0-1.9301-3-1.9284-3,0v4.8809c0,0-2.5583,3.4106-0.073,7.6638"/>
+	<path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" d="M17.2301,12.5001
+		c0,0,0.8596,2.0547-0.7561,6.3888c-0.8091,2.1705-1.1017,4.6096-1.1017,4.6096"/>
+	<path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" d="M10.4476,14.9858H7.7501
+		c-1.6531,0-1.6557-2.4858,0-2.4858h2.7363"/>
+	<path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" d="M9.6942,17.455H8.6209
+		c-1.504,0-1.516-2.4692,0-2.4692h1.8267"/>
+	
+		<ellipse fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" cx="8.6629" cy="6.4507" rx="1.1013" ry="1.4276"/>
+	<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" points="13.7921,5.0231 15.4696,5.0231 
+		14.0484,7.8829 	"/>
+	<path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M10.9227,5.0196
+		h1.7007l-1.105,1.3558c0,0,1.2257-0.0955,1.105,0.8699c-0.1176,0.9405-1.4969,0.7289-1.8025,0.1646"/>
+</g>
+<rect x="-0.0136" y="0.0001" fill="none" width="24" height="24"/>
+</svg>

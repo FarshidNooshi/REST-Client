@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+<g>
+	<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		15.5353,8.3255 15.5353,0.4998 0.5353,0.4998 0.5353,15.4998 8.361,15.4998 	"/>
+	<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		8.361,15.4998 8.361,23.5597 23.5951,23.5597 23.5951,8.3255 15.5353,8.3255 	"/>
+	<g>
+		<g>
+			<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" points="9.361,15.4998 8.361,15.4998 
+				8.361,14.4998 			"/>
+			
+				<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.0349,2.0697" x1="8.361" y1="12.4302" x2="8.361" y2="10.3604"/>
+			<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" points="8.361,9.3255 8.361,8.3255 
+				9.361,8.3255 			"/>
+			
+				<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.0349,2.0697" x1="11.4307" y1="8.3255" x2="13.5004" y2="8.3255"/>
+			<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" points="14.5354,8.3255 15.5354,8.3255 
+				15.5354,9.3255 			"/>
+			
+				<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.0349,2.0697" x1="15.5354" y1="11.3953" x2="15.5354" y2="13.4649"/>
+			<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" points="15.5354,14.4998 
+				15.5354,15.4998 14.5354,15.4998 			"/>
+			
+				<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.0349,2.0697" x1="12.4656" y1="15.4998" x2="10.3959" y2="15.4998"/>
+		</g>
+	</g>
+</g>
+<rect x="0.0293" y="0.0001" fill="none" width="24" height="24"/>
+</svg>

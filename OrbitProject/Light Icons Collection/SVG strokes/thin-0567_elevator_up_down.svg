@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+<g>
+	
+		<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="16.4863" y1="19.8712" x2="16.4863" y2="14.0002"/>
+	<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		19.2755,17.0646 16.5279,19.8712 13.7803,17.0646 	"/>
+	
+		<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="16.4863" y1="4.3135" x2="16.4863" y2="10.0002"/>
+	<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		13.7803,7.1201 16.5279,4.3135 19.2755,7.1201 	"/>
+	<path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M23.4864,2.8774
+		c0-1.3129-1.0642-2.3772-2.377-2.3772H2.8633c-1.3128,0-2.377,1.0643-2.377,2.3772V21.123c0,1.3129,1.0642,2.3772,2.377,2.3772
+		h18.246c1.3128,0,2.377-1.0643,2.377-2.3772V2.8774z"/>
+	
+		<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="7.4716" y1="20.3694" x2="7.4718" y2="14.5055"/>
+	<path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M8.5326,4.6317
+		c0,0.5859-0.4749,1.404-1.0608,1.404S6.411,5.2175,6.411,4.6317s0.4749-1.0608,1.0608-1.0608S8.5326,4.0458,8.5326,4.6317z"/>
+	<path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M6.0988,20.3694
+		l-0.4192-7.2807c-0.0062-0.1525-0.4957,0.046-0.5011-0.0986C4.9791,7.653,5.4228,7.2379,5.4729,7.196
+		c0.059-0.0165,0.5432-0.0296,0.6881-0.0387C6.357,7.1449,6.5259,7.2646,6.6158,7.4391c0.319,0.6187,1.393,0.6187,1.712,0
+		c0.09-0.1745,0.2588-0.2941,0.4547-0.2818C8.9274,7.1664,9.4116,7.1795,9.4707,7.196c0.0501,0.042,0.4939,0.457,0.2945,5.7942
+		c-0.0054,0.1445-0.495-0.0539-0.5011,0.0986l-0.4197,7.2807"/>
+</g>
+<rect x="-0.0136" y="0.0002" fill="none" width="24" height="24"/>
+</svg>

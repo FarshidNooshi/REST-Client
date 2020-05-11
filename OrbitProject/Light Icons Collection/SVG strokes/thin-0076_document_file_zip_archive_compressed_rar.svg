@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+<g>
+	<path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M22.4174,10.5067
+		H10.5509c-0.5798,0-1.05,0.4699-1.05,1.05v6.9392c0,0.5801,0.4702,1.05,1.05,1.05h11.8665c0.5793,0,1.049-0.4699,1.049-1.05
+		v-6.9392C23.4664,10.9766,22.9967,10.5067,22.4174,10.5067z"/>
+	<path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M7.3473,4.5889
+		c0,1.0336-0.8379,1.8712-1.8712,1.8712c-1.0327,0-1.8708-0.8376-1.8708-1.8712c0-1.0329,0.8827-4.06,1.9154-4.06
+		C6.5541,0.529,7.3473,3.556,7.3473,4.5889z"/>
+	<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		14.3254,0.5289 14.3296,4.5001 18.4685,4.5001 	"/>
+	<path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M2.4238,0.529
+		H1.3313c-0.4409,0-0.7979,0.3572-0.7979,0.7979v21.3462c0,0.441,0.357,0.7982,0.7979,0.7982h16.3384
+		c0.4419,0,0.7989-0.3572,0.7989-0.7982v-1.1098"/>
+	<path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M18.4685,8.4024
+		l0-3.9023c0-0.2135-0.0862-0.2946-0.238-0.4443l-3.3452-3.2974c-0.1491-0.147-0.3502-0.2294-0.5599-0.2294H8.5801"/>
+	
+		<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="5.4761" y1="4.5001" x2="5.4761" y2="4.5001"/>
+	
+		<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" x1="16.397" y1="16.465" x2="16.397" y2="13.4881"/>
+	<polyline fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" points="12.5779,13.4881 14.6022,13.4881 
+		12.4484,16.465 14.6022,16.465 	"/>
+	<path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" d="M18.5556,16.4651v-2.9769h1.1169
+		c0,0,0.9562-0.0348,0.9562,0.7693c0,0.8332-0.9562,0.8412-0.9562,0.8412l-1.1169,0.0025"/>
+	
+		<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="3,7" x1="5.4763" y1="8.528" x2="5.4763" y2="9.5226"/>
+	
+		<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="3,7" x1="5.4763" y1="11.5283" x2="5.4763" y2="12.5229"/>
+	
+		<line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="3,7" x1="5.4763" y1="14.5286" x2="5.4763" y2="15.5232"/>
+</g>
+<rect x="0" y="0.0001" fill="none" width="24" height="24"/>
+</svg>

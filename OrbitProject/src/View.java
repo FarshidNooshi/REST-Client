@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -9,15 +10,24 @@ public class View extends JFrame {
     private JMenuBar menuBar;
     private ArrayList<JMenu> menus;
     private ArrayList<ArrayList<JMenuItem>> submenus;
+    private JPanel center, left, right;
 
     public View() {
+        setTitle("Farshid Nooshi Midterm project-term2(98-99)");
+        setPreferredSize(new Dimension(300, 300));
+        setLayout(new BorderLayout());
+        center = new JPanel();
+        left = new JPanel();
+        right = new JPanel();
         menuBar = new JMenuBar();
         menus = new ArrayList<>();
         submenus = new ArrayList<>();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         initMenuBar();
         setJMenuBar(menuBar);
-
+        add(center, BorderLayout.CENTER);
+        add(left, BorderLayout.EAST);
+        add(right, BorderLayout.WEST);
     }
 
     public void showGUI() {
@@ -26,6 +36,7 @@ public class View extends JFrame {
     }
 
     private void initMenuBar() { // Action listener should add
+        setIconImage(new ImageIcon("OrbitProject/res/Insomnia.png").getImage());
         menus.add(new JMenu("Application"));
         menus.add(new JMenu("View"));
         menus.add(new JMenu("Help"));
