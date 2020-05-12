@@ -19,9 +19,9 @@ public class View extends JFrame {
     private JPanel center, left, right;
     private JTabbedPane tabbedPane;
     private JTextField urlTextField;
+    private JTextArea textArea, jTextArea, jTextArea1;
     private JButton saveURL;
-    private ArrayList<JPanel> centerPanels, rightPanels;
-    private JComboBox bodyComboBox;
+    private ArrayList<JPanel> centerPanels, rightPanels, rightBodyPanels;
     private JPanel formDataPanel, jSONpanel, binaryDataPanel;
 
     View() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
@@ -51,7 +51,7 @@ public class View extends JFrame {
 
     private void initCenterPanel() {
         center.setLayout(new BorderLayout());
-        JComboBox comboBox = new JComboBox(requests.values());
+        JComboBox<requests> comboBox = new JComboBox<>(requests.values());
         comboBox.setPreferredSize(new Dimension(70, 55));
         JPanel temporary = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         urlTextField.setPreferredSize(new Dimension(200, 55));
@@ -93,6 +93,28 @@ public class View extends JFrame {
         }
         JButton copy = new JButton("Copy to Clipboard");
         reference.add(copy);
+//**********************************************************************************************************************
+        reference = rightPanels.get(0);//Body
+        JTabbedPane jTabbedPane1 = new JTabbedPane();
+        textArea = new JTextArea("TO DO IN THE NEXT PHASES");
+        jTextArea = new JTextArea("TO DO IN THE NEXT PHASES");
+        jTextArea1 = new JTextArea("TO DO IN THE NEXT PHASES");
+        reference.setLayout(new BorderLayout());
+        reference.add(jTabbedPane1, BorderLayout.CENTER);
+        rightBodyPanels = new ArrayList<>();
+        for (int i = 0; i < 3; i++)
+            rightBodyPanels.add(new JPanel(new BorderLayout())); // default in bashe ta too phase 2&3 avaz beshe
+        rightBodyPanels.get(0).setName("Raw");
+        rightBodyPanels.get(1).setName("Preview");
+        rightBodyPanels.get(2).setName("JSON");
+        rightBodyPanels.get(0).add(textArea, BorderLayout.CENTER);
+        rightBodyPanels.get(1).add(jTextArea1, BorderLayout.CENTER);
+        rightBodyPanels.get(2).add(jTextArea, BorderLayout.CENTER);
+        textArea.setEditable(false);
+        jTextArea.setEditable(false);
+        jTextArea1.setEditable(false);
+        for (JPanel panel : rightBodyPanels)
+            jTabbedPane1.add(panel.getName(), panel);
     }
 
     private void createSpecificLableRightPanel(String text, Color color, JPanel help) {
@@ -151,6 +173,8 @@ public class View extends JFrame {
                 if (j == 0)
                     menus.get(i).addSeparator();
             }
+        submenus.get(0).get(0).addActionListener(e -> {
+        });
     }
 
     private void initTabs() {
@@ -205,23 +229,9 @@ public class View extends JFrame {
         reference.add(enabled);
         reference.add(isEnabled);
 //**********************************************************************************************************************
-        bodyComboBox = new JComboBox(new String[]{"Form Data", "Json", "Binary Data"});
         reference = centerPanels.get(3);
         reference.setLayout(new BorderLayout());
-        reference.add(bodyComboBox, BorderLayout.NORTH);
         initBody();
-        bodyComboBox.addActionListener(e -> {
-            int mem = bodyComboBox.getSelectedIndex();
-            binaryDataPanel.setVisible(false);
-            jSONpanel.setVisible(false);
-            formDataPanel.setVisible(false);
-            if (mem == 0)
-                formDataPanel.setVisible(true);
-            else if (mem == 1)
-                jSONpanel.setVisible(true);
-            else
-                binaryDataPanel.setVisible(true);
-        });
     }
 
     private void initBody() {
@@ -229,9 +239,14 @@ public class View extends JFrame {
         binaryDataPanel = new JPanel();
         jSONpanel = new JPanel();
         formDataPanel = new JPanel();
-        reference.add(binaryDataPanel, BorderLayout.EAST);
-        reference.add(jSONpanel, BorderLayout.CENTER);
-        reference.add(formDataPanel, BorderLayout.WEST);
+        jSONpanel.setName("jSONpanel");
+        formDataPanel.setName("formDataPanel");
+        binaryDataPanel.setName("binaryDataPanel");
+        JTabbedPane help = new JTabbedPane();
+        help.add(jSONpanel.getName(), jSONpanel);
+        help.add(formDataPanel.getName(), formDataPanel);
+        help.add(binaryDataPanel.getName(), binaryDataPanel);
+        reference.add(help, BorderLayout.CENTER);
 //**********************************************************************************************************************
         binaryDataPanel.setLayout(new BorderLayout());
         JLabel label = new JLabel("SELECTED FILE");
