@@ -1,7 +1,9 @@
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class View extends JFrame {
@@ -16,6 +18,7 @@ public class View extends JFrame {
         setTitle("Farshid Nooshi Midterm project-term2(98-99)");
         setPreferredSize(new Dimension(300, 300));
         setLayout(new BorderLayout());
+//        setResizable(false);
         center = new JPanel();
         left = new JPanel();
         right = new JPanel();
@@ -26,8 +29,16 @@ public class View extends JFrame {
         initMenuBar();
         setJMenuBar(menuBar);
         add(center, BorderLayout.CENTER);
-        add(left, BorderLayout.EAST);
-        add(right, BorderLayout.WEST);
+        add(left, BorderLayout.WEST);
+        add(right, BorderLayout.EAST);
+        initLeftPanel();
+    }
+
+    private void initLeftPanel() {
+        left.setLayout(new BorderLayout());
+        JLabel label = new JLabel("Insomnia", new ImageIcon("OrbitProject/res/Insomnia.png"), SwingConstants.LEFT);
+        left.add(label, BorderLayout.NORTH);
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Request");
     }
 
     public void showGUI() {
