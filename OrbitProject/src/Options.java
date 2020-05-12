@@ -8,6 +8,9 @@ public class Options extends JFrame {
     private View view;
 
     Options() {
+        setTitle("Options");
+        setPreferredSize(new Dimension(400, 200));
+        setIconImage(new ImageIcon("OrbitProject/res/Insomnia.png").getImage());
         setLayout(new GridLayout(3, 1));
         isDarkMode = false;
         isExitable = false;

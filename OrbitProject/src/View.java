@@ -55,7 +55,6 @@ public class View extends JFrame {
     View(Options options) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         this.options = options;
         setTitle("Farshid Nooshi Midterm project-term2(98-99)");
-//        setAlwaysOnTop(true);
         UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         setLayout(new BorderLayout());
         center = new JPanel();
