@@ -3,8 +3,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+enum requests {
+    PATCH, PUT, POST, DELETE, GET;
+}
 
 public class View extends JFrame {
     private static final int NUMBER_OF_MENUS = 3;
@@ -13,18 +16,26 @@ public class View extends JFrame {
     private ArrayList<JMenu> menus;
     private ArrayList<ArrayList<JMenuItem>> submenus;
     private JPanel center, left, right;
+    private JTabbedPane tabbedPane;
+    private ArrayList<Panel> centerPanels;
+    private JTextField urlTextField;
+    private JComboBox comboBox;
+    private JButton saveURL;
 
-    public View() {
+    public View() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         setTitle("Farshid Nooshi Midterm project-term2(98-99)");
-        setPreferredSize(new Dimension(300, 300));
+        setAlwaysOnTop(true);
+        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         setLayout(new BorderLayout());
-//        setResizable(false);
         center = new JPanel();
         left = new JPanel();
         right = new JPanel();
         menuBar = new JMenuBar();
         menus = new ArrayList<>();
         submenus = new ArrayList<>();
+        urlTextField = new JTextField();
+        saveURL = new JButton("Send");
+        tabbedPane = new JTabbedPane();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         initMenuBar();
         setJMenuBar(menuBar);
@@ -32,16 +43,44 @@ public class View extends JFrame {
         add(left, BorderLayout.WEST);
         add(right, BorderLayout.EAST);
         initLeftPanel();
+        initCenterPanel();
+        initRightPanel();
+    }
+
+    private void initCenterPanel() {
+        ArrayList<String> tmp = new ArrayList<>();
+        for (requests r : requests.values())
+            tmp.add(r.name());
+        comboBox = new JComboBox(tmp.toArray());
+        comboBox.setPreferredSize(new Dimension(70, 60));
+        center.setLayout(new BorderLayout());
+        JPanel temporary = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        urlTextField.setPreferredSize(new Dimension(200, 60));
+        saveURL.setPreferredSize(new Dimension(70, 60));
+        temporary.add(comboBox);
+        temporary.add(urlTextField);
+        temporary.add(saveURL);
+        center.add(temporary, BorderLayout.NORTH);
+        center.add(tabbedPane, BorderLayout.CENTER);
+
+    }
+
+    private void initRightPanel() {
+
     }
 
     private void initLeftPanel() {
         left.setLayout(new BorderLayout());
         JLabel label = new JLabel("Insomnia", new ImageIcon("OrbitProject/res/Insomnia.png"), SwingConstants.LEFT);
+        label.setBackground(new Color(182, 1, 255));
+        label.setForeground(Color.WHITE);
+        label.setOpaque(true);
+        label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         left.add(label, BorderLayout.NORTH);
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Request");
     }
 
-    public void showGUI() {
+    void showGUI() {
         pack();
         setVisible(true);
     }
