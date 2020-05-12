@@ -316,6 +316,6 @@ public class View extends JFrame {
         binaryDataPanel.setVisible(false);
         jSONpanel.setVisible(false);
         formDataPanel.setVisible(false);
-    }
+    }as
 
 }
