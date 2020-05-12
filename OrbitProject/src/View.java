@@ -12,6 +12,7 @@ enum requests {
 public class View extends JFrame {
     private static final int NUMBER_OF_MENUS = 3;
     private static final int NUMBER_OF_SUBMENUS = 2;
+    private final Options options;
     private int numberOfHeaders = 0;
     private JMenuBar menuBar;
     private ArrayList<JMenu> menus;
@@ -24,9 +25,10 @@ public class View extends JFrame {
     private ArrayList<JPanel> centerPanels, rightPanels, rightBodyPanels;
     private JPanel formDataPanel, jSONpanel, binaryDataPanel;
 
-    View() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+    View(Options options) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+        this.options = options;
         setTitle("Farshid Nooshi Midterm project-term2(98-99)");
-        setAlwaysOnTop(true);
+//        setAlwaysOnTop(true);
         UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         setLayout(new BorderLayout());
         center = new JPanel();
@@ -170,11 +172,32 @@ public class View extends JFrame {
         for (int i = 0; i < NUMBER_OF_MENUS; i++)
             for (int j = 0; j < NUMBER_OF_SUBMENUS; j++) {
                 menus.get(i).add(submenus.get(i).get(j));
-                if (j == 0)asas
+                if (j == 0)
                     menus.get(i).addSeparator();
             }
         submenus.get(0).get(0).addActionListener(e -> {
+            options.showGUI();
         });
+        submenus.get(1).get(0).addActionListener(e -> {
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+        });
+        submenus.get(1).get(1).addActionListener(e -> {
+            if (left.isVisible())
+                left.setVisible(false);
+            else
+                left.setVisible(true);
+        });
+        submenus.get(2).get(0).addActionListener(e -> {
+            
+        });
+    }
+
+    void setToDark() {
+        System.out.println("seen");
+    }
+
+    void setToLight() {
+        System.out.println("!seen");
     }
 
     private void initTabs() {
