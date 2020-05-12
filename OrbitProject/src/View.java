@@ -23,6 +23,8 @@ public class View extends JFrame {
     private JButton saveURL;
     private ArrayList<JPanel> panels;
     private JComboBox bodyComboBox;
+    private JTextField token, prefix;
+    private JCheckBox isEnabled;
 
     View() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         setTitle("Farshid Nooshi Midterm project-term2(98-99)");
@@ -51,11 +53,11 @@ public class View extends JFrame {
 
     private void initCenterPanel() {
         comboBox = new JComboBox(requests.values());
-        comboBox.setPreferredSize(new Dimension(70, 60));
+        comboBox.setPreferredSize(new Dimension(70, 55));
         center.setLayout(new BorderLayout());
         JPanel temporary = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        urlTextField.setPreferredSize(new Dimension(200, 60));
-        saveURL.setPreferredSize(new Dimension(70, 60));
+        urlTextField.setPreferredSize(new Dimension(200, 55));
+        saveURL.setPreferredSize(new Dimension(70, 55));
         temporary.add(comboBox);
         temporary.add(urlTextField);
         temporary.add(saveURL);
@@ -132,14 +134,44 @@ public class View extends JFrame {
         reference.setLayout(new GridLayout(20, 5, 5, 5));
         for (int i = 0; i < 20; i++) {
             reference.add(new JLabel(new ImageIcon("OrbitProject/menu_32px.png")));
-            reference.add(new JTextField());
-            reference.add(new JTextField());
+            reference.add(new JTextField("New Header"));
+            reference.add(new JTextField("New Value"));
             reference.add(new JCheckBox());
             reference.add(new JButton(new ImageIcon("OrbitProject/waste_32px.png")));
         }
         for (int i = numberOfHeaders + 1; i < 20; i++)
             for (int j = 0; j < 5; j++)
                 reference.getComponent(i * 5 + j).setVisible(false);
+
+            //***************************************************
+        reference = panels.get(2);
+        reference.setLayout(new GridLayout(20, 5, 5, 5));
+        for (int i = 0; i < 20; i++) {
+            reference.add(new JLabel(new ImageIcon("OrbitProject/menu_32px.png")));
+            reference.add(new JTextField("New Header"));
+            reference.add(new JTextField("New Value"));
+            reference.add(new JCheckBox());
+            reference.add(new JButton(new ImageIcon("OrbitProject/waste_32px.png")));
+        }
+        for (int i = numberOfHeaders + 1; i < 20; i++)
+            for (int j = 0; j < 5; j++)
+                reference.getComponent(i * 5 + j).setVisible(false);
+            //***************************************************
+        reference = panels.get(1);
+        reference.setLayout(new GridLayout(5, 2));
+        token = new JTextField();
+        prefix = new JTextField();
+        isEnabled = new JCheckBox();
+        JLabel token1 = new JLabel("TOKEN");
+        JLabel prefix1 = new JLabel("PREFIX");
+        JLabel enabled = new JLabel("ENABLED");
+        reference.add(token1);
+        reference.add(token);
+        reference.add(prefix1);
+        reference.add(prefix);
+        reference.add(enabled);
+        reference.add(isEnabled);
+
     }
 
 }
