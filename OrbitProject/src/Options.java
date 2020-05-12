@@ -44,7 +44,7 @@ public class Options extends JFrame {
 
         exitBox.addActionListener(e -> {
             isExitable = !isExitable;
-
+adf
             System.out.println(isExitable ? "exit" : "get out");
         });
     }
