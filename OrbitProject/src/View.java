@@ -19,12 +19,10 @@ public class View extends JFrame {
     private JPanel center, left, right;
     private JTabbedPane tabbedPane;
     private JTextField urlTextField;
-    private JComboBox comboBox;
     private JButton saveURL;
-    private ArrayList<JPanel> panels;
+    private ArrayList<JPanel> centerPanels, rightPanels;
     private JComboBox bodyComboBox;
-    private JTextField token, prefix;
-    private JCheckBox isEnabled;
+    private JPanel formDataPanel, jSONpanel, binaryDataPanel;
 
     View() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         setTitle("Farshid Nooshi Midterm project-term2(98-99)");
@@ -52,9 +50,9 @@ public class View extends JFrame {
     }
 
     private void initCenterPanel() {
-        comboBox = new JComboBox(requests.values());
-        comboBox.setPreferredSize(new Dimension(70, 55));
         center.setLayout(new BorderLayout());
+        JComboBox comboBox = new JComboBox(requests.values());
+        comboBox.setPreferredSize(new Dimension(70, 55));
         JPanel temporary = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         urlTextField.setPreferredSize(new Dimension(200, 55));
         saveURL.setPreferredSize(new Dimension(70, 55));
@@ -67,7 +65,43 @@ public class View extends JFrame {
     }
 
     private void initRightPanel() {
+        JTabbedPane jTabbedPane = new JTabbedPane();
+        right.setLayout(new BorderLayout(5, 5));
+        JPanel help = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 10));
+        createSpecificLableRightPanel("200 OK", new Color(83, 255, 119), help);
+        createSpecificLableRightPanel("1.03 S", new Color(10, 84, 255), help);
+        createSpecificLableRightPanel("11.6 KB", new Color(10, 84, 255), help);
+        right.add(help, BorderLayout.NORTH);
+        rightPanels = new ArrayList<>();
+        for (int i = 0; i < 2; i++)
+            rightPanels.add(new JPanel());
+        rightPanels.get(0).setName("Body");
+        rightPanels.get(1).setName("Header");
+        for (JPanel panel : rightPanels)
+            jTabbedPane.add(panel.getName(), panel);
+        right.add(jTabbedPane, BorderLayout.CENTER);
+//**********************************************************************************************************************
+        JPanel reference = rightPanels.get(1);// HEADER
+        reference.setLayout(new GridLayout(16, 3, 5, 5));
+        for (int i = 0; i < 15; i++) {
+            reference.add(new JLabel(new ImageIcon("OrbitProject/menu_32px.png")));
+            JTextField textField = new JTextField(), textField1 = new JTextField();
+            reference.add(textField);
+            reference.add(textField1);
+            textField.setEditable(false);
+            textField1.setEditable(false);
+        }
+        JButton copy = new JButton("Copy to Clipboard");
+        reference.add(copy);
+    }
 
+    private void createSpecificLableRightPanel(String text, Color color, JPanel help) {
+        JLabel memory = new JLabel(text);
+        memory.setBackground(color);
+        memory.setForeground(Color.WHITE);
+        memory.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        memory.setOpaque(true);
+        help.add(memory);
     }
 
     private void initLeftPanel() {
@@ -120,17 +154,17 @@ public class View extends JFrame {
     }
 
     private void initTabs() {
-        panels = new ArrayList<>();
-        bodyComboBox = new JComboBox(new String[]{"Form Data", "Json", "Binary Data"});
-        for (int i = 0; i < 3; i++)
-            panels.add(new JPanel());
-        panels.get(0).setName("Header");
-        panels.get(1).setName("Auth");
-        panels.get(2).setName("Query");
-        tabbedPane.add("Body", bodyComboBox);
-        for (JPanel j : panels)
+        centerPanels = new ArrayList<>();
+        for (int i = 0; i < 4; i++)
+            centerPanels.add(new JPanel());
+        centerPanels.get(0).setName("Header");
+        centerPanels.get(1).setName("Auth");
+        centerPanels.get(2).setName("Query");
+        centerPanels.get(3).setName("Body");
+        for (JPanel j : centerPanels)
             tabbedPane.add(j.getName(), j);
-        JPanel reference = panels.get(0);
+//**********************************************************************************************************************
+        JPanel reference = centerPanels.get(0);// HEADER
         reference.setLayout(new GridLayout(20, 5, 5, 5));
         for (int i = 0; i < 20; i++) {
             reference.add(new JLabel(new ImageIcon("OrbitProject/menu_32px.png")));
@@ -142,9 +176,8 @@ public class View extends JFrame {
         for (int i = numberOfHeaders + 1; i < 20; i++)
             for (int j = 0; j < 5; j++)
                 reference.getComponent(i * 5 + j).setVisible(false);
-
-            //***************************************************
-        reference = panels.get(2);
+//**********************************************************************************************************************
+        reference = centerPanels.get(2);
         reference.setLayout(new GridLayout(20, 5, 5, 5));
         for (int i = 0; i < 20; i++) {
             reference.add(new JLabel(new ImageIcon("OrbitProject/menu_32px.png")));
@@ -156,12 +189,12 @@ public class View extends JFrame {
         for (int i = numberOfHeaders + 1; i < 20; i++)
             for (int j = 0; j < 5; j++)
                 reference.getComponent(i * 5 + j).setVisible(false);
-            //***************************************************
-        reference = panels.get(1);
+//**********************************************************************************************************************
+        reference = centerPanels.get(1);
         reference.setLayout(new GridLayout(5, 2));
-        token = new JTextField();
-        prefix = new JTextField();
-        isEnabled = new JCheckBox();
+        JTextField token = new JTextField();
+        JTextField prefix = new JTextField();
+        JCheckBox isEnabled = new JCheckBox();
         JLabel token1 = new JLabel("TOKEN");
         JLabel prefix1 = new JLabel("PREFIX");
         JLabel enabled = new JLabel("ENABLED");
@@ -171,7 +204,67 @@ public class View extends JFrame {
         reference.add(prefix);
         reference.add(enabled);
         reference.add(isEnabled);
+//**********************************************************************************************************************
+        bodyComboBox = new JComboBox(new String[]{"Form Data", "Json", "Binary Data"});
+        reference = centerPanels.get(3);
+        reference.setLayout(new BorderLayout());
+        reference.add(bodyComboBox, BorderLayout.NORTH);
+        initBody();
+        bodyComboBox.addActionListener(e -> {
+            int mem = bodyComboBox.getSelectedIndex();
+            binaryDataPanel.setVisible(false);
+            jSONpanel.setVisible(false);
+            formDataPanel.setVisible(false);
+            if (mem == 0)
+                formDataPanel.setVisible(true);
+            else if (mem == 1)
+                jSONpanel.setVisible(true);
+            else
+                binaryDataPanel.setVisible(true);
+        });
+    }
 
+    private void initBody() {
+        JPanel reference = centerPanels.get(3);
+        binaryDataPanel = new JPanel();
+        jSONpanel = new JPanel();
+        formDataPanel = new JPanel();
+        reference.add(binaryDataPanel, BorderLayout.EAST);
+        reference.add(jSONpanel, BorderLayout.CENTER);
+        reference.add(formDataPanel, BorderLayout.WEST);
+//**********************************************************************************************************************
+        binaryDataPanel.setLayout(new BorderLayout());
+        JLabel label = new JLabel("SELECTED FILE");
+        binaryDataPanel.add(label, BorderLayout.NORTH);
+        JTextField ttt = new JTextField("...");
+        ttt.setEditable(false);
+        binaryDataPanel.add(ttt, BorderLayout.CENTER);
+        JButton selectItem = new JButton("Choose File");
+        JButton resetItem = new JButton("Reset File");
+        JPanel tmp = new JPanel(new FlowLayout());
+        tmp.add(resetItem);
+        tmp.add(selectItem);
+        binaryDataPanel.add(tmp, BorderLayout.SOUTH);
+//**********************************************************************************************************************
+        jSONpanel.setLayout(new BorderLayout());
+        JTextField textField1 = new JTextField("...");
+        jSONpanel.add(textField1, BorderLayout.CENTER);
+//**********************************************************************************************************************
+        formDataPanel.setLayout(new GridLayout(20, 5, 5, 5));
+        for (int i = 0; i < 20; i++) {
+            formDataPanel.add(new JLabel(new ImageIcon("OrbitProject/menu_32px.png")));
+            formDataPanel.add(new JTextField("New Header"));
+            formDataPanel.add(new JTextField("New Value"));
+            formDataPanel.add(new JCheckBox());
+            formDataPanel.add(new JButton(new ImageIcon("OrbitProject/waste_32px.png")));
+        }
+        for (int i = numberOfHeaders + 1; i < 20; i++)
+            for (int j = 0; j < 5; j++)
+                formDataPanel.getComponent(i * 5 + j).setVisible(false);
+//**********************************************************************************************************************
+        binaryDataPanel.setVisible(false);
+        jSONpanel.setVisible(false);
+        formDataPanel.setVisible(false);
     }
 
 }
