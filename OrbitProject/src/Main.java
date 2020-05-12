@@ -1,6 +1,14 @@
-import javax.swing.*;
+// In The Name Of GOD
 
+/**
+ * i followed the concepts of MVC designing pattern
+ */
 public class Main {
+    /**
+     * the main method and the main class of the program
+     *
+     * @param args ...
+     */
     public static void main(String[] args) {
         System.out.println("project started");
         try {
