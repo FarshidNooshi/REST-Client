@@ -17,12 +17,13 @@ public class View extends JFrame {
     private ArrayList<ArrayList<JMenuItem>> submenus;
     private JPanel center, left, right;
     private JTabbedPane tabbedPane;
-    private ArrayList<Panel> centerPanels;
     private JTextField urlTextField;
     private JComboBox comboBox;
     private JButton saveURL;
+    private ArrayList<JPanel> panels;
+    private JComboBox bodyComboBox;
 
-    public View() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+    View() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         setTitle("Farshid Nooshi Midterm project-term2(98-99)");
         setAlwaysOnTop(true);
         UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -48,10 +49,7 @@ public class View extends JFrame {
     }
 
     private void initCenterPanel() {
-        ArrayList<String> tmp = new ArrayList<>();
-        for (requests r : requests.values())
-            tmp.add(r.name());
-        comboBox = new JComboBox(tmp.toArray());
+        comboBox = new JComboBox(requests.values());
         comboBox.setPreferredSize(new Dimension(70, 60));
         center.setLayout(new BorderLayout());
         JPanel temporary = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -62,7 +60,7 @@ public class View extends JFrame {
         temporary.add(saveURL);
         center.add(temporary, BorderLayout.NORTH);
         center.add(tabbedPane, BorderLayout.CENTER);
-
+        initTabs();
     }
 
     private void initRightPanel() {
@@ -116,6 +114,30 @@ public class View extends JFrame {
                 if (j == 0)
                     menus.get(i).addSeparator();
             }
+    }
+
+    private void initTabs() {
+        panels = new ArrayList<>();
+        bodyComboBox = new JComboBox(new String[]{"Form Data", "Json", "Binary Data"});
+        for (int i = 0; i < 3; i++)
+            panels.add(new JPanel());
+        panels.get(0).setName("Header");
+        panels.get(1).setName("Auth");
+        panels.get(2).setName("Query");
+        tabbedPane.add("Body", bodyComboBox);
+        for (JPanel j : panels)
+            tabbedPane.add(j.getName(), j);
+        JPanel reference = panels.get(0);
+        reference.setLayout(new GridLayout(20, 5, 5, 5));
+        for (int i = 0; i < 20; i++) {
+            reference.add(new JLabel());
+            reference.add(new JTextField());
+            reference.add(new JTextField());
+            reference.add(new JCheckBox());
+            reference.add(new JButton(new ImageIcon("OrbitProject/res/Insomnia.png")));
+        }
+//        for (int i = 5; i < 250; i++)
+//            reference.getComponent(i).setVisible(false);
     }
 
 }
