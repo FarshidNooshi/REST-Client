@@ -1,8 +1,6 @@
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 enum requests {
@@ -13,7 +11,7 @@ public class View extends JFrame {
     private static final int NUMBER_OF_MENUS = 3;
     private static final int NUMBER_OF_SUBMENUS = 2;
     private final Options options;
-    private int numberOfHeaders = 0;
+    private static int[] numberOfHeaders = {1, 1, 1};
     private boolean fullScreen = false;
     private JMenuBar menuBar;
     private ArrayList<JMenu> menus;
@@ -23,9 +21,36 @@ public class View extends JFrame {
     private JTextField urlTextField;
     private JTextArea textArea, jTextArea, jTextArea1;
     private JButton saveURL;
-    private ArrayList<JPanel> centerPanels, rightPanels, rightBodyPanels;
-    private JPanel formDataPanel, jSONpanel, binaryDataPanel;
+    private static ArrayList<JPanel> centerPanels, rightPanels, rightBodyPanels;
+    private static JPanel formDataPanel, jSONpanel, binaryDataPanel;
     private JList list;
+    private myFocus focus = new myFocus();
+
+    private static class myFocus extends FocusAdapter {
+        @Override
+        public void focusGained(FocusEvent e) {
+            JTextField jTextField = (JTextField)e.getSource();
+            jTextField.setText("");
+            if (jTextField.getName().equals("New Header"))
+                return;
+            for (int j = 0; j < 5; j++) {
+                if (numberOfHeaders[0] > 19)
+                    break;
+                centerPanels.get(0).getComponent(numberOfHeaders[0] * 5 + j).setVisible(true);
+                centerPanels.get(2).getComponent(numberOfHeaders[1] * 5 + j).setVisible(true);
+                formDataPanel.getComponent(numberOfHeaders[2] * 5 + j).setVisible(true);
+            }
+            for (int i = 0; i < 3; i++)
+                numberOfHeaders[i]++;
+        }
+
+        @Override
+        public void focusLost(FocusEvent e) {
+            JTextField jTextField = (JTextField)e.getSource();
+            if (jTextField.getText().trim().equals(""))
+                jTextField.setText(jTextField.getName());
+        }
+    }
 
     View(Options options) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         this.options = options;
@@ -241,12 +266,17 @@ public class View extends JFrame {
         reference.setLayout(new GridLayout(20, 5, 5, 5));
         for (int i = 0; i < 20; i++) {
             reference.add(new JLabel(new ImageIcon("OrbitProject/menu_32px.png")));
-            reference.add(new JTextField("New Header"));
-            reference.add(new JTextField("New Value"));
+            JTextField tt = new JTextField("New Header"), tt1 = new JTextField("New Value");
+            tt.setName("New Header");
+            tt.addFocusListener(focus);
+            tt1.setName(tt1.getText());
+            tt1.addFocusListener(focus);
+            reference.add(tt);
+            reference.add(tt1);
             reference.add(new JCheckBox());
             reference.add(new JButton(new ImageIcon("OrbitProject/waste_32px.png")));
         }
-        for (int i = numberOfHeaders + 1; i < 20; i++)
+        for (int i = numberOfHeaders[0]; i < 20; i++)
             for (int j = 0; j < 5; j++)
                 reference.getComponent(i * 5 + j).setVisible(false);
 //**********************************************************************************************************************
@@ -254,12 +284,17 @@ public class View extends JFrame {
         reference.setLayout(new GridLayout(20, 5, 5, 5));
         for (int i = 0; i < 20; i++) {
             reference.add(new JLabel(new ImageIcon("OrbitProject/menu_32px.png")));
-            reference.add(new JTextField("New Header"));
-            reference.add(new JTextField("New Value"));
+            JTextField tt = new JTextField("New Header"), tt1 = new JTextField("New Value");
+            tt.setName("New Header");
+            tt.addFocusListener(focus);
+            tt1.setName(tt1.getText());
+            tt1.addFocusListener(focus);
+            reference.add(tt);
+            reference.add(tt1);
             reference.add(new JCheckBox());
             reference.add(new JButton(new ImageIcon("OrbitProject/waste_32px.png")));
         }
-        for (int i = numberOfHeaders + 1; i < 20; i++)
+        for (int i = numberOfHeaders[1]; i < 20; i++)
             for (int j = 0; j < 5; j++)
                 reference.getComponent(i * 5 + j).setVisible(false);
 //**********************************************************************************************************************
@@ -312,17 +347,24 @@ public class View extends JFrame {
 //**********************************************************************************************************************
         jSONpanel.setLayout(new BorderLayout());
         JTextField textField1 = new JTextField("...");
+        textField1.setName("...");
+        textField1.addFocusListener(focus);
         jSONpanel.add(textField1, BorderLayout.CENTER);
 //**********************************************************************************************************************
         formDataPanel.setLayout(new GridLayout(20, 5, 5, 5));
         for (int i = 0; i < 20; i++) {
             formDataPanel.add(new JLabel(new ImageIcon("OrbitProject/menu_32px.png")));
-            formDataPanel.add(new JTextField("New Header"));
-            formDataPanel.add(new JTextField("New Value"));
+            JTextField tt = new JTextField("New Header"), tt1 = new JTextField("New Value");
+            tt.setName("New Header");
+            tt.addFocusListener(focus);
+            tt1.setName(tt1.getText());
+            tt1.addFocusListener(focus);
+            formDataPanel.add(tt);
+            formDataPanel.add(tt1);
             formDataPanel.add(new JCheckBox());
             formDataPanel.add(new JButton(new ImageIcon("OrbitProject/waste_32px.png")));
         }
-        for (int i = numberOfHeaders + 1; i < 20; i++)
+        for (int i = numberOfHeaders[2]; i < 20; i++)
             for (int j = 0; j < 5; j++)
                 formDataPanel.getComponent(i * 5 + j).setVisible(false);
 //**********************************************************************************************************************
