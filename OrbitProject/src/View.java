@@ -177,7 +177,7 @@ public class View extends JFrame {
         list = new JList(folders.toArray());
         JButton createNode = new JButton("create");
         left.setLayout(new BorderLayout());
-        JLabel label = new JLabel("Insomnia", new ImageIcon("OrbitProject/res/Insomnia.png"), SwingConstants.LEFT);
+        JLabel label = new JLabel("Insomnia", new ImageIcon("OrbitProject/Insomnia.png"), SwingConstants.LEFT);
         label.setBackground(new Color(182, 1, 255));
         label.setForeground(Color.WHITE);
         label.setOpaque(true);
@@ -207,7 +207,7 @@ public class View extends JFrame {
      * it's extendable also for adding multiple futures to the program
      */
     private void initMenuBar() { // Action listener should add
-        setIconImage(new ImageIcon("OrbitProject/res/Insomnia.png").getImage());
+        setIconImage(new ImageIcon("OrbitProject/Insomnia.png").getImage());
         menus.add(new JMenu("Application"));
         menus.add(new JMenu("View"));
         menus.add(new JMenu("Help"));

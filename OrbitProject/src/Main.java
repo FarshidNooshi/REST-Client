@@ -1,7 +1,7 @@
 // In The Name Of GOD
 
 /**
- * i followed the concepts of MVC designing pattern
+ * I followed the concepts of MVC designing pattern
  */
 public class Main {
     /**

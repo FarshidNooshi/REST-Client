@@ -17,7 +17,7 @@ public class Options extends JFrame {
     Options() {
         setTitle("Options");
         setPreferredSize(new Dimension(400, 200));
-        setIconImage(new ImageIcon("OrbitProject/res/Insomnia.png").getImage());
+        setIconImage(new ImageIcon("OrbitProject/Insomnia.png").getImage());
         setLayout(new GridLayout(3, 1));
         isDarkMode = false;
         isExitable = false;
@@ -44,7 +44,6 @@ public class Options extends JFrame {
 
         exitBox.addActionListener(e -> {
             isExitable = !isExitable;
-adf
             System.out.println(isExitable ? "exit" : "get out");
         });
     }
