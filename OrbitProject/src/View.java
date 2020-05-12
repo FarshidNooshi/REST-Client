@@ -12,6 +12,7 @@ enum requests {
 public class View extends JFrame {
     private static final int NUMBER_OF_MENUS = 3;
     private static final int NUMBER_OF_SUBMENUS = 2;
+    private int numberOfHeaders = 0;
     private JMenuBar menuBar;
     private ArrayList<JMenu> menus;
     private ArrayList<ArrayList<JMenuItem>> submenus;
@@ -130,14 +131,15 @@ public class View extends JFrame {
         JPanel reference = panels.get(0);
         reference.setLayout(new GridLayout(20, 5, 5, 5));
         for (int i = 0; i < 20; i++) {
-            reference.add(new JLabel());
+            reference.add(new JLabel(new ImageIcon("OrbitProject/menu_32px.png")));
             reference.add(new JTextField());
             reference.add(new JTextField());
             reference.add(new JCheckBox());
-            reference.add(new JButton(new ImageIcon("OrbitProject/res/Insomnia.png")));
+            reference.add(new JButton(new ImageIcon("OrbitProject/waste_32px.png")));
         }
-//        for (int i = 5; i < 250; i++)
-//            reference.getComponent(i).setVisible(false);
+        for (int i = numberOfHeaders + 1; i < 20; i++)
+            for (int j = 0; j < 5; j++)
+                reference.getComponent(i * 5 + j).setVisible(false);
     }
 
 }
