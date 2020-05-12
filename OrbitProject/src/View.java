@@ -14,6 +14,7 @@ public class View extends JFrame {
     private static final int NUMBER_OF_SUBMENUS = 2;
     private final Options options;
     private int numberOfHeaders = 0;
+    private boolean fullScreen = false;
     private JMenuBar menuBar;
     private ArrayList<JMenu> menus;
     private ArrayList<ArrayList<JMenuItem>> submenus;
@@ -178,8 +179,16 @@ public class View extends JFrame {
         submenus.get(0).get(0).addActionListener(e -> {
             options.showGUI();
         });
+        submenus.get(0).get(1).addActionListener(e -> {
+            dispose();
+//            dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        });
         submenus.get(1).get(0).addActionListener(e -> {
-            setExtendedState(JFrame.MAXIMIZED_BOTH);
+            fullScreen = !fullScreen;
+            if (fullScreen)
+                setExtendedState(JFrame.MAXIMIZED_BOTH);
+            else
+                setExtendedState(JFrame.NORMAL);
         });
         submenus.get(1).get(1).addActionListener(e -> {
             if (left.isVisible())
@@ -188,7 +197,11 @@ public class View extends JFrame {
                 left.setVisible(true);
         });
         submenus.get(2).get(0).addActionListener(e -> {
-            
+            JOptionPane.showMessageDialog(null, "Farshid Nooshi\nStudent ID: 9831068\nEmail: FarshidNooshi726@aut.ac.ir", "About", JOptionPane.INFORMATION_MESSAGE);
+        });
+        submenus.get(2).get(1).addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "To Do for next phases", "Help", JOptionPane.INFORMATION_MESSAGE);
+
         });
     }
 
