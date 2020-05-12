@@ -25,6 +25,7 @@ public class View extends JFrame {
     private JButton saveURL;
     private ArrayList<JPanel> centerPanels, rightPanels, rightBodyPanels;
     private JPanel formDataPanel, jSONpanel, binaryDataPanel;
+    private JList list;
 
     View(Options options) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         this.options = options;
@@ -130,6 +131,10 @@ public class View extends JFrame {
     }
 
     private void initLeftPanel() {
+        ArrayList<String> folders = new ArrayList<>();
+        folders.add("Requests");
+        list = new JList(folders.toArray());
+        JButton createNode = new JButton("create");
         left.setLayout(new BorderLayout());
         JLabel label = new JLabel("Insomnia", new ImageIcon("OrbitProject/res/Insomnia.png"), SwingConstants.LEFT);
         label.setBackground(new Color(182, 1, 255));
@@ -137,7 +142,15 @@ public class View extends JFrame {
         label.setOpaque(true);
         label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         left.add(label, BorderLayout.NORTH);
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Request");
+        left.add(createNode, BorderLayout.SOUTH);
+        left.add(list);
+
+        createNode.addActionListener(e -> {
+            String str = JOptionPane.showInputDialog(null, "Type a name", JOptionPane.INPUT_VALUE_PROPERTY);
+            list.clearSelection();
+            folders.add(str);
+            list.setListData(folders.toArray());
+        });
     }
 
     void showGUI() {
@@ -316,6 +329,6 @@ public class View extends JFrame {
         binaryDataPanel.setVisible(false);
         jSONpanel.setVisible(false);
         formDataPanel.setVisible(false);
-    }as
+    }
 
 }
