@@ -1,11 +1,12 @@
 // In The Name Of GOD
 
+/**
+ * the tray part is used from the code from stackoverflow.com
+ */
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 enum requests {
@@ -30,6 +31,8 @@ public class View extends JFrame {
     private JButton saveurl; // a button for saving the url
     private JList list; // for making folders in the left panel
     private myFocus focus = new myFocus(); // it's a focus listener
+    private TrayIcon trayIcon; // this two are for tray closing system
+    private SystemTray tray;
 
     /**
      * the constructor of the frame that build the things
@@ -66,6 +69,28 @@ public class View extends JFrame {
         initLeftPanel();
         initCenterPanel();
         initRightPanel();
+        tray = SystemTray.getSystemTray();
+        Image image = Toolkit.getDefaultToolkit().getImage("OrbitProject/Insomnia.png");
+        ActionListener exitListener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        };
+        PopupMenu popup = new PopupMenu();
+        MenuItem defaultItem = new MenuItem("Exit");
+        defaultItem.addActionListener(exitListener);
+        popup.add(defaultItem);
+        defaultItem = new MenuItem("Open");
+        defaultItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setVisible(true);
+                setExtendedState(JFrame.NORMAL);
+                tray.remove(trayIcon);
+            }
+        });
+        popup.add(defaultItem);
+        trayIcon = new TrayIcon(image, "", popup);
+        trayIcon.setImageAutoSize(true);
     }
 
     /**
@@ -480,6 +505,17 @@ public class View extends JFrame {
             JTextField jTextField = (JTextField) e.getSource();
             if (jTextField.getText().trim().equals(""))
                 jTextField.setText(jTextField.getName());
+        }
+    }
+
+    void setToTray() {
+        if (options.isExitable()) {
+            try {
+                tray.add(trayIcon);
+            } catch (AWTException ex) {
+                ex.printStackTrace();
+            }
+            setVisible(false);
         }
     }
 
