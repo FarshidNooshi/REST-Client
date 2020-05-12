@@ -170,7 +170,7 @@ public class View extends JFrame {
         for (int i = 0; i < NUMBER_OF_MENUS; i++)
             for (int j = 0; j < NUMBER_OF_SUBMENUS; j++) {
                 menus.get(i).add(submenus.get(i).get(j));
-                if (j == 0)
+                if (j == 0)asas
                     menus.get(i).addSeparator();
             }
         submenus.get(0).get(0).addActionListener(e -> {
