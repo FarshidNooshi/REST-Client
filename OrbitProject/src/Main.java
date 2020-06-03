@@ -1,5 +1,8 @@
 // In The Name Of GOD
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+
 /**
  * I followed the concepts of MVC designing pattern
  */
@@ -21,3 +24,4 @@ public class Main {
         }
     }
 }
+

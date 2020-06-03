@@ -468,6 +468,17 @@ public class View extends JFrame {
         formDataPanel.setVisible(false);
     }
 
+    void setToTray() {
+        if (options.isExitable()) {
+            try {
+                tray.add(trayIcon);
+            } catch (AWTException ex) {
+                ex.printStackTrace();
+            }
+            setVisible(false);
+        }
+    }
+
     /**
      * this class is built for listening to focuses in the program for textAreas
      */
@@ -505,17 +516,6 @@ public class View extends JFrame {
             JTextField jTextField = (JTextField) e.getSource();
             if (jTextField.getText().trim().equals(""))
                 jTextField.setText(jTextField.getName());
-        }
-    }
-
-    void setToTray() {
-        if (options.isExitable()) {
-            try {
-                tray.add(trayIcon);
-            } catch (AWTException ex) {
-                ex.printStackTrace();
-            }
-            setVisible(false);
         }
     }
 
