@@ -21,6 +21,7 @@ public class Main {
             view.showGUI();
         } catch (Exception e) {
             e.printStackTrace();
+            
         }
     }
 }
