@@ -1,4 +1,4 @@
-// In The Name Of GOD
+package Phase1;// In The Name Of GOD
 
 /**
  * the tray part is used from the code from stackoverflow.com
@@ -234,7 +234,7 @@ public class View extends JFrame {
     private void initMenuBar() { // Action listener should add
         setIconImage(new ImageIcon("OrbitProject/Insomnia.png").getImage());
         menus.add(new JMenu("Application"));
-        menus.add(new JMenu("View"));
+        menus.add(new JMenu("Phase1.View"));
         menus.add(new JMenu("Help"));
         menus.get(0).setMnemonic(KeyEvent.VK_ASTERISK);
         menus.get(0).setMnemonic(KeyEvent.VK_1);
@@ -244,7 +244,7 @@ public class View extends JFrame {
             menuBar.add(menus.get(i));
         for (int i = 0; i < NUMBER_OF_MENUS; i++)
             submenus.add(new ArrayList<>());
-        submenus.get(0).add(new JMenuItem("Options", KeyEvent.VK_O));
+        submenus.get(0).add(new JMenuItem("Phase1.Options", KeyEvent.VK_O));
         submenus.get(0).add(new JMenuItem("Exit", KeyEvent.VK_E));
         submenus.get(1).add(new JMenuItem("Toggle Full Screen", KeyEvent.VK_T));
         submenus.get(1).add(new JMenuItem("Toggle sidebar", KeyEvent.VK_S));

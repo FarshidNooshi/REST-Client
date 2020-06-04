@@ -1,7 +1,4 @@
-// In The Name Of GOD
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
+package Phase1;// In The Name Of GOD
 
 /**
  * I followed the concepts of MVC designing pattern
