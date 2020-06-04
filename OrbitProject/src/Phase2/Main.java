@@ -1,5 +1,6 @@
 package Phase2;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 public class Main {
@@ -9,7 +10,7 @@ public class Main {
      * // --upload, list
      * @param args is the inputs of this HTTPCLIENT service
      */
-    public static void main(String[] args){
+    public static void main(String[] args) throws MalformedURLException {
         if (args.length == 0)
             new Exception("INVALID INPUT").printStackTrace();
         request = new Request();
@@ -53,6 +54,8 @@ public class Main {
                     }
                 }
             }
+            HTTPService service = new HTTPService(request);
+            service.runService();
         }
     }
 

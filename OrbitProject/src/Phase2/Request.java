@@ -5,11 +5,11 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Request {
-    HashMap<String, String> mp;
+    private HashMap<String, String> mp;
 
     public Request() {
         mp = new HashMap<>();
-        mp.put("URL", "https://www.google.com");
+        mp.put("url", "https://www.google.com");
         mp.put("method", "GET");
         mp.put("headers", "");
         mp.put("i", "false");
@@ -19,6 +19,7 @@ public class Request {
         mp.put("save", "false");
         mp.put("data", "");
         mp.put("json", "");
+        mp.put("upload", "false");
     }
 
     public HashMap<String, String> getMp() {
