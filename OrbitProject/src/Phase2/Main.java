@@ -1,13 +1,28 @@
 package Phase2;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLParameters;
+import java.io.IOException;
+import java.net.Authenticator;
+import java.net.CookieHandler;
 import java.net.MalformedURLException;
+import java.net.ProxySelector;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 public class Main {
     private static Request request;
+
     /**
      * //--url, -M(--method), -H(--headers), -i, -h(--help), -f, -O(--output), -S(--save), -d(--data), -j(--json),
      * // --upload, list
+     *
      * @param args is the inputs of this HTTPCLIENT service
      */
     public static void main(String[] args) throws MalformedURLException {
@@ -54,31 +69,33 @@ public class Main {
                     }
                 }
             }
-            HTTPService service = new HTTPService(request);
+            HTTpService service = new HTTpService(request);
             service.runService();
         }
     }
 
     /**
      * this method initializes the arrayList for checking for the next input in the commands or not
+     *
      * @param arr says if each command needs a second value or not
      */
     private static void init(ArrayList<Pair<String, Boolean>> arr) {
-        arr.add(new Pair<>("url", true));
-        arr.add(new Pair<>("method", true));
-        arr.add(new Pair<>("headers", true));
-        arr.add(new Pair<>("i", false));
-        arr.add(new Pair<>("help", false));
-        arr.add(new Pair<>("f", false));
-        arr.add(new Pair<>("save", false));
-        arr.add(new Pair<>("data", true));
-        arr.add(new Pair<>("json", true));
-        arr.add(new Pair<>("upload", true));
-        arr.add(new Pair<>("output", true));
+        arr.add(new Pair<>("url", true));//done
+        arr.add(new Pair<>("method", true));//POST:done, GET:done, PATCH: , DELETE: , PUT:
+        arr.add(new Pair<>("headers", true));//done
+        arr.add(new Pair<>("i", false));//
+        arr.add(new Pair<>("help", false));//
+        arr.add(new Pair<>("f", false));// done
+        arr.add(new Pair<>("save", false));//
+        arr.add(new Pair<>("data", true));//
+        arr.add(new Pair<>("json", true));//
+        arr.add(new Pair<>("upload", true));//
+        arr.add(new Pair<>("output", true));//
     }
 
     /**
      * this method replaces -* commands with their --* equivalent
+     *
      * @param args is the input commands
      */
     private static void initArgs(String[] args) {

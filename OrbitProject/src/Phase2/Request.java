@@ -9,7 +9,7 @@ public class Request {
 
     public Request() {
         mp = new HashMap<>();
-        mp.put("url", "https://www.google.com");
+        mp.put("url", "www.google.com");
         mp.put("method", "GET");
         mp.put("headers", "");
         mp.put("i", "false");
