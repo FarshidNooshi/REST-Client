@@ -81,7 +81,7 @@ public class Main {
      */
     private static void init(ArrayList<Pair<String, Boolean>> arr) {
         arr.add(new Pair<>("url", true));//done
-        arr.add(new Pair<>("method", true));//POST:done, GET:done, PATCH: , DELETE: , PUT:
+        arr.add(new Pair<>("method", true));//POST:done, GET:done, PATCH: , DELETE:done, PUT:done
         arr.add(new Pair<>("headers", true));//done
         arr.add(new Pair<>("i", false));//
         arr.add(new Pair<>("help", false));//

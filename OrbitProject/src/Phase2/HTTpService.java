@@ -7,6 +7,8 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.http.HttpClient;
+import java.util.List;
+import java.util.Map;
 
 /**
  * this class represents a service for the user http requests and stuff.
@@ -59,6 +61,9 @@ public class HTTpService {
                 case "DELETE":
                     System.out.println(Delete(connection));
                     break;
+            }
+            if (request.getMp().get("i").equals("true")) {
+                
             }
         } catch (IOException ex) {
             System.err.println("FAILED TO OPEN CONNECTION!" + ex);
