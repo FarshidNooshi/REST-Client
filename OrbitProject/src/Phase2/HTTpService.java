@@ -63,7 +63,8 @@ public class HTTpService {
                     break;
             }
             if (request.getMp().get("i").equals("true")) {
-                
+                for (Map.Entry<String, List<String>> entry : connection.getHeaderFields().entrySet())
+                    System.out.println("Key: " + entry.getKey() + " ,Value: " + entry.getValue() + "\n");
             }
         } catch (IOException ex) {
             System.err.println("FAILED TO OPEN CONNECTION!" + ex);
