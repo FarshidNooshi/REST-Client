@@ -84,11 +84,11 @@ public class Main {
         arr.add(new Pair<>("method", true));//POST:done, GET:done, PATCH: , DELETE:done, PUT:done
         arr.add(new Pair<>("headers", true));//done
         arr.add(new Pair<>("i", false));//done
-        arr.add(new Pair<>("help", false));//
+        arr.add(new Pair<>("help", false));//done
         arr.add(new Pair<>("f", false));// done
         arr.add(new Pair<>("save", false));//
         arr.add(new Pair<>("data", true));//done
-        arr.add(new Pair<>("json", true));//...
+        arr.add(new Pair<>("json", true));//
         arr.add(new Pair<>("upload", true));//
         arr.add(new Pair<>("output", true));//
     }

@@ -32,6 +32,8 @@ public class HTTpService {
      * @throws MalformedURLException for the url connection
      */
     public void runService() throws MalformedURLException {
+        if (request.getMp().get("help").equals("true"))
+            PrintHelp();
         URL url = new URL(request.getMp().get("url"));
         try {
             if ("http".equals(url.getProtocol())) {
@@ -156,5 +158,18 @@ public class HTTpService {
         if (connection.getResponseCode() / 100 == 2)
             return Get(connection);
         return "NOT SUCCESSFUL\n" + connection.getResponseCode() + " " + connection.getResponseMessage();
+    }
+
+    /**
+     * this method prints a user guide for the user for how to use the application
+     */
+    private void PrintHelp() {
+        System.out.println("--url: [Address] := address as the request url");
+        System.out.println("-M(--method): (GET, POST, PATCH, DELETE, PUT) := request method type");
+        System.out.println("-i: tells to print the response headers.");
+        System.out.println("-H(--headers): key:value&... := setting the headers of the request");
+        System.out.println("-h(--help)  will print the help");
+        System.out.println("-f := if typed it will allow the following redirection");
+//        System.out.println("");
     }
 }
