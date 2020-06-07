@@ -1,6 +1,9 @@
 package Phase2;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 public class Reader {
     private ObjectInputStream in;
@@ -10,10 +13,15 @@ public class Reader {
     }
 
     public Object ReadFromFile() throws IOException {
-        return in.read();
+        try {
+            return in.readObject();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public void CloseConnection () throws IOException {
+    public void CloseConnection() throws IOException {
         in.close();
     }
 }

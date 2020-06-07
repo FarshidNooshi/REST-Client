@@ -37,7 +37,7 @@ public class Main {
                     if (!temp.equalsIgnoreCase("phase2") && !temp.equalsIgnoreCase("phase1"))
                         System.out.println(temp);
             } else {
-                Path path = Paths.get(new File(System.getProperty("user.dir")).getParentFile().getAbsolutePath() + File.separator + args[1]);
+                Path path = Paths.get(new File(System.getProperty("user.dir")).getAbsolutePath() + File.separator + args[1]);
                 File file = new File(path.toString());
                 if (file.exists()) {
                     String[] arr = file.list();
