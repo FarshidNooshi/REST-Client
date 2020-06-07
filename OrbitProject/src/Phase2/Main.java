@@ -1,20 +1,10 @@
 package Phase2;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLParameters;
+import java.io.File;
 import java.io.IOException;
-import java.net.Authenticator;
-import java.net.CookieHandler;
-import java.net.MalformedURLException;
-import java.net.ProxySelector;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 public class Main {
     private static Request request;
@@ -25,15 +15,45 @@ public class Main {
      *
      * @param args is the inputs of this HTTPCLIENT service
      */
-    public static void main(String[] args) throws MalformedURLException {
+    public static void main(String[] args) throws IOException {
         if (args.length == 0)
             new Exception("INVALID INPUT").printStackTrace();
         request = new Request();
         ArrayList<Pair<String, Boolean>> arrayList = new ArrayList<>();
         init(arrayList);
         initArgs(args);
-        if (args[0].equalsIgnoreCase("list")) {
-
+        if (args[0].equalsIgnoreCase("create")) {
+            File fileToCreate = new File(new File(System.getProperty("user.dir")).getAbsolutePath() + File.separator + args[1]);
+            if (fileToCreate.mkdir())
+                System.out.println("directory created!");
+            else
+                System.err.println("Couldn't create the directory");
+        } else if (args[0].equalsIgnoreCase("list")) {
+            if (args.length == 1) {
+                File file = new File(System.getProperty("user.dir"));
+                String[] arr = file.list();
+                assert arr != null;
+                for (String temp : arr)
+                    if (!temp.equalsIgnoreCase("phase2") && !temp.equalsIgnoreCase("phase1"))
+                        System.out.println(temp);
+            } else {
+                Path path = Paths.get(new File(System.getProperty("user.dir")).getParentFile().getAbsolutePath() + File.separator + args[1]);
+                File file = new File(path.toString());
+                if (file.exists()) {
+                    String[] arr = file.list();
+                    assert arr != null;
+                    for (String temp : arr) {
+                        System.out.print(temp + ". ");
+                        Reader reader = new Reader(path.toString() + File.separator + temp);
+                        Request req = (Request) reader.ReadFromFile();
+                        System.out.print("URL: " + req.getMp().get("url") + " | ");
+                        System.out.print("method: " + req.getMp().get("method") + " | ");
+                        System.out.print("headers: " + req.getMp().get("header") + " | ");
+                        System.out.println("data: " + req.getMp().get("data"));
+                    }
+                } else
+                    System.err.println("error occurred while opening the directory.");
+            }
         } else {
             for (Pair<String, Boolean> element : arrayList) {
                 if (element.getFirst().equals("i") || element.getFirst().equals("f")) {
@@ -70,8 +90,17 @@ public class Main {
                 }
             }
             HTTpService service = new HTTpService(request);
+            if (!request.getMp().get("save").equals("false"))
+                SaveRequest();
             service.runService();
         }
+    }
+
+    private static void SaveRequest() throws IOException {
+        Path path = Paths.get(new File(System.getProperty("user.dir")).getAbsolutePath() + File.separator + request.getMp().get("save"));
+        String name = String.valueOf(new File(path.toString()).list().length + 1);
+        Writer writer = new Writer(path.toString() + File.separator + name);
+        writer.WriteToFile(request);
     }
 
     /**
@@ -86,7 +115,7 @@ public class Main {
         arr.add(new Pair<>("i", false));//done
         arr.add(new Pair<>("help", false));//done
         arr.add(new Pair<>("f", false));// done
-        arr.add(new Pair<>("save", false));//
+        arr.add(new Pair<>("save", true));//
         arr.add(new Pair<>("data", true));//done
         arr.add(new Pair<>("json", true));//
         arr.add(new Pair<>("upload", true));//

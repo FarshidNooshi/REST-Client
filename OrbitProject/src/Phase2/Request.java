@@ -1,10 +1,12 @@
 package Phase2;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class Request {
+public class Request implements Serializable {
+    private static final long serialVersionUID = 2724937972241616654L;
     private HashMap<String, String> mp;
 
     public Request() {
