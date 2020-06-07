@@ -50,21 +50,32 @@ public class HTTpService {
                 connection.setInstanceFollowRedirects(false);
             initHeaders(connection);
             connection.setRequestMethod(request.getMp().get("method"));
+            String ret = null;
             switch (connection.getRequestMethod()) {
                 case "GET":
-                    System.out.println(Get(connection));
+                    ret = Get(connection);
                     break;
                 case "POST":
-                    System.out.println(Post(connection));
+                    ret = Post(connection);
                     break;
                 case "PATCH":
                     break;
                 case "PUT":
-                    System.out.println(Put(connection));
+                    ret = Put(connection);
                     break;
                 case "DELETE":
-                    System.out.println(Delete(connection));
+                    ret = Delete(connection);
                     break;
+            }
+            System.out.println(ret);
+            if (!request.getMp().get("output").equals("")) {
+                File file = new File(new File(System.getProperty("user.dir")).getParent() + File.separator + "OutputFolder");
+                file.mkdir();
+                String name = "output[" + request.getMp().get("output") + "]" + ".txt";
+                File actualFile = new File(file, name);
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(actualFile));
+                bufferedWriter.write(ret);
+                bufferedWriter.flush();
             }
             if (request.getMp().get("i").equals("true")) {
                 for (Map.Entry<String, List<String>> entry : connection.getHeaderFields().entrySet())

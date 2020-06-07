@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Main {
@@ -68,9 +70,12 @@ public class Main {
                         if (relax.equals(element.getFirst())) {
                             if (element.getFirst().equals("output")) {
                                 try {
-                                    if (args[i + 1].charAt(0) == '-')
-                                        continue;
-                                    request.getMp().replace(element.getFirst(), args[i + 1]);
+                                    if ((args.length > i + 1 && args[i + 1].charAt(0) == '-') || (args.length == i + 1)) {
+                                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy.MM.dd,HH.mm.ss");
+                                        LocalDateTime now = LocalDateTime.now();
+                                        request.getMp().replace("output", dtf.format(now));
+                                    } else if (args.length > i + 1)
+                                        request.getMp().replace(element.getFirst(), args[i + 1]);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -115,7 +120,7 @@ public class Main {
         arr.add(new Pair<>("i", false));//done
         arr.add(new Pair<>("help", false));//done
         arr.add(new Pair<>("f", false));// done
-        arr.add(new Pair<>("save", true));//
+        arr.add(new Pair<>("save", true));//done
         arr.add(new Pair<>("data", true));//done
         arr.add(new Pair<>("json", true));//
         arr.add(new Pair<>("upload", true));//
