@@ -124,7 +124,7 @@ public class Main {
         arr.add(new Pair<>("data", true));//done
         arr.add(new Pair<>("json", true));//
         arr.add(new Pair<>("upload", true));//
-        arr.add(new Pair<>("output", true));//
+        arr.add(new Pair<>("output", true));//done
     }
 
     /**
