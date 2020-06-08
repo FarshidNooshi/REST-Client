@@ -102,6 +102,18 @@ public class Main {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            if (request.getMp().get("upload").equals(""))
+                return;
+            request = (Request) (new Reader(request.getMp().get("upload")).ReadFromFile());
+            service = new HTTpService(request);
+            if (!request.getMp().get("save").equals("false"))
+                SaveRequest();
+            try {
+                service.runService();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -127,7 +139,7 @@ public class Main {
         arr.add(new Pair<>("save", true));//done
         arr.add(new Pair<>("data", true));//done
         arr.add(new Pair<>("json", true));//done
-        arr.add(new Pair<>("upload", true));//
+        arr.add(new Pair<>("upload", true));//done
         arr.add(new Pair<>("output", true));//done
     }
 

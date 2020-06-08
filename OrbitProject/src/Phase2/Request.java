@@ -21,7 +21,7 @@ public class Request implements Serializable {
         mp.put("save", "false");
         mp.put("data", "");
         mp.put("json", "");
-        mp.put("upload", "false");
+        mp.put("upload", "");
     }
 
     public HashMap<String, String> getMp() {
