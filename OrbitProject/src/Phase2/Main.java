@@ -138,7 +138,7 @@ public class Main {
         arr.add(new Pair<>("f", false));// done
         arr.add(new Pair<>("save", true));//done
         arr.add(new Pair<>("data", true));//done
-        arr.add(new Pair<>("json", true));//done
+        arr.add(new Pair<>("json", true));//done 
         arr.add(new Pair<>("upload", true));//done
         arr.add(new Pair<>("output", true));//done
     }
