@@ -4,11 +4,7 @@ import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.net.http.HttpClient;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -33,9 +29,13 @@ public class HTTpService {
      *
      * @throws MalformedURLException for the url connection
      */
-    public void runService() throws MalformedURLException {
+    public void runService() throws Exception {
         if (request.getMp().get("help").equals("true"))
             PrintHelp();
+        if (!request.getMp().get("data").equals("") && !request.getMp().get("json").equals("")) {
+            System.err.println("Program terminated.");
+            throw new Exception("can't have both json & form data as message body!");
+        }
         URL url = new URL(request.getMp().get("url"));
         try {
             if ("http".equals(url.getProtocol())) {
@@ -92,6 +92,10 @@ public class HTTpService {
      * @param connection is the http connection to the server
      */
     private void initHeaders(HttpURLConnection connection) {
+        if (!request.getMp().get("json").equals("")) {
+            connection.setRequestProperty("Content-Type", "application/json; utf-8");
+            connection.setRequestProperty("Accept", "application/json");
+        }
         String input = request.getMp().get("headers") + ";";
         int size = input.length();
         for (int i = 0; i < size; i++) {
@@ -145,7 +149,7 @@ public class HTTpService {
     private String Put(HttpURLConnection connection) throws IOException {
         connection.setDoOutput(true);
         connection.setRequestMethod("PUT");
-        try(BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()))) {
+        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()))) {
             out.write(request.getMp().get("data"));
             out.flush();
         } catch (Exception e) {
@@ -161,7 +165,7 @@ public class HTTpService {
         connection.setDoOutput(true);
         connection.setRequestMethod("DELETE");
         connection.connect();
-        try(BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()))) {
+        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()))) {
             out.write(request.getMp().get("data"));
             out.flush();
         } catch (Exception e) {

@@ -97,7 +97,11 @@ public class Main {
             HTTpService service = new HTTpService(request);
             if (!request.getMp().get("save").equals("false"))
                 SaveRequest();
-            service.runService();
+            try {
+                service.runService();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
