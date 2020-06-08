@@ -48,6 +48,7 @@ public class Main {
                         System.out.print(temp + ". ");
                         Reader reader = new Reader(path.toString() + File.separator + temp);
                         Request req = (Request) reader.ReadFromFile();
+                        reader.close();
                         System.out.print("URL: " + req.getMp().get("url") + " | ");
                         System.out.print("method: " + req.getMp().get("method") + " | ");
                         System.out.print("headers: " + req.getMp().get("header") + " | ");
@@ -105,7 +106,9 @@ public class Main {
 
             if (request.getMp().get("upload").equals(""))
                 return;
-            request = (Request) (new Reader(request.getMp().get("upload")).ReadFromFile());
+            Reader tmp = new Reader(request.getMp().get("upload"));
+            request = (Request) tmp.ReadFromFile();
+            tmp.close();
             service = new HTTpService(request);
             if (!request.getMp().get("save").equals("false"))
                 SaveRequest();
@@ -117,6 +120,11 @@ public class Main {
         }
     }
 
+    /**
+     * this method will save the request to the path that user gave.
+     *
+     * @throws IOException if the exception occurred
+     */
     private static void SaveRequest() throws IOException {
         Path path = Paths.get(new File(System.getProperty("user.dir")).getAbsolutePath() + File.separator + request.getMp().get("save"));
         String name = String.valueOf(new File(path.toString()).list().length + 1);
@@ -138,7 +146,7 @@ public class Main {
         arr.add(new Pair<>("f", false));// done
         arr.add(new Pair<>("save", true));//done
         arr.add(new Pair<>("data", true));//done
-        arr.add(new Pair<>("json", true));//done 
+        arr.add(new Pair<>("json", true));//done
         arr.add(new Pair<>("upload", true));//done
         arr.add(new Pair<>("output", true));//done
     }

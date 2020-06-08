@@ -2,9 +2,10 @@ package Phase2;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
 
+/**
+ * this class is a serialized class for request and represents a request in this project.
+ */
 public class Request implements Serializable {
     private static final long serialVersionUID = 2724937972241616654L;
     private HashMap<String, String> mp;

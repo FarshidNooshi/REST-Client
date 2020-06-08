@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+/**
+ * this class is for reading an object(request) from a path
+ */
 public class Reader {
     private ObjectInputStream in;
 
@@ -21,7 +24,11 @@ public class Reader {
         return null;
     }
 
-    public void CloseConnection() throws IOException {
-        in.close();
+    public void close() {
+        try {
+            in.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

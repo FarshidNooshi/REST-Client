@@ -25,7 +25,7 @@ public class HTTpService {
     }
 
     /**
-     * runs the servcie for the client, e.x. executes the request
+     * runs the service for the client, e.x. executes the request
      *
      * @throws MalformedURLException for the url connection
      */
@@ -116,7 +116,13 @@ public class HTTpService {
         }
     }
 
+    /**
+     * doing a get request for the connection given to it.
+     * @param connection is a connection that user wants to send a get request with desired params.
+     * @return a String containing the response body.
+     */
     private String Get(HttpURLConnection connection) {
+        initBody(connection);
         StringBuilder builder = new StringBuilder();
         String line;
         try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
@@ -131,9 +137,14 @@ public class HTTpService {
         return builder.toString();
     }
 
-    private String Post(HttpURLConnection connection) throws IOException {
-        connection.setDoOutput(true);
+    /**
+     * initializes the request body for the program.
+     * @param connection is the connection to use.
+     */
+    private void initBody(HttpURLConnection connection) {
         String data = request.getMp().get("data");
+        if (data.equals(""))
+            data = request.getMp().get("json");
         try (BufferedOutputStream out = new BufferedOutputStream(connection.getOutputStream())) {
             out.write(data.getBytes());
             out.flush();
@@ -141,40 +152,55 @@ public class HTTpService {
             e.printStackTrace();
             System.exit(1);
         }
-        if (connection.getResponseCode() / 100 == 2)
-            return Get(connection);
-        return "NOT SUCCESSFUL\n" + connection.getResponseCode() + " " + connection.getResponseMessage();
     }
 
+    /**
+     * this method is for doing a simple post request for user
+     * @param connection is the connection that wants to do a post request.
+     * @return a string containing response body.
+     * @throws IOException if the Exception occurred.
+     */
+    private String Post(HttpURLConnection connection) throws IOException {
+        connection.setDoOutput(true);
+        initBody(connection);
+        return getResponse(connection);
+    }
+
+    /**
+     * this method is doing a put request for the
+     * @param connection that passes to it.
+     * @param connection is the passed HttpURLConnection for doing the put request.
+     * @return a string containing the response body.
+     * @throws IOException if an exception in IO occurs.
+     */
     private String Put(HttpURLConnection connection) throws IOException {
         connection.setDoOutput(true);
-        connection.setRequestMethod("PUT");
-        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()))) {
-            out.write(request.getMp().get("data"));
-            out.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
+        initBody(connection);
+        return getResponse(connection);
+    }
+
+    /**
+     * returns a string showing the status of the failed request or returning the response body.
+     * @param connection is the connection to use.
+     * @return a string showing the status of the failed request or returning the response body.
+     * @throws IOException if the IO exception occurs.
+     */
+    private String getResponse(HttpURLConnection connection) throws IOException {
         if (connection.getResponseCode() / 100 == 2)
             return Get(connection);
         return "NOT SUCCESSFUL\n" + connection.getResponseCode() + " " + connection.getResponseMessage();
     }
 
+    /**
+     * doing a simple Delete request.
+     * @param connection is the connection to use.
+     * @return the getResponse for the request response.
+     * @throws IOException if the IO exception occurs.
+     */
     private String Delete(HttpURLConnection connection) throws IOException {
         connection.setDoOutput(true);
-        connection.setRequestMethod("DELETE");
         connection.connect();
-        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()))) {
-            out.write(request.getMp().get("data"));
-            out.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-        if (connection.getResponseCode() / 100 == 2)
-            return Get(connection);
-        return "NOT SUCCESSFUL\n" + connection.getResponseCode() + " " + connection.getResponseMessage();
+        return getResponse(connection);
     }
 
     /**
@@ -187,6 +213,11 @@ public class HTTpService {
         System.out.println("-H(--headers): key:value&... := setting the headers of the request");
         System.out.println("-h(--help)  will print the help");
         System.out.println("-f := if typed it will allow the following redirection");
-//        System.out.println("");
+        System.out.println("--save [folder name] := will save the request for you");
+        System.out.println("--data [message body] := is the preferred message body with formData");
+        System.out.println("--json [message body] := is the preferred message body with Json");
+        System.out.println("note that in each request you should use one of json and data");
+        System.out.println("--upload [URI] := will upload a request from a URI in system, URI is a absolute path.");
+        System.out.println("output [empty or name] := will save the response body in a txt file with name : output [name or current date]");
     }
 }
