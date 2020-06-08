@@ -87,7 +87,7 @@ public class Main {
                                     if ((args.length > i + 1 && args[i + 1].charAt(0) == '-') || (args.length == i + 1)) {
                                         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy.MM.dd,HH.mm.ss");
                                         LocalDateTime now = LocalDateTime.now();
-                                        request.getMp().replace("output", dtf.format(now));
+                                        request.getMp().replace("output", "output[" + dtf.format(now) + "]" + ".txt");
                                     } else if (args.length > i + 1)
                                         request.getMp().replace(element.getFirst(), args[i + 1]);
                                 } catch (Exception e) {
@@ -116,7 +116,6 @@ public class Main {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             if (request.getMp().get("upload").equals(""))
                 return;
             Reader tmp = new Reader(request.getMp().get("upload"));
@@ -160,6 +159,7 @@ public class Main {
         arr.add(new Pair<>("json", true));//done
         arr.add(new Pair<>("upload", true));//done
         arr.add(new Pair<>("output", true));//done
+        arr.add(new Pair<>("type", true));
     }
 
     /**

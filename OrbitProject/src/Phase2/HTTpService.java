@@ -30,12 +30,12 @@ public class HTTpService {
      * @throws MalformedURLException for the url connection
      */
     public void runService() throws Exception {
-        if (request.getMp().get("help").equals("true"))
-            PrintHelp();
         if (!request.getMp().get("data").equals("") && !request.getMp().get("json").equals("")) {
             System.err.println("Program terminated.");
             throw new Exception("can't have both json & form data as message body!");
         }
+        if (request.getMp().get("help").equals("true"))
+            PrintHelp();
         URL url = new URL(request.getMp().get("url"));
         try {
             if ("http".equals(url.getProtocol())) {
@@ -56,26 +56,13 @@ public class HTTpService {
                 System.out.println("redirected to " + location);
                 connection = (HttpURLConnection) (new URL(location)).openConnection();
             }
-            String ret = null;
-            switch (connection.getRequestMethod()) {
-                case "GET":
-                    ret = Get(connection);
-                    break;
-                case "PUT":
-                case "POST":
-                    ret = getResponse(connection);
-                    break;
-                case "PATCH":
-                    break;
-                case "DELETE":
-                    ret = Delete(connection);
-                    break;
-            }
+            String ret = getResponse(connection);
+            System.out.println(connection.getResponseCode() + " " + connection.getResponseMessage());
             System.out.println(ret);
             if (!request.getMp().get("output").equals("")) {
                 File file = new File(new File(System.getProperty("user.dir")).getParent() + File.separator + "OutputFolder");
                 file.mkdir();
-                String name = "output[" + request.getMp().get("output") + "]" + ".txt";
+                String name = request.getMp().get("output");
                 File actualFile = new File(file, name);
                 BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(actualFile));
                 bufferedWriter.write(ret);
@@ -91,14 +78,42 @@ public class HTTpService {
     }
 
     /**
+     * doing a get request for the connection given to it.
+     *
+     * @param connection is a connection that user wants to send a get request with desired params.
+     * @return a String containing the response body.
+     */
+    private String Get(HttpURLConnection connection) {
+        StringBuilder builder = new StringBuilder();
+        String line;
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            while ((line = in.readLine()) != null) {
+                builder.append(line);
+                builder.append(System.lineSeparator());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return builder.toString();
+    }
+
+    /**
      * this method adds the headers of the user input to our connection
      *
      * @param connection is the http connection to the server
      */
     private void initHeaders(HttpURLConnection connection) {
-        if (!request.getMp().get("json").equals("")) {
+        if (request.getMp().get("type").equals("json")) {
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
+        } else if (request.getMp().get("type").equals("formData")) {
+            String boundary = System.currentTimeMillis() + "";
+            connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+        } else if (request.getMp().get("type").equals("encoded")) {
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        } else if (request.getMp().get("type").equals("binary")) {
+
         }
         String input = request.getMp().get("headers") + ";";
         int size = input.length();
@@ -121,27 +136,8 @@ public class HTTpService {
     }
 
     /**
-     * doing a get request for the connection given to it.
-     * @param connection is a connection that user wants to send a get request with desired params.
-     * @return a String containing the response body.
-     */
-    private String Get(HttpURLConnection connection) {
-        StringBuilder builder = new StringBuilder();
-        String line;
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-            while ((line = in.readLine()) != null) {
-                builder.append(line);
-                builder.append(System.lineSeparator());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-        return builder.toString();
-    }
-
-    /**
      * initializes the request body for the program.
+     *
      * @param connection is the connection to use.
      */
     private void initBody(HttpURLConnection connection) {
@@ -170,9 +166,9 @@ public class HTTpService {
             builder.append("}");
             data = builder.toString();
         }
-        System.out.println(data);
-        if (data.equals(""))
+        if (data.equals("") || data.equals("{}"))
             return;
+        System.out.println(data);
         try (BufferedOutputStream out = new BufferedOutputStream(connection.getOutputStream())) {
             out.write(data.getBytes());
             out.flush();
@@ -184,6 +180,7 @@ public class HTTpService {
 
     /**
      * returns a string showing the status of the failed request or returning the response body.
+     *
      * @param connection is the connection to use.
      * @return a string showing the status of the failed request or returning the response body.
      * @throws IOException if the IO exception occurs.
@@ -192,17 +189,6 @@ public class HTTpService {
         if (connection.getResponseCode() / 100 == 2)
             return Get(connection);
         return "NOT SUCCESSFUL\n" + connection.getResponseCode() + " " + connection.getResponseMessage();
-    }
-
-    /**
-     * doing a simple Delete request.
-     * @param connection is the connection to use.
-     * @return the getResponse for the request response.
-     * @throws IOException if the IO exception occurs.
-     */
-    private String Delete(HttpURLConnection connection) throws IOException {
-        connection.connect();
-        return getResponse(connection);
     }
 
     /**
