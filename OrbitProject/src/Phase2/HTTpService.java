@@ -206,7 +206,7 @@ public class HTTpService {
     /**
      * this method prints a user guide for the user for how to use the application
      */
-    private void PrintHelp() {
+    private void PrintHelp() {  
         System.out.println("--url: [Address] := address as the request url");
         System.out.println("-M(--method): (GET, POST, PATCH, DELETE, PUT) := request method type");
         System.out.println("-i: tells to print the response headers.");
