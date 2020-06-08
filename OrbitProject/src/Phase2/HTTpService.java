@@ -46,22 +46,26 @@ public class HTTpService {
                 System.err.println("UNSUPPORTED PROTOCOL!");
                 return;
             }
-            if (request.getMp().get("f").equals("false"))
-                connection.setInstanceFollowRedirects(false);
+            connection.setInstanceFollowRedirects(false);
+            connection.setDoOutput(true);
             initHeaders(connection);
             connection.setRequestMethod(request.getMp().get("method"));
+            initBody(connection);
+            while (connection.getResponseCode() / 100 == 3 && request.getMp().get("f").equals("true")) {
+                String location = connection.getHeaderField("Location");
+                System.out.println("redirected to " + location);
+                connection = (HttpURLConnection) (new URL(location)).openConnection();
+            }
             String ret = null;
             switch (connection.getRequestMethod()) {
                 case "GET":
                     ret = Get(connection);
                     break;
+                case "PUT":
                 case "POST":
-                    ret = Post(connection);
+                    ret = getResponse(connection);
                     break;
                 case "PATCH":
-                    break;
-                case "PUT":
-                    ret = Put(connection);
                     break;
                 case "DELETE":
                     ret = Delete(connection);
@@ -93,7 +97,7 @@ public class HTTpService {
      */
     private void initHeaders(HttpURLConnection connection) {
         if (!request.getMp().get("json").equals("")) {
-            connection.setRequestProperty("Content-Type", "application/json; utf-8");
+            connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
         }
         String input = request.getMp().get("headers") + ";";
@@ -122,7 +126,6 @@ public class HTTpService {
      * @return a String containing the response body.
      */
     private String Get(HttpURLConnection connection) {
-        initBody(connection);
         StringBuilder builder = new StringBuilder();
         String line;
         try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
@@ -143,8 +146,33 @@ public class HTTpService {
      */
     private void initBody(HttpURLConnection connection) {
         String data = request.getMp().get("data");
+        if (data.equals("")) {
+            StringBuilder builder = new StringBuilder("{");
+            String input = request.getMp().get("json");
+            int size = input.length();
+            for (int i = 1; i + 1 < size; i++) {
+                String key = null, value = null;
+                int j = i;
+                while (j < size && input.charAt(j) != ':')
+                    j++;
+                if (j < size)
+                    key = input.substring(i, j);
+                i = ++j;
+                while (j + 1 < size && input.charAt(j) != ',')
+                    j++;
+                if (i + 1 < size)
+                    value = input.substring(i, j);
+                builder.append("\"").append(key).append("\"").append(":\"").append(value).append("\"");
+                i = j;
+                if (i + 1 < size)
+                    builder.append(",");
+            }
+            builder.append("}");
+            data = builder.toString();
+        }
+        System.out.println(data);
         if (data.equals(""))
-            data = request.getMp().get("json");
+            return;
         try (BufferedOutputStream out = new BufferedOutputStream(connection.getOutputStream())) {
             out.write(data.getBytes());
             out.flush();
@@ -152,31 +180,6 @@ public class HTTpService {
             e.printStackTrace();
             System.exit(1);
         }
-    }
-
-    /**
-     * this method is for doing a simple post request for user
-     * @param connection is the connection that wants to do a post request.
-     * @return a string containing response body.
-     * @throws IOException if the Exception occurred.
-     */
-    private String Post(HttpURLConnection connection) throws IOException {
-        connection.setDoOutput(true);
-        initBody(connection);
-        return getResponse(connection);
-    }
-
-    /**
-     * this method is doing a put request for the
-     * @param connection that passes to it.
-     * @param connection is the passed HttpURLConnection for doing the put request.
-     * @return a string containing the response body.
-     * @throws IOException if an exception in IO occurs.
-     */
-    private String Put(HttpURLConnection connection) throws IOException {
-        connection.setDoOutput(true);
-        initBody(connection);
-        return getResponse(connection);
     }
 
     /**
@@ -198,7 +201,6 @@ public class HTTpService {
      * @throws IOException if the IO exception occurs.
      */
     private String Delete(HttpURLConnection connection) throws IOException {
-        connection.setDoOutput(true);
         connection.connect();
         return getResponse(connection);
     }
@@ -206,7 +208,7 @@ public class HTTpService {
     /**
      * this method prints a user guide for the user for how to use the application
      */
-    private void PrintHelp() {  
+    private void PrintHelp() {
         System.out.println("--url: [Address] := address as the request url");
         System.out.println("-M(--method): (GET, POST, PATCH, DELETE, PUT) := request method type");
         System.out.println("-i: tells to print the response headers.");

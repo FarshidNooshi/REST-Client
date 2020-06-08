@@ -1,5 +1,7 @@
 package Phase2;
 
+import com.sun.net.httpserver.HttpServer;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -24,7 +26,18 @@ public class Main {
         ArrayList<Pair<String, Boolean>> arrayList = new ArrayList<>();
         init(arrayList);
         initArgs(args);
-        if (args[0].equalsIgnoreCase("create")) {
+        if (args[0].equalsIgnoreCase("fire")) {
+            File dir = new File(new File(System.getProperty("user.dir")).getAbsolutePath() + File.separator + args[1]);
+            Reader tmp = new Reader(dir.getAbsolutePath() + File.separator + args[2]);
+            request = (Request) tmp.ReadFromFile();
+            tmp.close();
+            HTTpService service = new HTTpService(request);
+            try {
+                service.runService();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (args[0].equalsIgnoreCase("create")) {
             File fileToCreate = new File(new File(System.getProperty("user.dir")).getAbsolutePath() + File.separator + args[1]);
             if (fileToCreate.mkdir())
                 System.out.println("directory created!");
@@ -110,8 +123,6 @@ public class Main {
             request = (Request) tmp.ReadFromFile();
             tmp.close();
             service = new HTTpService(request);
-            if (!request.getMp().get("save").equals("false"))
-                SaveRequest();
             try {
                 service.runService();
             } catch (Exception e) {
