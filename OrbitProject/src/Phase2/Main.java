@@ -1,7 +1,5 @@
 package Phase2;
 
-import com.sun.net.httpserver.HttpServer;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -108,20 +106,15 @@ public class Main {
                     }
                 }
             }
+            if (!request.getMp().get("upload").equals("")) {
+                Reader tmp = new Reader(request.getMp().get("upload"));
+                request = (Request) tmp.ReadFromFile();
+                tmp.close();
+                System.out.println("Request renewed.");
+            }
             HTTpService service = new HTTpService(request);
             if (!request.getMp().get("save").equals("false"))
                 SaveRequest();
-            try {
-                service.runService();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (request.getMp().get("upload").equals(""))
-                return;
-            Reader tmp = new Reader(request.getMp().get("upload"));
-            request = (Request) tmp.ReadFromFile();
-            tmp.close();
-            service = new HTTpService(request);
             try {
                 service.runService();
             } catch (Exception e) {
@@ -159,7 +152,8 @@ public class Main {
         arr.add(new Pair<>("json", true));//done
         arr.add(new Pair<>("upload", true));//done
         arr.add(new Pair<>("output", true));//done
-        arr.add(new Pair<>("type", true));
+        arr.add(new Pair<>("type", true));//done
+        arr.add(new Pair<>("uploadBinary", true));//
     }
 
     /**

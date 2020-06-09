@@ -23,7 +23,8 @@ public class Request implements Serializable {
         mp.put("data", "");
         mp.put("json", "");
         mp.put("upload", "");
-        mp.put("type","encoded");
+        mp.put("type", "");
+        mp.put("uploadBinary", "");
     }
 
     public HashMap<String, String> getMp() {

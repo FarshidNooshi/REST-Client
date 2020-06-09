@@ -5,6 +5,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import java.util.Map;
  */
 public class HTTpService {
     private HttpURLConnection connection;
+    private String boundary;
     private Request request;
 
     /**
@@ -22,6 +24,31 @@ public class HTTpService {
      */
     public HTTpService(Request req) {
         request = req;
+        boundary =  "" + System.currentTimeMillis();
+    }
+
+    private static void bufferOutFormData(HashMap<String, String> body, String boundary, BufferedOutputStream bufferedOutputStream) throws IOException {
+        for (String key : body.keySet()) {
+            bufferedOutputStream.write(("--" + boundary + "\r\n").getBytes());
+            if (key.contains("file")) {
+                bufferedOutputStream.write(("Content-Disposition: form-data; filename=\"" + (new File(body.get(key))).getName() + "\"\r\nContent-Type: Auto\r\n\r\n").getBytes());
+                try {
+                    BufferedInputStream tempBufferedInputStream = new BufferedInputStream(new FileInputStream(new File(body.get(key))));
+                    byte[] filesBytes = tempBufferedInputStream.readAllBytes();
+                    bufferedOutputStream.write(filesBytes);
+                    bufferedOutputStream.write("\r\n".getBytes());
+                    tempBufferedInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                bufferedOutputStream.write(("Content-Disposition: form-data; name=\"" + key + "\"\r\n\r\n").getBytes());
+                bufferedOutputStream.write((body.get(key) + "\r\n").getBytes());
+            }
+        }
+        bufferedOutputStream.write(("--" + boundary + "--\r\n").getBytes());
+        bufferedOutputStream.flush();
+        bufferedOutputStream.close();
     }
 
     /**
@@ -107,14 +134,12 @@ public class HTTpService {
         if (request.getMp().get("type").equals("json")) {
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
-        } else if (request.getMp().get("type").equals("formData")) {
-            String boundary = System.currentTimeMillis() + "";
+        } else if (request.getMp().get("type").equals("formData"))
             connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-        } else if (request.getMp().get("type").equals("encoded")) {
+        else if (request.getMp().get("type").equals("encoded"))
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        } else if (request.getMp().get("type").equals("binary")) {
-
-        }
+        else if (request.getMp().get("type").equals("binary"))
+            connection.setRequestProperty("Content-Type", "application/octet-stream");
         String input = request.getMp().get("headers") + ";";
         int size = input.length();
         for (int i = 0; i < size; i++) {
@@ -141,34 +166,32 @@ public class HTTpService {
      * @param connection is the connection to use.
      */
     private void initBody(HttpURLConnection connection) {
-        String data = request.getMp().get("data");
-        if (data.equals("")) {
-            StringBuilder builder = new StringBuilder("{");
-            String input = request.getMp().get("json");
-            int size = input.length();
-            for (int i = 1; i + 1 < size; i++) {
-                String key = null, value = null;
-                int j = i;
-                while (j < size && input.charAt(j) != ':')
-                    j++;
-                if (j < size)
-                    key = input.substring(i, j);
-                i = ++j;
-                while (j + 1 < size && input.charAt(j) != ',')
-                    j++;
-                if (i + 1 < size)
-                    value = input.substring(i, j);
-                builder.append("\"").append(key).append("\"").append(":\"").append(value).append("\"");
-                i = j;
-                if (i + 1 < size)
-                    builder.append(",");
-            }
-            builder.append("}");
-            data = builder.toString();
+        String data;
+        if (request.getMp().get("type").equalsIgnoreCase("json")) {
+            data = JsonBodyBuilder();
+            SendData(connection, data);
+        } else if (request.getMp().get("type").equalsIgnoreCase("formData"))
+            FormDataBuilder();
+        else if (request.getMp().get("type").equalsIgnoreCase("encoded")) {
+            data = request.getMp().get("data");
+            SendData(connection, data);
+        } else if (request.getMp().get("type").equalsIgnoreCase("binary"))
+            UploadBinary(request.getMp().get("uploadBinary"));
+    }
+
+    private void UploadBinary(String uri) {
+        File file = new File(uri);
+        try (BufferedInputStream fileInputStream = new BufferedInputStream(new FileInputStream(file));
+             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(connection.getOutputStream())) {
+
+            bufferedOutputStream.write(fileInputStream.readAllBytes());
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        if (data.equals("") || data.equals("{}"))
-            return;
-        System.out.println(data);
+    }
+
+    private void SendData(HttpURLConnection connection, String data) {
         try (BufferedOutputStream out = new BufferedOutputStream(connection.getOutputStream())) {
             out.write(data.getBytes());
             out.flush();
@@ -176,6 +199,55 @@ public class HTTpService {
             e.printStackTrace();
             System.exit(1);
         }
+    }
+
+    private void FormDataBuilder() {
+        String str = request.getMp().get("data");
+        HashMap<String, String> hashMap = new HashMap<>();
+        for (int i = 0; i < str.length(); i++) {
+            int j = i;
+            while (str.charAt(j) != '=')
+                j++;
+            String key = str.substring(i, j);
+            i = j + 1;
+            while (j < str.length() && str.charAt(j) != '&')
+                j++;
+            String value = str.substring(i, j);
+            hashMap.put(key, value);
+            i = j;
+        }
+        try (BufferedOutputStream out = new BufferedOutputStream(connection.getOutputStream())) {
+            bufferOutFormData(hashMap, boundary, out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String JsonBodyBuilder() {
+        String data;
+        StringBuilder builder = new StringBuilder("{");
+        String input = request.getMp().get("json");
+        int size = input.length();
+        for (int i = 1; i + 1 < size; i++) {
+            String key = null, value = null;
+            int j = i;
+            while (j < size && input.charAt(j) != ':')
+                j++;
+            if (j < size)
+                key = input.substring(i, j);
+            i = ++j;
+            while (j + 1 < size && input.charAt(j) != ',')
+                j++;
+            if (i + 1 < size)
+                value = input.substring(i, j);
+            builder.append("\"").append(key).append("\"").append(":\"").append(value).append("\"");
+            i = j;
+            if (i + 1 < size)
+                builder.append(",");
+        }
+        builder.append("}");
+        data = builder.toString();
+        return data;
     }
 
     /**
@@ -207,5 +279,6 @@ public class HTTpService {
         System.out.println("note that in each request you should use one of json and data");
         System.out.println("--upload [URI] := will upload a request from a URI in system, URI is a absolute path.");
         System.out.println("output [empty or name] := will save the response body in a txt file with name : output [name or current date]");
+        System.out.println("--type := encoded is for urlencoded, formData is for FormData, binary is for uploading a binary upload, json is for json.");
     }
 }
