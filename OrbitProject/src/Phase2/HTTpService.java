@@ -27,6 +27,13 @@ public class HTTpService {
         boundary =  "" + System.currentTimeMillis();
     }
 
+    /**
+     * this method is a copy of the same method of the run class from the authors of the project
+     * @param body is a hashMap for representing the body of the request.
+     * @param boundary is a boundary for using in the request.
+     * @param bufferedOutputStream is the outputStream of the request.
+     * @throws IOException if the IO exception occurs.
+     */
     private static void bufferOutFormData(HashMap<String, String> body, String boundary, BufferedOutputStream bufferedOutputStream) throws IOException {
         for (String key : body.keySet()) {
             bufferedOutputStream.write(("--" + boundary + "\r\n").getBytes());
@@ -179,6 +186,10 @@ public class HTTpService {
             UploadBinary(request.getMp().get("uploadBinary"));
     }
 
+    /**
+     * this method uploads a binary file from the system for the connection.
+     * @param uri is the address of the file to upload.
+     */
     private void UploadBinary(String uri) {
         File file = new File(uri);
         try (BufferedInputStream fileInputStream = new BufferedInputStream(new FileInputStream(file));
@@ -191,6 +202,11 @@ public class HTTpService {
         }
     }
 
+    /**
+     * this method will write the data to the connection.
+     * @param connection is the URL connection to use for writing.
+     * @param data is the preferred data for writing.
+     */
     private void SendData(HttpURLConnection connection, String data) {
         try (BufferedOutputStream out = new BufferedOutputStream(connection.getOutputStream())) {
             out.write(data.getBytes());
@@ -201,6 +217,9 @@ public class HTTpService {
         }
     }
 
+    /**
+     * this method will extract the key&values from the user input to a hashMap and send them for the authors method as they ordered.
+     */
     private void FormDataBuilder() {
         String str = request.getMp().get("data");
         HashMap<String, String> hashMap = new HashMap<>();
@@ -223,6 +242,10 @@ public class HTTpService {
         }
     }
 
+    /**
+     * this is a simple json body maker is that builds the json body from the user input.
+     * @return a string containing the json body to send for the connection.
+     */
     private String JsonBodyBuilder() {
         String data;
         StringBuilder builder = new StringBuilder("{");
@@ -280,5 +303,7 @@ public class HTTpService {
         System.out.println("--upload [URI] := will upload a request from a URI in system, URI is a absolute path.");
         System.out.println("output [empty or name] := will save the response body in a txt file with name : output [name or current date]");
         System.out.println("--type := encoded is for urlencoded, formData is for FormData, binary is for uploading a binary upload, json is for json.");
+        System.out.println("note that for encoded and formData the data should be in \"a=b&c=d\" and for json it should be like : {a:b,c:d} also for binary upload use:" +
+                "--uploadBinary [address] to send it.");
     }
 }
