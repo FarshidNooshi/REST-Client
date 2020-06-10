@@ -24,13 +24,14 @@ public class HTTpService {
      */
     public HTTpService(Request req) {
         request = req;
-        boundary =  "" + System.currentTimeMillis();
+        boundary = "" + System.currentTimeMillis();
     }
 
     /**
      * this method is a copy of the same method of the run class from the authors of the project
-     * @param body is a hashMap for representing the body of the request.
-     * @param boundary is a boundary for using in the request.
+     *
+     * @param body                 is a hashMap for representing the body of the request.
+     * @param boundary             is a boundary for using in the request.
      * @param bufferedOutputStream is the outputStream of the request.
      * @throws IOException if the IO exception occurs.
      */
@@ -80,10 +81,10 @@ public class HTTpService {
                 System.err.println("UNSUPPORTED PROTOCOL!");
                 return;
             }
+            connection.setRequestMethod(request.getMp().get("method"));
             connection.setInstanceFollowRedirects(false);
             connection.setDoOutput(true);
             initHeaders(connection);
-            connection.setRequestMethod(request.getMp().get("method"));
             initBody(connection);
             while (connection.getResponseCode() / 100 == 3 && request.getMp().get("f").equals("true")) {
                 String location = connection.getHeaderField("Location");
@@ -188,6 +189,7 @@ public class HTTpService {
 
     /**
      * this method uploads a binary file from the system for the connection.
+     *
      * @param uri is the address of the file to upload.
      */
     private void UploadBinary(String uri) {
@@ -204,8 +206,9 @@ public class HTTpService {
 
     /**
      * this method will write the data to the connection.
+     *
      * @param connection is the URL connection to use for writing.
-     * @param data is the preferred data for writing.
+     * @param data       is the preferred data for writing.
      */
     private void SendData(HttpURLConnection connection, String data) {
         try (BufferedOutputStream out = new BufferedOutputStream(connection.getOutputStream())) {
@@ -244,6 +247,7 @@ public class HTTpService {
 
     /**
      * this is a simple json body maker is that builds the json body from the user input.
+     *
      * @return a string containing the json body to send for the connection.
      */
     private String JsonBodyBuilder() {
@@ -303,7 +307,6 @@ public class HTTpService {
         System.out.println("--upload [URI] := will upload a request from a URI in system, URI is a absolute path.");
         System.out.println("output [empty or name] := will save the response body in a txt file with name : output [name or current date]");
         System.out.println("--type := encoded is for urlencoded, formData is for FormData, binary is for uploading a binary upload, json is for json.");
-        System.out.println("note that for encoded and formData the data should be in \"a=b&c=d\" and for json it should be like : {a:b,c:d} also for binary upload use:" +
-                "--uploadBinary [address] to send it.");
+        System.out.println("note that for encoded and formData the data should be in \"a=b&c=d\" and for json it should be like : {a:b,c:d} also for binary upload use:" + "--uploadBinary [address] to send it.");
     }
 }

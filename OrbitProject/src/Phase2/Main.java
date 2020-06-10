@@ -153,7 +153,7 @@ public class Main {
         arr.add(new Pair<>("upload", true));//done
         arr.add(new Pair<>("output", true));//done
         arr.add(new Pair<>("type", true));//done
-        arr.add(new Pair<>("uploadBinary", true));//
+        arr.add(new Pair<>("uploadBinary", true));//done
     }
 
     /**
