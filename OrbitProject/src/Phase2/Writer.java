@@ -15,7 +15,7 @@ public class Writer {
         out = new ObjectOutputStream(new FileOutputStream(new File(path)));
     }
 
-    public void WriteToFile(Object obj) throws IOException {
+    void WriteToFile(Object obj) throws IOException {
         out.writeObject(obj);
         out.close();
     }

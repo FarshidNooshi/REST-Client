@@ -10,7 +10,7 @@ public class Request implements Serializable {
     private static final long serialVersionUID = 2724937972241616654L;
     private HashMap<String, String> mp;
 
-    public Request() {
+    Request() {
         mp = new HashMap<>();
         mp.put("url", "www.google.com");
         mp.put("method", "GET");
@@ -27,7 +27,7 @@ public class Request implements Serializable {
         mp.put("uploadBinary", "");
     }
 
-    public HashMap<String, String> getMp() {
+    HashMap<String, String> getMp() {
         return mp;
     }
 }

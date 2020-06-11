@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Main {
     private static Request request;
@@ -130,7 +131,7 @@ public class Main {
      */
     private static void SaveRequest() throws IOException {
         Path path = Paths.get(new File(System.getProperty("user.dir")).getAbsolutePath() + File.separator + request.getMp().get("save"));
-        String name = String.valueOf(new File(path.toString()).list().length + 1);
+        String name = String.valueOf(Objects.requireNonNull(new File(path.toString()).list()).length + 1);
         Writer writer = new Writer(path.toString() + File.separator + name);
         writer.WriteToFile(request);
     }

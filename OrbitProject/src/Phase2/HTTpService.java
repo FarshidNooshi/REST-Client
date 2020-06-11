@@ -22,7 +22,7 @@ public class HTTpService {
      *
      * @param req is the request that we wanna execute
      */
-    public HTTpService(Request req) {
+    HTTpService(Request req) {
         request = req;
         boundary = "" + System.currentTimeMillis();
     }
@@ -64,7 +64,7 @@ public class HTTpService {
      *
      * @throws MalformedURLException for the url connection
      */
-    public void runService() throws Exception {
+    void runService() throws Exception {
         if (!request.getMp().get("data").equals("") && !request.getMp().get("json").equals("")) {
             System.err.println("Program terminated.");
             throw new Exception("can't have both json & form data as message body!");
@@ -96,6 +96,7 @@ public class HTTpService {
             System.out.println(ret);
             if (!request.getMp().get("output").equals("")) {
                 File file = new File(new File(System.getProperty("user.dir")).getParent() + File.separator + "OutputFolder");
+                //noinspection ResultOfMethodCallIgnored
                 file.mkdir();
                 String name = request.getMp().get("output");
                 File actualFile = new File(file, name);
@@ -139,15 +140,21 @@ public class HTTpService {
      * @param connection is the http connection to the server
      */
     private void initHeaders(HttpURLConnection connection) {
-        if (request.getMp().get("type").equals("json")) {
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Accept", "application/json");
-        } else if (request.getMp().get("type").equals("formData"))
-            connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-        else if (request.getMp().get("type").equals("encoded"))
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        else if (request.getMp().get("type").equals("binary"))
-            connection.setRequestProperty("Content-Type", "application/octet-stream");
+        switch (request.getMp().get("type")) {
+            case "json":
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "application/json");
+                break;
+            case "formData":
+                connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+                break;
+            case "encoded":
+                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                break;
+            case "binary":
+                connection.setRequestProperty("Content-Type", "application/octet-stream");
+                break;
+        }
         String input = request.getMp().get("headers") + ";";
         int size = input.length();
         for (int i = 0; i < size; i++) {
