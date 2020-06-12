@@ -13,7 +13,7 @@ public class Options extends JFrame {
      * it's the constructor of the options frame
      */
     Options() {
-        setTitle("Phase1.Options");
+        setTitle("Options");
         setPreferredSize(new Dimension(400, 200));
         setIconImage(new ImageIcon("OrbitProject/Insomnia.png").getImage());
         setLayout(new GridLayout(3, 1));

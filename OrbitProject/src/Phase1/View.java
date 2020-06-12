@@ -1,13 +1,16 @@
-package Phase1;// In The Name Of GOD
+// In The Name Of GOD
+package Phase1;
 
-/**
- * the tray part is used from the code from stackoverflow.com
- */
+// * the tray part is used from the code from stackOverFlow.com
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+
+import static java.awt.event.InputEvent.ALT_MASK;
 
 enum requests {
     PATCH, PUT, POST, DELETE, GET
@@ -17,20 +20,19 @@ public class View extends JFrame {
     private static final int NUMBER_OF_MENUS = 3; // number of menus of the program
     private static final int NUMBER_OF_SUBMENUS = 2; // its the number of submenus of each menu
     private static int[] numberOfHeaders = {1, 1, 1}; // an index holder for the headers that are visible at the moment
-    private static ArrayList<JPanel> centerPanels, rightPanels, rightBodyPanels; // three parts of the screen subpanels
-    private static JPanel formDataPanel, jSONpanel, binaryDataPanel; // three panels for formData, Json, binaryData in the program
+    private static ArrayList<JPanel> centerPanels;
+    private static ArrayList<JPanel> rightPanels;
+    private static JPanel formDataPanel;
     private final Options options; // options panel that should be opened in another frame
     private boolean fullScreen = false; // say if it's in the fullscreen mode or not
     private JMenuBar menuBar; // for the menu of the frame
     private ArrayList<JMenu> menus; // menus of the program
     private ArrayList<ArrayList<JMenuItem>> submenus; // submenus of the program
-    private JPanel center, left, right; // three panles for left center and right side of the program
+    private JPanel center, left, right; // three panels for left center and right side of the program
     private JTabbedPane tabbedPane; // used for center panel (4 possibilities)
     private JTextField urlTextField; // url textField for writing a url
-    private JTextArea textArea, jTextArea, jTextArea1; // textAreas for right panel but they'll be changed
-    private JButton saveurl; // a button for saving the url
-    private JList list; // for making folders in the left panel
-    private myFocus focus = new myFocus(); // it's a focus listener
+    private JButton saveURL; // a button for saving the url
+    private JList<Object> list; // for making folders in the left panel
     private TrayIcon trayIcon; // this two are for tray closing system
     private SystemTray tray;
 
@@ -40,7 +42,7 @@ public class View extends JFrame {
      * @param options is the option frame
      * @throws ClassNotFoundException          if the class didn't exist
      * @throws UnsupportedLookAndFeelException if the look and feel wasn't available in the system
-     * @throws InstantiationException
+     * @throws InstantiationException          if the exception occurs.
      * @throws IllegalAccessException          if we wanted an illegal access to something in the system
      */
     View(Options options) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
@@ -58,10 +60,9 @@ public class View extends JFrame {
         menus = new ArrayList<>();
         submenus = new ArrayList<>();
         urlTextField = new JTextField();
-        saveurl = new JButton("Send");
-        saveurl.addActionListener(e -> {
-            System.out.println("Send URL got an action event.");
-        });
+        rightPanels = new ArrayList<>();
+        saveURL = new JButton("Send");
+        saveURL.addActionListener(e -> System.out.println("Send URL got an action event."));
         tabbedPane = new JTabbedPane();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         initMenuBar();
@@ -77,16 +78,14 @@ public class View extends JFrame {
         Image image = Toolkit.getDefaultToolkit().getImage("OrbitProject/Insomnia.png");
         PopupMenu popup = new PopupMenu();
         MenuItem defaultItem = new MenuItem("Exit");
-        defaultItem.addActionListener(e -> {
-            System.exit(0);
-        });
+        defaultItem.addActionListener(e -> System.exit(0));
         popup.add(defaultItem);
         defaultItem = new MenuItem("Open");
         defaultItem.addActionListener(e -> {
-                setVisible(true);
-                setExtendedState(JFrame.NORMAL);
-                tray.remove(trayIcon);
-            }
+                    setVisible(true);
+                    setExtendedState(JFrame.NORMAL);
+                    tray.remove(trayIcon);
+                }
         );
         popup.add(defaultItem);
         trayIcon = new TrayIcon(image, "", popup);
@@ -102,11 +101,11 @@ public class View extends JFrame {
         JComboBox<requests> comboBox = new JComboBox<>(requests.values());
         comboBox.setPreferredSize(new Dimension(80, 41));
         JPanel temporary = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        urlTextField.setPreferredSize(new Dimension(600, 41));
-        saveurl.setPreferredSize(new Dimension(70, 41));
+        urlTextField.setPreferredSize(new Dimension(607, 41));
+        saveURL.setPreferredSize(new Dimension(70, 41));
         temporary.add(comboBox);
         temporary.add(urlTextField);
-        temporary.add(saveurl);
+        temporary.add(saveURL);
         temporary.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
         center.add(temporary, BorderLayout.NORTH);
         center.add(tabbedPane, BorderLayout.CENTER);
@@ -120,12 +119,12 @@ public class View extends JFrame {
      * each separated part is used for one panel
      */
     private void initRightPanel() {
-        JTabbedPane jTabbedPane = new JTabbedPane();
         right.setLayout(new BorderLayout(5, 0));
+        JTabbedPane jTabbedPane = new JTabbedPane();
         JPanel help = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 5));
         help.setPreferredSize(new Dimension(400, 45));
         help.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
-        jTabbedPane.setBorder(BorderFactory.createLineBorder(Color.GRAY,2));
+        jTabbedPane.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
         try {
             createSpecificLabelRightPanel("200 OK", new Color(83, 255, 119), help);
             createSpecificLabelRightPanel("1.03 S", new Color(10, 84, 255), help);
@@ -135,7 +134,6 @@ public class View extends JFrame {
             dispose();
         }
         right.add(help, BorderLayout.NORTH);
-        rightPanels = new ArrayList<>();
         for (int i = 0; i < 2; i++)
             rightPanels.add(new JPanel());
         rightPanels.get(0).setName("Body");
@@ -155,19 +153,17 @@ public class View extends JFrame {
             textField1.setEditable(false);
         }
         JButton copy = new JButton("Copy to Clipboard");
-        copy.addActionListener(e -> {
-            System.out.println("copy button got action event.");
-        });
+        copy.addActionListener(e -> System.out.println("copy button got action event."));
         reference.add(copy);
 //**********************************************************************************************************************
         reference = rightPanels.get(0);//Body
         JTabbedPane jTabbedPane1 = new JTabbedPane();
-        textArea = new JTextArea("TO DO IN THE NEXT PHASES");
-        jTextArea = new JTextArea("TO DO IN THE NEXT PHASES");
-        jTextArea1 = new JTextArea("TO DO IN THE NEXT PHASES");
+        JTextArea textArea = new JTextArea("TO DO IN THE NEXT PHASES");
+        JTextArea jTextArea = new JTextArea("TO DO IN THE NEXT PHASES");
+        JTextArea jTextArea1 = new JTextArea("TO DO IN THE NEXT PHASES");
         reference.setLayout(new BorderLayout());
         reference.add(jTabbedPane1, BorderLayout.CENTER);
-        rightBodyPanels = new ArrayList<>();
+        ArrayList<JPanel> rightBodyPanels = new ArrayList<>();
         for (int i = 0; i < 3; i++)
             rightBodyPanels.add(new JPanel(new BorderLayout())); // default in bashe ta too phase 2&3 avaz beshe
         rightBodyPanels.get(0).setName("Raw");
@@ -191,7 +187,7 @@ public class View extends JFrame {
      */
     private void createSpecificLabelRightPanel(String text, Color color, JPanel help) throws NullPointerException {
         JLabel memory = new JLabel(text, SwingConstants.CENTER);
-        memory.setPreferredSize(new Dimension(70,30));
+        memory.setPreferredSize(new Dimension(70, 30));
         memory.setBackground(color);
         memory.setForeground(Color.WHITE);
         memory.setBorder(BorderFactory.createLineBorder(Color.black, 2));
@@ -206,7 +202,8 @@ public class View extends JFrame {
     private void initLeftPanel() {
         ArrayList<String> folders = new ArrayList<>();
         folders.add("Requests");
-        list = new JList(folders.toArray());
+        list = new JList<>(folders.toArray());
+        list.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
         JButton createNode = new JButton("create");
         left.setLayout(new BorderLayout());
         JLabel label = new JLabel("Insomnia", new ImageIcon("OrbitProject/Insomnia.png"), SwingConstants.LEFT);
@@ -216,11 +213,9 @@ public class View extends JFrame {
         label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         left.add(label, BorderLayout.NORTH);
         left.add(createNode, BorderLayout.SOUTH);
-        left.add(list);
-
+        left.add(list, BorderLayout.CENTER);
         createNode.addActionListener(e -> {
             String str = JOptionPane.showInputDialog(null, "Type a name", JOptionPane.INPUT_VALUE_PROPERTY);
-            list.clearSelection();
             folders.add(str);
             list.setListData(folders.toArray());
         });
@@ -238,6 +233,7 @@ public class View extends JFrame {
      * initializes the menu bar of our program
      * it's extendable also for adding multiple futures to the program
      */
+    @SuppressWarnings("deprecation")
     private void initMenuBar() { // Action listener should add
         setIconImage(new ImageIcon("OrbitProject/Insomnia.png").getImage());
         menus.add(new JMenu("Application"));
@@ -257,25 +253,20 @@ public class View extends JFrame {
         submenus.get(1).add(new JMenuItem("Toggle sidebar", KeyEvent.VK_S));
         submenus.get(2).add(new JMenuItem("About", KeyEvent.VK_A));
         submenus.get(2).add(new JMenuItem("Help", KeyEvent.VK_H));
-        submenus.get(0).get(0).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.ALT_MASK));
-        submenus.get(0).get(1).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.ALT_MASK));
-        submenus.get(1).get(0).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.ALT_MASK));
-        submenus.get(1).get(1).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.ALT_MASK));
-        submenus.get(2).get(0).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.ALT_MASK));
-        submenus.get(2).get(1).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.ALT_MASK));
+        submenus.get(0).get(0).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ALT_MASK));
+        submenus.get(0).get(1).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ALT_MASK));
+        submenus.get(1).get(0).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ALT_MASK));
+        submenus.get(1).get(1).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ALT_MASK));
+        submenus.get(2).get(0).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ALT_MASK));
+        submenus.get(2).get(1).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ALT_MASK));
         for (int i = 0; i < NUMBER_OF_MENUS; i++)
             for (int j = 0; j < NUMBER_OF_SUBMENUS; j++) {
                 menus.get(i).add(submenus.get(i).get(j));
                 if (j == 0)
                     menus.get(i).addSeparator();
             }
-        submenus.get(0).get(0).addActionListener(e -> {
-            options.showGUI();
-        });
-        submenus.get(0).get(1).addActionListener(e -> {
-            dispose();
-//            dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-        });
+        submenus.get(0).get(0).addActionListener(e -> options.showGUI());
+        submenus.get(0).get(1).addActionListener(e -> dispose());
         submenus.get(1).get(0).addActionListener(e -> {
             fullScreen = !fullScreen;
             if (fullScreen)
@@ -289,13 +280,8 @@ public class View extends JFrame {
             else
                 left.setVisible(true);
         });
-        submenus.get(2).get(0).addActionListener(e -> {
-            JOptionPane.showMessageDialog(null, "Farshid Nooshi\nStudent ID: 9831068\nEmail: FarshidNooshi726@aut.ac.ir", "About", JOptionPane.INFORMATION_MESSAGE);
-        });
-        submenus.get(2).get(1).addActionListener(e -> {
-            JOptionPane.showMessageDialog(null, "To Do for next phases", "Help", JOptionPane.INFORMATION_MESSAGE);
-
-        });
+        submenus.get(2).get(0).addActionListener(e -> JOptionPane.showMessageDialog(null, "Farshid Nooshi\nStudent ID: 9831068\nEmail: FarshidNooshi726@aut.ac.ir", "About", JOptionPane.INFORMATION_MESSAGE));
+        submenus.get(2).get(1).addActionListener(e -> JOptionPane.showMessageDialog(null, "To Do for next phases", "Help", JOptionPane.INFORMATION_MESSAGE));
     }
 
     /**
@@ -314,8 +300,8 @@ public class View extends JFrame {
     }
 
     /**
-     * initializes the tabes of teh center panel
-     * i separated the parts of the code for better understanding
+     * initializes the tabs of the center panel
+     * I separated the parts of the code for better readability
      */
     private void initTabs() {
         centerPanels = new ArrayList<>();
@@ -329,56 +315,10 @@ public class View extends JFrame {
             tabbedPane.add(j.getName(), j);
 //**********************************************************************************************************************
         JPanel reference = centerPanels.get(0);// HEADER
-        reference.setLayout(new GridLayout(20, 5, 5, 5));
-        for (int i = 0; i < 20; i++) {
-            reference.add(new JLabel(new ImageIcon("OrbitProject/menu_32px.png")));
-            JTextField tt = new JTextField("New Header"), tt1 = new JTextField("New Value");
-            tt.setName("New Header");
-            tt.addFocusListener(focus);
-            tt1.setName(tt1.getText());
-            tt1.addFocusListener(focus);
-            reference.add(tt);
-            reference.add(tt1);
-            JCheckBox checkBoxx = new JCheckBox();
-            checkBoxx.addActionListener(e -> {
-                System.out.println("check box clicked. and state of this box changed.");
-            });
-            reference.add(checkBoxx);
-            JButton jButton = new JButton(new ImageIcon("OrbitProject/waste_32px.png"));
-            reference.add(jButton);
-            jButton.addActionListener(e -> {
-                System.out.println("a header delete button clicked.");
-            });
-        }
-        for (int i = numberOfHeaders[0]; i < 20; i++)
-            for (int j = 0; j < 5; j++)
-                reference.getComponent(i * 5 + j).setVisible(false);
+        buildTab(reference, 0);
 //**********************************************************************************************************************
         reference = centerPanels.get(2);//Query
-        reference.setLayout(new GridLayout(20, 5, 5, 5));
-        for (int i = 0; i < 20; i++) {
-            reference.add(new JLabel(new ImageIcon("OrbitProject/menu_32px.png")));
-            JTextField tt = new JTextField("New Header"), tt1 = new JTextField("New Value");
-            tt.setName("New Header");
-            tt.addFocusListener(focus);
-            tt1.setName(tt1.getText());
-            tt1.addFocusListener(focus);
-            reference.add(tt);
-            reference.add(tt1);
-            JCheckBox checkBoxx = new JCheckBox();
-            checkBoxx.addActionListener(e -> {
-                System.out.println("check box clicked. and state of this box changed.");
-            });
-            reference.add(checkBoxx);
-            JButton jButton = new JButton(new ImageIcon("OrbitProject/waste_32px.png"));
-            reference.add(jButton);
-            jButton.addActionListener(e -> {
-                System.out.println("a header delete button clicked.");
-            });
-        }
-        for (int i = numberOfHeaders[1]; i < 20; i++)
-            for (int j = 0; j < 5; j++)
-                reference.getComponent(i * 5 + j).setVisible(false);
+        buildTab(reference, 1);
 //**********************************************************************************************************************
         reference = centerPanels.get(1);// Auth
         reference.setLayout(new GridLayout(5, 2));
@@ -388,9 +328,7 @@ public class View extends JFrame {
         JLabel token1 = new JLabel("TOKEN");
         JLabel prefix1 = new JLabel("PREFIX");
         JLabel enabled = new JLabel("ENABLED");
-        isEnabled.addActionListener(e -> {
-            System.out.println("Auth checkbox got action event.");
-        });
+        isEnabled.addActionListener(e -> System.out.println("Auth checkbox got action event."));
         reference.add(token1);
         reference.add(token);
         reference.add(prefix1);
@@ -403,19 +341,43 @@ public class View extends JFrame {
         initBody();
     }
 
+    private void buildTab(JPanel reference, int id) {
+        MyFocus focus = new MyFocus(id);
+        reference.setLayout(new GridLayout(20, 5, 5, 5));
+        for (int i = 0; i < 20; i++) {
+            reference.add(new JLabel(new ImageIcon("OrbitProject/menu_32px.png")));
+            JTextField tt = new JTextField("New Header"), tt1 = new JTextField("New Value");
+            tt.setName("New Header");
+            tt.addFocusListener(focus);
+            tt1.setName(tt1.getText());
+            tt1.addFocusListener(focus);
+            reference.add(tt);
+            reference.add(tt1);
+            JCheckBox jCheckBox = new JCheckBox();
+            jCheckBox.addActionListener(e -> System.out.println("check box clicked. and state of this box changed."));
+            reference.add(jCheckBox);
+            JButton jButton = new JButton(new ImageIcon("OrbitProject/waste_32px.png"));
+            reference.add(jButton);
+            jButton.addActionListener(e -> System.out.println("a header delete button clicked."));
+        }
+        for (int i = numberOfHeaders[id]; i < 20; i++)
+            for (int j = 0; j < 5; j++)
+                reference.getComponent(i * 5 + j).setVisible(false);
+    }
+
     /**
      * because of the body of the center panel is too long i separated the code to another method for dividing it to improving the readability
      */
     private void initBody() {
         JPanel reference = centerPanels.get(3);
-        binaryDataPanel = new JPanel();
-        jSONpanel = new JPanel();
+        JPanel binaryDataPanel = new JPanel();
+        JPanel jsonPanel = new JPanel();
         formDataPanel = new JPanel();
-        jSONpanel.setName("jSONpanel");
+        jsonPanel.setName("jSONpanel");
         formDataPanel.setName("formDataPanel");
         binaryDataPanel.setName("binaryDataPanel");
         JTabbedPane help = new JTabbedPane();
-        help.add(jSONpanel.getName(), jSONpanel);
+        help.add(jsonPanel.getName(), jsonPanel);
         help.add(formDataPanel.getName(), formDataPanel);
         help.add(binaryDataPanel.getName(), binaryDataPanel);
         reference.add(help, BorderLayout.CENTER);
@@ -428,50 +390,23 @@ public class View extends JFrame {
         binaryDataPanel.add(ttt, BorderLayout.CENTER);
         JButton selectItem = new JButton("Choose File");
         JButton resetItem = new JButton("Reset File");
-        selectItem.addActionListener(e -> {
-            System.out.println("choose a file button got an action event.");
-        });
-        resetItem.addActionListener(e -> {
-            System.out.println("reset Item button got an action event.");
-        });
+        selectItem.addActionListener(e -> System.out.println("choose a file button got an action event."));
+        resetItem.addActionListener(e -> System.out.println("reset Item button got an action event."));
         JPanel tmp = new JPanel(new FlowLayout());
         tmp.add(resetItem);
         tmp.add(selectItem);
         binaryDataPanel.add(tmp, BorderLayout.SOUTH);
 //**********************************************************************************************************************
-        jSONpanel.setLayout(new BorderLayout());// JSON panel
+        jsonPanel.setLayout(new BorderLayout());// JSON panel
         JTextField textField1 = new JTextField("...");
         textField1.setName("...");
-        textField1.addFocusListener(focus);
-        jSONpanel.add(textField1, BorderLayout.CENTER);
+        textField1.addFocusListener(new MyFocus(3));
+        jsonPanel.add(textField1, BorderLayout.CENTER);
 //**********************************************************************************************************************
-        formDataPanel.setLayout(new GridLayout(20, 5, 5, 5)); // Form Data
-        for (int i = 0; i < 20; i++) {
-            formDataPanel.add(new JLabel(new ImageIcon("OrbitProject/menu_32px.png")));
-            JTextField tt = new JTextField("New Header"), tt1 = new JTextField("New Value");
-            tt.setName("New Header");
-            tt.addFocusListener(focus);
-            tt1.setName(tt1.getText());
-            tt1.addFocusListener(focus);
-            formDataPanel.add(tt);
-            formDataPanel.add(tt1);
-            JCheckBox checkBoxx = new JCheckBox();
-            checkBoxx.addActionListener(e -> {
-                System.out.println("check box clicked. and state of this box changed.");
-            });
-            formDataPanel.add(checkBoxx);
-            JButton jButton = new JButton(new ImageIcon("OrbitProject/waste_32px.png"));
-            formDataPanel.add(jButton);
-            jButton.addActionListener(e -> {
-                System.out.println("a header delete button clicked.");
-            });
-        }
-        for (int i = numberOfHeaders[2]; i < 20; i++)
-            for (int j = 0; j < 5; j++)
-                formDataPanel.getComponent(i * 5 + j).setVisible(false);
+        buildTab(formDataPanel, 2);// FormData Panel
 //**********************************************************************************************************************
         binaryDataPanel.setVisible(false);
-        jSONpanel.setVisible(false);
+        jsonPanel.setVisible(false);
         formDataPanel.setVisible(false);
     }
 
@@ -489,7 +424,17 @@ public class View extends JFrame {
     /**
      * this class is built for listening to focuses in the program for textAreas
      */
-    private static class myFocus extends FocusAdapter {
+    private static class MyFocus extends FocusAdapter {
+        private final int ID;
+
+        MyFocus(int id) {
+            this.ID = id;
+        }
+
+        private boolean valid(JTextField... texts) {
+            return (!texts[0].getText().equals("New Header") && !texts[1].getText().equals("New Value"));
+        }
+
         /**
          * clearing the initial text of the textArea is the responsibility
          * and opening a new row of textFields
@@ -500,17 +445,30 @@ public class View extends JFrame {
         public void focusGained(FocusEvent e) {
             JTextField jTextField = (JTextField) e.getSource();
             jTextField.setText("");
-            if (jTextField.getName().equals("New Header"))
+            if (ID > 2)
                 return;
-            for (int j = 0; j < 5; j++) {
-                if (numberOfHeaders[0] > 19)
-                    break;
-                centerPanels.get(0).getComponent(numberOfHeaders[0] * 5 + j).setVisible(true);
-                centerPanels.get(2).getComponent(numberOfHeaders[1] * 5 + j).setVisible(true);
-                formDataPanel.getComponent(numberOfHeaders[2] * 5 + j).setVisible(true);
+            JTextField[] texts = new JTextField[2];
+            if (ID == 0) {
+                texts[0] = (JTextField) centerPanels.get(0).getComponent((numberOfHeaders[ID] - 1) * 5 + 1);
+                texts[1] = (JTextField) centerPanels.get(0).getComponent((numberOfHeaders[ID] - 1) * 5 + 2);
+            } else if (ID == 1) {
+                texts[0] = (JTextField) centerPanels.get(2).getComponent((numberOfHeaders[ID] - 1) * 5 + 1);
+                texts[1] = (JTextField) centerPanels.get(2).getComponent((numberOfHeaders[ID] - 1) * 5 + 2);
+            } else {
+                texts[0] = (JTextField) formDataPanel.getComponent((numberOfHeaders[ID] - 1) * 5 + 1);
+                texts[1] = (JTextField) formDataPanel.getComponent((numberOfHeaders[ID] - 1) * 5 + 2);
             }
-            for (int i = 0; i < 3; i++)
-                numberOfHeaders[i]++;
+            if (valid(texts)) {
+                for (int j = 0; j < 5 && numberOfHeaders[ID] <= 19; j++) {
+                    if (ID == 0)
+                        centerPanels.get(0).getComponent(numberOfHeaders[ID] * 5 + j).setVisible(true);
+                    else if (ID == 1)
+                        centerPanels.get(2).getComponent(numberOfHeaders[ID] * 5 + j).setVisible(true);
+                    else
+                        formDataPanel.getComponent(numberOfHeaders[ID] * 5 + j).setVisible(true);
+                }
+                numberOfHeaders[ID]++;
+            }
         }
 
         /**
