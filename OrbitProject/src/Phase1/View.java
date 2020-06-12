@@ -46,8 +46,11 @@ public class View extends JFrame {
     View(Options options) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         this.options = options;
         setTitle("Farshid Nooshi Midterm project-term2(98-99)");
-        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         setLayout(new BorderLayout());
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        setPreferredSize(screen);
+        setResizable(false);
         center = new JPanel();
         left = new JPanel();
         right = new JPanel();
@@ -69,28 +72,26 @@ public class View extends JFrame {
         initLeftPanel();
         initCenterPanel();
         initRightPanel();
+        //***********************************************************************************************TRAY
         tray = SystemTray.getSystemTray();
         Image image = Toolkit.getDefaultToolkit().getImage("OrbitProject/Insomnia.png");
-        ActionListener exitListener = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        };
         PopupMenu popup = new PopupMenu();
         MenuItem defaultItem = new MenuItem("Exit");
-        defaultItem.addActionListener(exitListener);
+        defaultItem.addActionListener(e -> {
+            System.exit(0);
+        });
         popup.add(defaultItem);
         defaultItem = new MenuItem("Open");
-        defaultItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        defaultItem.addActionListener(e -> {
                 setVisible(true);
                 setExtendedState(JFrame.NORMAL);
                 tray.remove(trayIcon);
             }
-        });
+        );
         popup.add(defaultItem);
         trayIcon = new TrayIcon(image, "", popup);
         trayIcon.setImageAutoSize(true);
+        //***********************************************************************************************TRAY
     }
 
     /**
@@ -99,31 +100,36 @@ public class View extends JFrame {
     private void initCenterPanel() {
         center.setLayout(new BorderLayout());
         JComboBox<requests> comboBox = new JComboBox<>(requests.values());
-        comboBox.setPreferredSize(new Dimension(70, 55));
+        comboBox.setPreferredSize(new Dimension(80, 41));
         JPanel temporary = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        urlTextField.setPreferredSize(new Dimension(200, 55));
-        saveurl.setPreferredSize(new Dimension(70, 55));
+        urlTextField.setPreferredSize(new Dimension(600, 41));
+        saveurl.setPreferredSize(new Dimension(70, 41));
         temporary.add(comboBox);
         temporary.add(urlTextField);
         temporary.add(saveurl);
+        temporary.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
         center.add(temporary, BorderLayout.NORTH);
         center.add(tabbedPane, BorderLayout.CENTER);
+        tabbedPane.setBorder(BorderFactory.createLineBorder(Color.gray, 2));
         initTabs();
     }
 
     /**
-     * this methos initializes the right panel for our GUI
-     * also i separeted parts of the code for better readability
+     * this method initializes the right panel for our GUI
+     * also i separated parts of the code for better readability
      * each separated part is used for one panel
      */
     private void initRightPanel() {
         JTabbedPane jTabbedPane = new JTabbedPane();
-        right.setLayout(new BorderLayout(5, 5));
-        JPanel help = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 10));
+        right.setLayout(new BorderLayout(5, 0));
+        JPanel help = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 5));
+        help.setPreferredSize(new Dimension(400, 45));
+        help.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+        jTabbedPane.setBorder(BorderFactory.createLineBorder(Color.GRAY,2));
         try {
-            createSpecificLableRightPanel("200 OK", new Color(83, 255, 119), help);
-            createSpecificLableRightPanel("1.03 S", new Color(10, 84, 255), help);
-            createSpecificLableRightPanel("11.6 KB", new Color(10, 84, 255), help);
+            createSpecificLabelRightPanel("200 OK", new Color(83, 255, 119), help);
+            createSpecificLabelRightPanel("1.03 S", new Color(10, 84, 255), help);
+            createSpecificLabelRightPanel("11.6 KB", new Color(10, 84, 255), help);
         } catch (Exception e) {
             e.printStackTrace();
             dispose();
@@ -183,11 +189,12 @@ public class View extends JFrame {
      * @param help  is a panel to adding to
      * @throws NullPointerException checking for not being null in help
      */
-    private void createSpecificLableRightPanel(String text, Color color, JPanel help) throws NullPointerException {
-        JLabel memory = new JLabel(text);
+    private void createSpecificLabelRightPanel(String text, Color color, JPanel help) throws NullPointerException {
+        JLabel memory = new JLabel(text, SwingConstants.CENTER);
+        memory.setPreferredSize(new Dimension(70,30));
         memory.setBackground(color);
         memory.setForeground(Color.WHITE);
-        memory.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        memory.setBorder(BorderFactory.createLineBorder(Color.black, 2));
         memory.setOpaque(true);
         help.add(memory);
     }
@@ -234,7 +241,7 @@ public class View extends JFrame {
     private void initMenuBar() { // Action listener should add
         setIconImage(new ImageIcon("OrbitProject/Insomnia.png").getImage());
         menus.add(new JMenu("Application"));
-        menus.add(new JMenu("Phase1.View"));
+        menus.add(new JMenu("View"));
         menus.add(new JMenu("Help"));
         menus.get(0).setMnemonic(KeyEvent.VK_ASTERISK);
         menus.get(0).setMnemonic(KeyEvent.VK_1);
@@ -244,7 +251,7 @@ public class View extends JFrame {
             menuBar.add(menus.get(i));
         for (int i = 0; i < NUMBER_OF_MENUS; i++)
             submenus.add(new ArrayList<>());
-        submenus.get(0).add(new JMenuItem("Phase1.Options", KeyEvent.VK_O));
+        submenus.get(0).add(new JMenuItem("Options", KeyEvent.VK_O));
         submenus.get(0).add(new JMenuItem("Exit", KeyEvent.VK_E));
         submenus.get(1).add(new JMenuItem("Toggle Full Screen", KeyEvent.VK_T));
         submenus.get(1).add(new JMenuItem("Toggle sidebar", KeyEvent.VK_S));
