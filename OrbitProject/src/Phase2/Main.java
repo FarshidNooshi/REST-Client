@@ -26,7 +26,7 @@ public class Main {
         init(arrayList);
         initArgs(args);
         if (args[0].equalsIgnoreCase("fire")) {
-            File dir = new File(new File(System.getProperty("user.dir")).getAbsolutePath() + File.separator + args[1]);
+            File dir = new File("OrbitProject\\src" + File.separator + args[1]);
             Reader tmp = new Reader(dir.getAbsolutePath() + File.separator + args[2]);
             request = (Request) tmp.ReadFromFile();
             tmp.close();
@@ -37,21 +37,21 @@ public class Main {
                 e.printStackTrace();
             }
         } else if (args[0].equalsIgnoreCase("create")) {
-            File fileToCreate = new File(new File(System.getProperty("user.dir")).getAbsolutePath() + File.separator + args[1]);
+            File fileToCreate = new File("OrbitProject\\src" + File.separator + args[1]);
             if (fileToCreate.mkdir())
                 System.out.println("directory created!");
             else
                 System.err.println("Couldn't create the directory");
         } else if (args[0].equalsIgnoreCase("list")) {
             if (args.length == 1) {
-                File file = new File(System.getProperty("user.dir"));
+                File file = new File("OrbitProject\\src");
                 String[] arr = file.list();
                 assert arr != null;
                 for (String temp : arr)
-                    if (!temp.equalsIgnoreCase("phase2") && !temp.equalsIgnoreCase("phase1"))
+                    if (!temp.contains("Phase") && !temp.equals("OutputFolder"))
                         System.out.println(temp);
             } else {
-                Path path = Paths.get(new File(System.getProperty("user.dir")).getAbsolutePath() + File.separator + args[1]);
+                Path path = Paths.get("OrbitProject\\src" + File.separator + args[1]);
                 File file = new File(path.toString());
                 if (file.exists()) {
                     String[] arr = file.list();
@@ -130,7 +130,7 @@ public class Main {
      * @throws IOException if the exception occurred
      */
     private static void SaveRequest() throws IOException {
-        Path path = Paths.get(new File(System.getProperty("user.dir")).getAbsolutePath() + File.separator + request.getMp().get("save"));
+        Path path = Paths.get("OrbitProject\\src" + File.separator + request.getMp().get("save"));
         String name = String.valueOf(Objects.requireNonNull(new File(path.toString()).list()).length + 1);
         Writer writer = new Writer(path.toString() + File.separator + name);
         writer.WriteToFile(request);

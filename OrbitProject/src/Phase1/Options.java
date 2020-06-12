@@ -22,7 +22,7 @@ public class Options extends JFrame {
         followRedirect = false;
         followRedirectBox = new JCheckBox("Follow Redirect");
         darkModeBox = new JCheckBox("Dark Mode");
-        exitBox = new JCheckBox("Exit ?");
+        exitBox = new JCheckBox("Exit&go to system tray ?");
         add(followRedirectBox);
         add(darkModeBox);
         add(exitBox);
