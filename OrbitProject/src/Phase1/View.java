@@ -22,10 +22,11 @@ public class View extends JFrame {
     private static final int NUMBER_OF_MENUS = 3; // number of menus of the program
     private static final int NUMBER_OF_SUBMENUS = 2; // its the number of submenus of each menu
     private static int[] numberOfHeaders = {1, 1, 1}; // an index holder for the headers that are visible at the moment
-    private static ArrayList<JPanel> centerPanels;
-    private static ArrayList<JPanel> rightPanels;
-    private static JPanel formDataPanel;
+    private static ArrayList<JPanel> centerPanels, rightPanels;
+    private static JPanel binaryDataPanel, jsonPanel, formDataPanel;
     private final Options options; // options panel that should be opened in another frame
+    private JButton selectItem, resetItem;
+    private JLabel fileSelected;
     private boolean fullScreen = false; // say if it's in the fullscreen mode or not
     private JMenuBar menuBar; // for the menu of the frame
     private ArrayList<JMenu> menus; // menus of the program
@@ -39,6 +40,7 @@ public class View extends JFrame {
     private SystemTray tray;
     private JButton createNode = new JButton("create");
     private ArrayList<String> folders = new ArrayList<>();
+    private JTabbedPane bodyTabbedPane;
 
 
     /**
@@ -67,7 +69,6 @@ public class View extends JFrame {
         urlTextField = new JTextField();
         rightPanels = new ArrayList<>();
         saveURL = new JButton("Send");
-        saveURL.addActionListener(e -> System.out.println("Send URL got an action event."));
         tabbedPane = new JTabbedPane();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         initMenuBar();
@@ -80,7 +81,7 @@ public class View extends JFrame {
         initRightPanel();
         //***********************************************************************************************TRAY
         tray = SystemTray.getSystemTray();
-        Image image = Toolkit.getDefaultToolkit().getImage("OrbitProject/Insomnia.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("OrbitProject/Data/Insomnia.png");
         PopupMenu popup = new PopupMenu();
         MenuItem defaultItem = new MenuItem("Exit");
         defaultItem.addActionListener(e -> System.exit(0));
@@ -112,6 +113,26 @@ public class View extends JFrame {
 
     public static JPanel getFormDataPanel() {
         return formDataPanel;
+    }
+
+    public static JPanel getBinaryDataPanel() {
+        return binaryDataPanel;
+    }
+
+    public static JPanel getJsonPanel() {
+        return jsonPanel;
+    }
+
+    public JPanel getRight() {
+        return right;
+    }
+
+    public JButton getResetItem() {
+        return resetItem;
+    }
+
+    public JButton getSelectItem() {
+        return selectItem;
     }
 
     /**
@@ -166,7 +187,7 @@ public class View extends JFrame {
         JPanel reference = rightPanels.get(1);// HEADER
         reference.setLayout(new GridLayout(16, 3, 5, 5));
         for (int i = 0; i < 15; i++) {
-            reference.add(new JLabel(new ImageIcon("OrbitProject/menu_32px.png")));
+            reference.add(new JLabel(new ImageIcon("OrbitProject/Data/menu_32px.png")));
             JTextField textField = new JTextField(), textField1 = new JTextField();
             reference.add(textField);
             reference.add(textField1);
@@ -221,7 +242,7 @@ public class View extends JFrame {
      * we have a list for creating folders
      */
     private void initLeftPanel() {
-        JLabel label = new JLabel("Insomnia", new ImageIcon("OrbitProject/Insomnia.png"), SwingConstants.LEFT);
+        JLabel label = new JLabel("Insomnia", new ImageIcon("OrbitProject/Data/Insomnia.png"), SwingConstants.LEFT);
         label.setBackground(new Color(182, 1, 255));
         label.setForeground(Color.WHITE);
         label.setOpaque(true);
@@ -259,7 +280,7 @@ public class View extends JFrame {
      */
     @SuppressWarnings("deprecation")
     private void initMenuBar() { // Action listener should add
-        setIconImage(new ImageIcon("OrbitProject/Insomnia.png").getImage());
+        setIconImage(new ImageIcon("OrbitProject/Data/Insomnia.png").getImage());
         menus.add(new JMenu("Application"));
         menus.add(new JMenu("View"));
         menus.add(new JMenu("Help"));
@@ -369,20 +390,20 @@ public class View extends JFrame {
         MyFocus focus = new MyFocus(id);
         reference.setLayout(new GridLayout(20, 5, 5, 5));
         for (int i = 0; i < 20; i++) {
-            reference.add(new JLabel(new ImageIcon("OrbitProject/menu_32px.png")));
-            JTextField tt = new JTextField("New Header"), tt1 = new JTextField("New Value");
-            tt.setName("New Header");
-            tt.addFocusListener(focus);
-            tt1.setName(tt1.getText());
-            tt1.addFocusListener(focus);
-            reference.add(tt);
-            reference.add(tt1);
-            JCheckBox jCheckBox = new JCheckBox();
-            jCheckBox.addActionListener(e -> System.out.println("check box clicked. and state of this box changed."));
-            reference.add(jCheckBox);
-            JButton jButton = new JButton(new ImageIcon("OrbitProject/waste_32px.png"));
-            reference.add(jButton);
-            jButton.addActionListener(e -> System.out.println("a header delete button clicked."));
+            JTextField header = new JTextField("New Header"), value = new JTextField("New Value");
+            JButton trash = new JButton(new ImageIcon("OrbitProject/Data/trash_32px.png"));
+            JCheckBox active = new JCheckBox("active");
+            header.addFocusListener(focus);
+            header.setName(header.getText());
+            value.setName(value.getText());
+            value.addFocusListener(focus);
+            reference.add(new JLabel(new ImageIcon("OrbitProject/Data/menu_32px.png")));
+            reference.add(header);
+            reference.add(value);
+            reference.add(active);
+            reference.add(trash);
+            active.setName("" + i);
+            trash.setName("" + i);
         }
         for (int i = numberOfHeaders[id]; i < 20; i++)
             for (int j = 0; j < 5; j++)
@@ -394,31 +415,28 @@ public class View extends JFrame {
      */
     private void initBody() {
         JPanel reference = centerPanels.get(3);
-        JPanel binaryDataPanel = new JPanel();
-        JPanel jsonPanel = new JPanel();
         formDataPanel = new JPanel();
-        jsonPanel.setName("jSONpanel");
+        jsonPanel = new JPanel();
+        binaryDataPanel = new JPanel();
+        jsonPanel.setName("jsonPanel");
         formDataPanel.setName("formDataPanel");
         binaryDataPanel.setName("binaryDataPanel");
-        JTabbedPane help = new JTabbedPane();
-        help.add(jsonPanel.getName(), jsonPanel);
-        help.add(formDataPanel.getName(), formDataPanel);
-        help.add(binaryDataPanel.getName(), binaryDataPanel);
-        reference.add(help, BorderLayout.CENTER);
+        bodyTabbedPane = new JTabbedPane();
+        bodyTabbedPane.add(jsonPanel.getName(), jsonPanel);
+        bodyTabbedPane.add(formDataPanel.getName(), formDataPanel);
+        bodyTabbedPane.add(binaryDataPanel.getName(), binaryDataPanel);
+        reference.add(bodyTabbedPane, BorderLayout.CENTER);
 //**********************************************************************************************************************
         binaryDataPanel.setLayout(new BorderLayout()); // Binary Data
-        JLabel label = new JLabel("SELECTED FILE");
+        JLabel label = new JLabel("Please select a file ", new ImageIcon("OrbitProject/Data/resume_100px.png"), SwingConstants.LEFT);
         binaryDataPanel.add(label, BorderLayout.NORTH);
-        JTextField ttt = new JTextField("...");
-        ttt.setEditable(false);
-        binaryDataPanel.add(ttt, BorderLayout.CENTER);
-        JButton selectItem = new JButton("Choose File");
-        JButton resetItem = new JButton("Reset File");
-        selectItem.addActionListener(e -> System.out.println("choose a file button got an action event."));
-        resetItem.addActionListener(e -> System.out.println("reset Item button got an action event."));
+        selectItem = new JButton("Choose File");
+        resetItem = new JButton("Reset File");
+        fileSelected = new JLabel("Selected File: Nothing", new ImageIcon("OrbitProject/Data/file_100px.png"), SwingUtilities.LEFT);
         JPanel tmp = new JPanel(new FlowLayout());
         tmp.add(resetItem);
         tmp.add(selectItem);
+        binaryDataPanel.add(fileSelected, BorderLayout.CENTER);
         binaryDataPanel.add(tmp, BorderLayout.SOUTH);
 //**********************************************************************************************************************
         jsonPanel.setLayout(new BorderLayout());// JSON panel
@@ -428,6 +446,7 @@ public class View extends JFrame {
         jsonPanel.add(textField1, BorderLayout.CENTER);
 //**********************************************************************************************************************
         buildTab(formDataPanel, 2);// FormData Panel
+        formDataPanel.setName("formData");
 //**********************************************************************************************************************
         binaryDataPanel.setVisible(false);
         jsonPanel.setVisible(false);
@@ -457,8 +476,16 @@ public class View extends JFrame {
         return saveURL;
     }
 
+    public JTabbedPane getBodyTabbedPane() {
+        return bodyTabbedPane;
+    }
+
     public JMenuBar getJMenuBar() {
         return menuBar;
+    }
+
+    public JLabel getFileSelected() {
+        return fileSelected;
     }
 
     public JList<Object> getList() {

@@ -15,7 +15,7 @@ public class Options extends JFrame {
     Options() {
         setTitle("Options");
         setPreferredSize(new Dimension(400, 200));
-        setIconImage(new ImageIcon("OrbitProject/Insomnia.png").getImage());
+        setIconImage(new ImageIcon("OrbitProject/Data/Insomnia.png").getImage());
         setLayout(new GridLayout(3, 1));
         isDarkMode = false;
         isExitable = false;

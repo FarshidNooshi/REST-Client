@@ -11,11 +11,11 @@ import java.io.ObjectInputStream;
 public class Reader {
     private ObjectInputStream in;
 
-    Reader(String path) throws IOException {
+    public Reader(String path) throws IOException {
         in = new ObjectInputStream(new FileInputStream(new File(path)));
     }
 
-    Object ReadFromFile() throws IOException {
+    public Object ReadFromFile() throws IOException {
         try {
             return in.readObject();
         } catch (ClassNotFoundException e) {
@@ -24,7 +24,7 @@ public class Reader {
         return null;
     }
 
-    void close() {
+    public void close() {
         try {
             in.close();
         } catch (Exception e) {
