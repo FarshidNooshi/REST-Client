@@ -237,8 +237,8 @@ public class Controller {
                     JPanel panel = View.getRightPanels().get(1);
                     int counter = 0;
                     for (int i = 0; i < 15; i++) {
-                        ((JTextField)panel.getComponent(i * 3 + 1)).setText("");
-                        ((JTextField)panel.getComponent(i * 3 + 2)).setText("");
+                        ((JTextArea)panel.getComponent(i * 3 + 1)).setText("");
+                        ((JTextArea)panel.getComponent(i * 3 + 2)).setText("");
                     }
                     while (!(read = scanner.nextLine()).isEmpty()) {
                         String value = "", key = "";
@@ -251,10 +251,8 @@ public class Controller {
                         while (read.charAt(i) != ':')
                             i--;
                         key = read.substring(i + 2, j);
-                        if (value.length() > 15)
-                            value = value.substring(0, 15) + "\n" + value.substring(15);
-                        ((JTextField)panel.getComponent(counter * 3 + 1)).setText(key);
-                        ((JTextField)panel.getComponent(counter * 3 + 2)).setText(value);
+                        ((JTextArea)panel.getComponent(counter * 3 + 1)).setText(key);
+                        ((JTextArea)panel.getComponent(counter * 3 + 2)).setText(value);
                         counter++;
                     }
                 }

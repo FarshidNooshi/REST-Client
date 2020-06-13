@@ -173,11 +173,9 @@ public class View extends JFrame {
      */
     private void initRightPanel() {
         right.setLayout(new BorderLayout(5, 0));
-        right.setMaximumSize(new Dimension(400, 45));
         JTabbedPane jTabbedPane = new JTabbedPane();
         GridLayout layout = new GridLayout(1, 3);
         status = new JPanel(layout);
-        layout.preferredLayoutSize(right);
         status.setPreferredSize(new Dimension(400, 45));
         right.add(status, BorderLayout.NORTH);
         status.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
@@ -199,14 +197,17 @@ public class View extends JFrame {
         right.add(jTabbedPane, BorderLayout.CENTER);
 //**********************************************************************************************************************
         JPanel reference = rightPanels.get(1);// HEADER
-        reference.setLayout(new GridLayout(16, 3, 5, 5));
+        reference.setLayout(new GridLayout(16, 3));
+        reference.setMaximumSize(new Dimension(400, 45));
         for (int i = 0; i < 15; i++) {
-            JTextField key = new JTextField(), value = new JTextField();
+            JTextArea key = new JTextArea(), value = new JTextArea();
             reference.add(new JLabel(new ImageIcon("OrbitProject/Data/menu_32px.png")));
             reference.add(key);
             reference.add(value);
             key.setEditable(false);
             value.setEditable(false);
+            value.setLineWrap(true);
+            key.setLineWrap(true);
         }
         JButton copy = new JButton("Copy to Clipboard");
         copy.addActionListener(e -> System.out.println("copy button got action event."));
