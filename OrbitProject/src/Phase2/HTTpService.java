@@ -18,12 +18,13 @@ public class HTTpService {
     private Request request;
     private PrintStream writer;
 
+
     /**
      * is the constructor for our service
      *
      * @param req is the request that we wanna execute
      */
-    HTTpService(Request req, PrintStream out) {
+    public HTTpService(Request req, PrintStream out) {
         writer = out;
         request = req;
         boundary = "" + System.currentTimeMillis();
@@ -66,7 +67,8 @@ public class HTTpService {
      *
      * @throws MalformedURLException for the url connection
      */
-    void runService() throws Exception {
+    public void runService() throws Exception {
+        long dif = System.currentTimeMillis();
         if (!request.getMp().get("data").equals("") && !request.getMp().get("json").equals("")) {
             System.err.println("Program terminated.");
             throw new Exception("can't have both json & form data as message body!");
@@ -88,14 +90,15 @@ public class HTTpService {
             connection.setDoOutput(true);
             initHeaders(connection);
             initBody(connection);
+            dif = System.currentTimeMillis() - dif;
+            writer.println(connection.getResponseCode() + "\n" + connection.getResponseMessage() + "\n" + dif);
             while (connection.getResponseCode() / 100 == 3 && request.getMp().get("f").equals("true")) {
                 String location = connection.getHeaderField("Location");
-                writer.println("redirected to " + location);
+                writer.println("--redirect redirected to " + location);
                 connection = (HttpURLConnection) (new URL(location)).openConnection();
             }
             String ret = getResponse(connection);
-            writer.println(connection.getResponseCode() + " " + connection.getResponseMessage());
-            writer.println(ret);
+            writer.println("--body \n" + ret);
             if (!request.getMp().get("output").equals("")) {
                 File base = new File("").getAbsoluteFile();
                 File file = new File(base + File.separator + "OutputFolder");
@@ -108,8 +111,9 @@ public class HTTpService {
                 bufferedWriter.flush();
             }
             if (request.getMp().get("i").equals("true")) {
+                writer.println("--headers ");
                 for (Map.Entry<String, List<String>> entry : connection.getHeaderFields().entrySet())
-                    writer.println("Key: " + entry.getKey() + " ,Value: " + entry.getValue() + "\n");
+                    writer.println("Key: " + entry.getKey() + " ,Value: " + entry.getValue());
             }
         } catch (IOException ex) {
             System.err.println("FAILED TO OPEN CONNECTION!" + ex);

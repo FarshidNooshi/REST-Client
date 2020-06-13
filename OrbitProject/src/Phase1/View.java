@@ -42,6 +42,8 @@ public class View extends JFrame {
     private JButton createNode = new JButton("create");
     private ArrayList<String> folders = new ArrayList<>();
     private JTabbedPane bodyTabbedPane;
+    private JPanel status;
+    private JTextArea raw, preview, json;
 
 
     /**
@@ -141,6 +143,10 @@ public class View extends JFrame {
         return comboBox;
     }
 
+    public JPanel getStatus() {
+        return status;
+    }
+
     /**
      * this method initializes the center panel for our GUI
      */
@@ -167,20 +173,23 @@ public class View extends JFrame {
      */
     private void initRightPanel() {
         right.setLayout(new BorderLayout(5, 0));
+        right.setMaximumSize(new Dimension(400, 45));
         JTabbedPane jTabbedPane = new JTabbedPane();
-        JPanel help = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 5));
-        help.setPreferredSize(new Dimension(400, 45));
-        help.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+        GridLayout layout = new GridLayout(1, 3);
+        status = new JPanel(layout);
+        layout.preferredLayoutSize(right);
+        status.setPreferredSize(new Dimension(400, 45));
+        right.add(status, BorderLayout.NORTH);
+        status.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
         jTabbedPane.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
         try {
-            createSpecificLabelRightPanel("200 OK", new Color(83, 255, 119), help);
-            createSpecificLabelRightPanel("1.03 S", new Color(10, 84, 255), help);
-            createSpecificLabelRightPanel("11.6 KB", new Color(10, 84, 255), help);
+            createSpecificLabelRightPanel("200 OK", new Color(83, 255, 119), status);
+            createSpecificLabelRightPanel("1.03 S", new Color(10, 84, 255), status);
+            createSpecificLabelRightPanel("11.6 KB", new Color(10, 84, 255), status);
         } catch (Exception e) {
             e.printStackTrace();
             dispose();
         }
-        right.add(help, BorderLayout.NORTH);
         for (int i = 0; i < 2; i++)
             rightPanels.add(new JPanel());
         rightPanels.get(0).setName("Body");
@@ -192,12 +201,12 @@ public class View extends JFrame {
         JPanel reference = rightPanels.get(1);// HEADER
         reference.setLayout(new GridLayout(16, 3, 5, 5));
         for (int i = 0; i < 15; i++) {
+            JTextField key = new JTextField(), value = new JTextField();
             reference.add(new JLabel(new ImageIcon("OrbitProject/Data/menu_32px.png")));
-            JTextField textField = new JTextField(), textField1 = new JTextField();
-            reference.add(textField);
-            reference.add(textField1);
-            textField.setEditable(false);
-            textField1.setEditable(false);
+            reference.add(key);
+            reference.add(value);
+            key.setEditable(false);
+            value.setEditable(false);
         }
         JButton copy = new JButton("Copy to Clipboard");
         copy.addActionListener(e -> System.out.println("copy button got action event."));
@@ -205,9 +214,9 @@ public class View extends JFrame {
 //**********************************************************************************************************************
         reference = rightPanels.get(0);//Body
         JTabbedPane jTabbedPane1 = new JTabbedPane();
-        JTextArea textArea = new JTextArea("TO DO IN THE NEXT PHASES");
-        JTextArea jTextArea = new JTextArea("TO DO IN THE NEXT PHASES");
-        JTextArea jTextArea1 = new JTextArea("TO DO IN THE NEXT PHASES");
+        raw = new JTextArea("TO DO IN THE NEXT PHASES");
+        preview = new JTextArea("TO DO IN THE NEXT PHASES");
+        json = new JTextArea("TO DO IN THE NEXT PHASES");
         reference.setLayout(new BorderLayout());
         reference.add(jTabbedPane1, BorderLayout.CENTER);
         ArrayList<JPanel> rightBodyPanels = new ArrayList<>();
@@ -216,14 +225,18 @@ public class View extends JFrame {
         rightBodyPanels.get(0).setName("Raw");
         rightBodyPanels.get(1).setName("Preview");
         rightBodyPanels.get(2).setName("JSON");
-        rightBodyPanels.get(0).add(textArea, BorderLayout.CENTER);
-        rightBodyPanels.get(1).add(jTextArea1, BorderLayout.CENTER);
-        rightBodyPanels.get(2).add(jTextArea, BorderLayout.CENTER);
-        textArea.setEditable(false);
-        jTextArea.setEditable(false);
-        jTextArea1.setEditable(false);
+        rightBodyPanels.get(0).add(raw, BorderLayout.CENTER);
+        rightBodyPanels.get(1).add(json, BorderLayout.CENTER);
+        rightBodyPanels.get(2).add(preview, BorderLayout.CENTER);
+        raw.setEditable(false);
+        preview.setEditable(false);
+        json.setEditable(false);
         for (JPanel panel : rightBodyPanels)
             jTabbedPane1.add(panel.getName(), panel);
+    }
+
+    public JTextArea getRaw() {
+        return raw;
     }
 
     /**
@@ -232,7 +245,7 @@ public class View extends JFrame {
      * @param help  is a panel to adding to
      * @throws NullPointerException checking for not being null in help
      */
-    private void createSpecificLabelRightPanel(String text, Color color, JPanel help) throws NullPointerException {
+    public void createSpecificLabelRightPanel(String text, Color color, JPanel help) throws NullPointerException {
         JLabel memory = new JLabel(text, SwingConstants.CENTER);
         memory.setPreferredSize(new Dimension(70, 30));
         memory.setBackground(color);
@@ -331,7 +344,7 @@ public class View extends JFrame {
                 left.setVisible(true);
         });
         submenus.get(2).get(0).addActionListener(e -> JOptionPane.showMessageDialog(null, "Farshid Nooshi\nStudent ID: 9831068\nEmail: FarshidNooshi726@aut.ac.ir", "About", JOptionPane.INFORMATION_MESSAGE));
-        submenus.get(2).get(1).addActionListener(e -> JOptionPane.showMessageDialog(null, "To Do for next phases", "Help", JOptionPane.INFORMATION_MESSAGE));
+        submenus.get(2).get(1).addActionListener(e -> JOptionPane.showMessageDialog(null, "see the help folder in phase 3", "Help", JOptionPane.INFORMATION_MESSAGE));
     }
 
     /**
@@ -409,7 +422,7 @@ public class View extends JFrame {
             reference.add(trash);
             active.setName("" + i);
             trash.setName("" + i);
-            active.doClick();
+            active.setSelected(false);
         }
         for (int i = numberOfHeaders[id]; i < 20; i++)
             for (int j = 0; j < 5; j++)
@@ -446,8 +459,8 @@ public class View extends JFrame {
         binaryDataPanel.add(tmp, BorderLayout.SOUTH);
 //**********************************************************************************************************************
         jsonPanel.setLayout(new BorderLayout());// JSON panel
-        JTextField textField1 = new JTextField("...");
-        textField1.setName("...");
+        JTextField textField1 = new JTextField("");
+        textField1.setName("json");
         textField1.addFocusListener(new MyFocus(3));
         jsonPanel.add(textField1, BorderLayout.CENTER);
 //**********************************************************************************************************************

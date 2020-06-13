@@ -5,15 +5,18 @@ import Phase2.Reader;
 import Phase2.Request;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class Controller {
     ActionListener actionListener;
@@ -86,7 +89,7 @@ public class Controller {
                 JTextField header = (JTextField) panel.getComponent(finalI * 5 + 1);
                 JTextField value = (JTextField) panel.getComponent(finalI * 5 + 2);
                 JCheckBox checkBox = (JCheckBox) panel.getComponent(finalI * 5 + 3);
-                checkBox.setSelected(true);
+                checkBox.setSelected(false);
                 header.setText(header.getName());
                 value.setText(value.getName());
             });
@@ -129,6 +132,18 @@ public class Controller {
         });
     }
 
+    private void executeService(Request request) throws IOException {
+        request.SaveRequest();
+        String base = (new File("OrbitProject\\src\\OutputFolder").getAbsolutePath());
+        String name = "output" + ".txt";
+        try (PrintStream writer = new PrintStream(base + File.separator + name)) {
+            Phase2.HTTpService service = new Phase2.HTTpService(request, writer);
+            service.runService();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private class Worker extends SwingWorker<String, Object> {
 
         /**
@@ -145,6 +160,11 @@ public class Controller {
          */
         @Override
         protected String doInBackground() throws Exception {
+            initRequest();
+            return null;
+        }
+
+        private void initRequest() throws InterruptedException, IOException {
             request.getMp().replace("url", view.getUrlTextField().getText());
             request.getMp().replace("method", Objects.requireNonNull(view.getComboBox().getSelectedItem()).toString());
             {
@@ -159,7 +179,7 @@ public class Controller {
                 }
                 if (builder.length() != 0) {
                     String headers = builder.toString();
-                    request.getMp().replace("header", headers.substring(0, headers.length() - 1));
+                    request.getMp().replace("headers", headers.substring(0, headers.length() - 1));
                 }
             }
             request.getMp().replace("i", "true");
@@ -170,12 +190,15 @@ public class Controller {
                 Thread.sleep(5000);
             }
             String name = view.getList().getSelectedValue().toString();
-            request.getMp().replace("save", "OrbitProject\\src" + File.separator + name);
+            File base = new File("OrbitProject\\src").getAbsoluteFile();
+            request.getMp().replace("save", base + File.separator + name);
             JTabbedPane bodyTabbedPane = view.getBodyTabbedPane();
             if (bodyTabbedPane.getSelectedComponent().getName().contains("json")) {
                 JTextField textField = (JTextField) View.getJsonPanel().getComponents()[0];
-                request.getMp().replace("json", textField.getText());
-                request.getMp().replace("type", "json");
+                if (textField.getText().length() > 2) {
+                    request.getMp().replace("json", textField.getText());
+                    request.getMp().replace("type", "json");
+                }
             } else if (bodyTabbedPane.getSelectedComponent().getName().contains("form")) {
                 StringBuilder builder = new StringBuilder();
                 JPanel panel = View.getFormDataPanel();
@@ -190,23 +213,77 @@ public class Controller {
                     String headers = builder.toString();
                     request.getMp().replace("data", headers);
                 }
-            } else {
+            } else if (bodyTabbedPane.getSelectedComponent().getName().contains("binary")) {//TODO
                 request.getMp().replace("type", "binary");
             }
             executeService(request);
-            return null;
         }
 
-    }
-
-    private void executeService(Request request) {
-        String base = "C:\\Users\\Farshid726\\Desktop\\Codes\\insomniaaut\\OrbitProject\\src\\OutputFolder";
-        String name = "output" + ".txt";
-        try (PrintStream writer = new PrintStream(base + File.separator + name)) {
-            HTTpService service = new HTTpService(request, writer);
-            service.runService();
-        } catch (Exception e) {
-            e.printStackTrace();
+        public void done() {
+            view.getSaveURL().setEnabled(true);
+            view.getUrlTextField().setEnabled(true);
+            request = new Request();
+            File base = new File("OrbitProject\\src\\OutputFolder\\output.txt").getAbsoluteFile();
+            view.getRaw().setText("");
+            try (FileReader fileReader = new FileReader(base.getAbsolutePath());
+                 Scanner scanner = new Scanner(fileReader)) {
+                initTopRight(scanner, base);
+                scanner.nextLine();
+                String read;
+                while (!(read = scanner.nextLine()).equals("--headers ")) {
+                    view.getRaw().append(read + '\n');
+                }
+                {
+                    JPanel panel = View.getRightPanels().get(1);
+                    int counter = 0;
+                    for (int i = 0; i < 15; i++) {
+                        ((JTextField)panel.getComponent(i * 3 + 1)).setText("");
+                        ((JTextField)panel.getComponent(i * 3 + 2)).setText("");
+                    }
+                    while (!(read = scanner.nextLine()).isEmpty()) {
+                        String value = "", key = "";
+                        int j = read.length() - 1;
+                        while (read.charAt(j) != ':')
+                            j--;
+                        value = read.substring(j + 2);
+                        j -= 7;
+                        int i = j;
+                        while (read.charAt(i) != ':')
+                            i--;
+                        key = read.substring(i + 2, j);
+                        if (value.length() > 15)
+                            value = value.substring(0, 15) + "\n" + value.substring(15);
+                        ((JTextField)panel.getComponent(counter * 3 + 1)).setText(key);
+                        ((JTextField)panel.getComponent(counter * 3 + 2)).setText(value);
+                        counter++;
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
+        private void initTopRight(Scanner scanner, File base) {
+            JPanel panel = view.getStatus();
+            int responseCode = scanner.nextInt();
+            scanner.nextLine();
+            String responseMessage = scanner.nextLine();
+            int milis = scanner.nextInt();
+            scanner.nextLine();
+            long sz = base.length();
+            Color temp;
+            if (responseCode / 100 == 2)
+                temp = new Color(83, 255, 119);
+            else if (responseCode / 100 == 3)
+                temp = new Color(255, 217, 38);
+            else
+                temp = new Color(255, 1, 13);
+            ((JLabel) panel.getComponent(0)).setText("" + responseCode + " " + responseMessage);
+            panel.getComponent(0).setBackground(temp);
+            ((JLabel) panel.getComponent(1)).setText("" + milis + " ms");
+            ((JLabel) panel.getComponent(2)).setText("" + sz + " bytes");
+
+        }
+
     }
 }

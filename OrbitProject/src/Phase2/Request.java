@@ -1,7 +1,12 @@
 package Phase2;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * this class is a serialized class for request and represents a request in this project.
@@ -25,6 +30,18 @@ public class Request implements Serializable {
         mp.put("upload", "");
         mp.put("type", "");
         mp.put("uploadBinary", "");
+    }
+
+    /**
+     * this method will save the request to the path that user gave.
+     *
+     * @throws IOException if the exception occurred
+     */
+    public void SaveRequest() throws IOException {
+        Path path = Paths.get(this.mp.get("save"));
+        String name = (Objects.requireNonNull(new File(path.toString()).list()).length + 1) + ".AUT";
+        Writer writer = new Writer(path.toString() + File.separator + name);
+        writer.WriteToFile(this);
     }
 
     public HashMap<String, String> getMp() {

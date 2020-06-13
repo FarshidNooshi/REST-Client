@@ -117,26 +117,13 @@ public class Main {
             }
             HTTpService service = new HTTpService(request, writer);
             if (!request.getMp().get("save").equals("false"))
-                SaveRequest();
+                request.SaveRequest();
             try {
                 service.runService();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    /**
-     * this method will save the request to the path that user gave.
-     *
-     * @throws IOException if the exception occurred
-     */
-    private static void SaveRequest() throws IOException {
-        String basePath = new File("").getAbsolutePath();
-        Path path = Paths.get(basePath + File.separator + request.getMp().get("save"));
-        String name = (Objects.requireNonNull(new File(path.toString()).list()).length + 1) + ".AUT";
-        Writer writer = new Writer(path.toString() + File.separator + name);
-        writer.WriteToFile(request);
     }
 
     /**
