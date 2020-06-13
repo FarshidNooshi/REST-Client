@@ -16,13 +16,15 @@ public class HTTpService {
     private HttpURLConnection connection;
     private String boundary;
     private Request request;
+    private PrintStream writer;
 
     /**
      * is the constructor for our service
      *
      * @param req is the request that we wanna execute
      */
-    HTTpService(Request req) {
+    HTTpService(Request req, PrintStream out) {
+        writer = out;
         request = req;
         boundary = "" + System.currentTimeMillis();
     }
@@ -88,12 +90,12 @@ public class HTTpService {
             initBody(connection);
             while (connection.getResponseCode() / 100 == 3 && request.getMp().get("f").equals("true")) {
                 String location = connection.getHeaderField("Location");
-                System.out.println("redirected to " + location);
+                writer.println("redirected to " + location);
                 connection = (HttpURLConnection) (new URL(location)).openConnection();
             }
             String ret = getResponse(connection);
-            System.out.println(connection.getResponseCode() + " " + connection.getResponseMessage());
-            System.out.println(ret);
+            writer.println(connection.getResponseCode() + " " + connection.getResponseMessage());
+            writer.println(ret);
             if (!request.getMp().get("output").equals("")) {
                 File file = new File("OrbitProject\\src" + File.separator + "OutputFolder");
                 //noinspection ResultOfMethodCallIgnored
@@ -106,7 +108,7 @@ public class HTTpService {
             }
             if (request.getMp().get("i").equals("true")) {
                 for (Map.Entry<String, List<String>> entry : connection.getHeaderFields().entrySet())
-                    System.out.println("Key: " + entry.getKey() + " ,Value: " + entry.getValue() + "\n");
+                    writer.println("Key: " + entry.getKey() + " ,Value: " + entry.getValue() + "\n");
             }
         } catch (IOException ex) {
             System.err.println("FAILED TO OPEN CONNECTION!" + ex);

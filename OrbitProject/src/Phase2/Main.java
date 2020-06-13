@@ -2,6 +2,8 @@ package Phase2;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -19,6 +21,7 @@ public class Main {
      * @param args is the inputs of this HTTPCLIENT service
      */
     public static void main(String[] args) throws IOException {
+        PrintStream writer = System.out;
         String basePath = new File("").getAbsolutePath();
         if (args.length == 0)
             new Exception("INVALID INPUT").printStackTrace();
@@ -31,7 +34,7 @@ public class Main {
             Reader tmp = new Reader(dir.getAbsolutePath() + File.separator + args[2]);
             request = (Request) tmp.ReadFromFile();
             tmp.close();
-            HTTpService service = new HTTpService(request);
+            HTTpService service = new HTTpService(request, writer);
             try {
                 service.runService();
             } catch (Exception e) {
@@ -107,13 +110,12 @@ public class Main {
                 }
             }
             if (!request.getMp().get("upload").equals("")) {
-//                Reader tmp = new Reader(request.getMp().get("upload"));// TODO check beshe
-//                request = (Request) tmp.ReadFromFile();
-//                tmp.close();
-//                System.out.println("Request renewed.");
-                request.getMp().replace("uploadBinary", request.getMp().get("upload"));
+                Reader tmp = new Reader(request.getMp().get("upload"));
+                request = (Request) tmp.ReadFromFile();
+                tmp.close();
+                System.out.println("Request renewed.");
             }
-            HTTpService service = new HTTpService(request);
+            HTTpService service = new HTTpService(request, writer);
             if (!request.getMp().get("save").equals("false"))
                 SaveRequest();
             try {

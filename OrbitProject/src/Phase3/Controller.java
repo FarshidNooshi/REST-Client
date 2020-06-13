@@ -9,15 +9,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Controller {
+    ActionListener actionListener;
     private View view;
     private Request request;
-    ActionListener actionListener;
 
     public Controller(View view) {
         request = new Request();
@@ -30,7 +29,7 @@ public class Controller {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
-                ((JButton)e.getSource()).setEnabled(false);
+                ((JButton) e.getSource()).setEnabled(false);
                 view.getUrlTextField().setEnabled(false);
                 Worker worker = new Worker();
                 worker.execute();
@@ -64,10 +63,10 @@ public class Controller {
             final JFileChooser fileChooser = new JFileChooser();
             fileChooser.showOpenDialog(view);
             fileChooser.setMultiSelectionEnabled(false);
-            //TODO requestesh ro dorost kon
             JLabel label = view.getFileSelected();
             label.setText("File selected: " + fileChooser.getSelectedFile().getName());
             label.setIcon(new ImageIcon("OrbitProject/Data/save_close_100px.png"));
+            request.getMp().replace("uploadBinary", fileChooser.getSelectedFile().getAbsolutePath());
         });
         JButton reset = view.getResetItem();
         reset.addActionListener(e -> {
@@ -146,8 +145,8 @@ public class Controller {
         protected String doInBackground() throws Exception {
             request.getMp().replace("url", view.getUrlTextField().getText());
             request.getMp().replace("method", Objects.requireNonNull(view.getComboBox().getSelectedItem()).toString());
-            StringBuilder builder = new StringBuilder();
             {
+                StringBuilder builder = new StringBuilder();
                 JPanel panel = View.getCenterPanels().get(0);
                 for (int i = 0; i < View.getNumberOfHeaders()[0]; i++) {
                     JTextField header = (JTextField) panel.getComponent(i * 5 + 1);
@@ -165,17 +164,46 @@ public class Controller {
             if (view.getOptions().getFollowRedirectBox().isSelected())
                 request.getMp().replace("f", "true");
             while (view.getList().getSelectedIndex() == -1) {
-                JOptionPane.showMessageDialog(view, (String)"choose or create a folder to save your request from the left panel", "Save Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(view, "choose or create a folder to save your request from the left panel", "Save Error", JOptionPane.ERROR_MESSAGE);
                 Thread.sleep(5000);
             }
             String name = view.getList().getSelectedValue().toString();
             request.getMp().replace("save", "OrbitProject\\src" + File.separator + name);
-            JTextField textField = (JTextField) View.getJsonPanel().getComponents()[0];
             JTabbedPane bodyTabbedPane = view.getBodyTabbedPane();
             if (bodyTabbedPane.getSelectedComponent().getName().contains("json")) {
-                
+                JTextField textField = (JTextField) View.getJsonPanel().getComponents()[0];
+                request.getMp().replace("json", textField.getText());
+                request.getMp().replace("type", "json");
+            } else if (bodyTabbedPane.getSelectedComponent().getName().contains("form")) {
+                StringBuilder builder = new StringBuilder();
+                JPanel panel = View.getFormDataPanel();
+                for (int i = 0; i < View.getNumberOfHeaders()[2]; i++) {
+                    JTextField header = (JTextField) panel.getComponent(i * 5 + 1);
+                    JTextField value = (JTextField) panel.getComponent(i * 5 + 2);
+                    JCheckBox checkBox = (JCheckBox) panel.getComponent(i * 5 + 3);
+                    if (checkBox.isSelected())
+                        builder.append(header.getText()).append("=").append(value.getText()).append("&");
+                }
+                if (builder.length() != 0) {
+                    String headers = builder.toString();
+                    request.getMp().replace("data", headers);
+                }
+            } else {
+                request.getMp().replace("type", "binary");
             }
+            executeService(request);
             return null;
+        }
+
+    }
+
+    private void executeService(Request request) {
+        File file = new File("OrbitProject\\src" + File.separator + "OutputFolder" + File.separator + "output.txt");
+        try (PrintStream writer = new PrintStream(file.toString())) {
+            HTTpService service = new HTTpService(request, writer);
+            service.runService();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
