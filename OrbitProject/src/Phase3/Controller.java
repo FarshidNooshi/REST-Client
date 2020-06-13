@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -198,8 +200,9 @@ public class Controller {
     }
 
     private void executeService(Request request) {
-        File file = new File("OrbitProject\\src" + File.separator + "OutputFolder" + File.separator + "output.txt");
-        try (PrintStream writer = new PrintStream(file.toString())) {
+        String base = "C:\\Users\\Farshid726\\Desktop\\Codes\\insomniaaut\\OrbitProject\\src\\OutputFolder";
+        String name = "output" + ".txt";
+        try (PrintStream writer = new PrintStream(base + File.separator + name)) {
             HTTpService service = new HTTpService(request, writer);
             service.runService();
         } catch (Exception e) {

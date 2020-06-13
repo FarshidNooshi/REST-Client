@@ -97,7 +97,8 @@ public class HTTpService {
             writer.println(connection.getResponseCode() + " " + connection.getResponseMessage());
             writer.println(ret);
             if (!request.getMp().get("output").equals("")) {
-                File file = new File("OrbitProject\\src" + File.separator + "OutputFolder");
+                File base = new File("").getAbsoluteFile();
+                File file = new File(base + File.separator + "OutputFolder");
                 //noinspection ResultOfMethodCallIgnored
                 file.mkdir();
                 String name = request.getMp().get("output");
