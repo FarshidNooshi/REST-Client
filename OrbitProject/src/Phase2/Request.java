@@ -27,7 +27,7 @@ public class Request implements Serializable {
         mp.put("uploadBinary", "");
     }
 
-    HashMap<String, String> getMp() {
+    public HashMap<String, String> getMp() {
         return mp;
     }
 }

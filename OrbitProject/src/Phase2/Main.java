@@ -92,9 +92,7 @@ public class Main {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                continue;
-                            }
-                            if (element.getSecond()) {
+                            } else if (element.getSecond()) {
                                 try {
                                     request.getMp().replace(element.getFirst(), args[i + 1]);
                                 } catch (Exception e) {

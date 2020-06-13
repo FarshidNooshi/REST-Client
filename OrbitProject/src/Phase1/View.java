@@ -8,7 +8,9 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static java.awt.event.InputEvent.ALT_MASK;
 
@@ -35,6 +37,9 @@ public class View extends JFrame {
     private JList<Object> list; // for making folders in the left panel
     private TrayIcon trayIcon; // this two are for tray closing system
     private SystemTray tray;
+    private JButton createNode = new JButton("create");
+    private ArrayList<String> folders = new ArrayList<>();
+
 
     /**
      * the constructor of the frame that build the things
@@ -91,6 +96,22 @@ public class View extends JFrame {
         trayIcon = new TrayIcon(image, "", popup);
         trayIcon.setImageAutoSize(true);
         //***********************************************************************************************TRAY
+    }
+
+    public static ArrayList<JPanel> getCenterPanels() {
+        return centerPanels;
+    }
+
+    public static ArrayList<JPanel> getRightPanels() {
+        return rightPanels;
+    }
+
+    public static int[] getNumberOfHeaders() {
+        return numberOfHeaders;
+    }
+
+    public static JPanel getFormDataPanel() {
+        return formDataPanel;
     }
 
     /**
@@ -200,25 +221,28 @@ public class View extends JFrame {
      * we have a list for creating folders
      */
     private void initLeftPanel() {
-        ArrayList<String> folders = new ArrayList<>();
-        folders.add("Requests");
-        list = new JList<>(folders.toArray());
-        list.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
-        JButton createNode = new JButton("create");
-        left.setLayout(new BorderLayout());
         JLabel label = new JLabel("Insomnia", new ImageIcon("OrbitProject/Insomnia.png"), SwingConstants.LEFT);
         label.setBackground(new Color(182, 1, 255));
         label.setForeground(Color.WHITE);
         label.setOpaque(true);
         label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        folders.add("Requests");
+        try {
+            File fileToCreate = new File("OrbitProject\\src");
+            for (String name : Objects.requireNonNull(fileToCreate.list())) {
+                if (name.contains("Phase") || name.equalsIgnoreCase("OutputFolder"))
+                    continue;
+                folders.add(folders.size(), name);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        list = new JList<>(folders.toArray());
+        list.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+        left.setLayout(new BorderLayout());
         left.add(label, BorderLayout.NORTH);
         left.add(createNode, BorderLayout.SOUTH);
         left.add(list, BorderLayout.CENTER);
-        createNode.addActionListener(e -> {
-            String str = JOptionPane.showInputDialog(null, "Type a name", JOptionPane.INPUT_VALUE_PROPERTY);
-            folders.add(str);
-            list.setListData(folders.toArray());
-        });
     }
 
     /**
@@ -421,6 +445,54 @@ public class View extends JFrame {
         }
     }
 
+    public ArrayList<ArrayList<JMenuItem>> getSubmenus() {
+        return submenus;
+    }
+
+    public ArrayList<JMenu> getMenus() {
+        return menus;
+    }
+
+    public JButton getSaveURL() {
+        return saveURL;
+    }
+
+    public JMenuBar getJMenuBar() {
+        return menuBar;
+    }
+
+    public JList<Object> getList() {
+        return list;
+    }
+
+    public JPanel getCenter() {
+        return center;
+    }
+
+    public JPanel getLeft() {
+        return left;
+    }
+
+    public JTextField getUrlTextField() {
+        return urlTextField;
+    }
+
+    public Options getOptions() {
+        return options;
+    }
+
+    public JTabbedPane getTabbedPane() {
+        return tabbedPane;
+    }
+
+    public JButton getCreateNode() {
+        return createNode;
+    }
+
+    public ArrayList<String> getFolders() {
+        return folders;
+    }
+
     /**
      * this class is built for listening to focuses in the program for textAreas
      */
@@ -483,5 +555,4 @@ public class View extends JFrame {
                 jTextField.setText(jTextField.getName());
         }
     }
-
 }
