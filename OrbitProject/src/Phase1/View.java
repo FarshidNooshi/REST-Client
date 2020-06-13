@@ -15,7 +15,7 @@ import java.util.Objects;
 import static java.awt.event.InputEvent.ALT_MASK;
 
 enum Requests {
-    PATCH, PUT, POST, DELETE, GET
+    PUT, POST, DELETE, GET
 }
 
 public class View extends JFrame {
@@ -218,6 +218,13 @@ public class View extends JFrame {
         raw = new JTextArea("TO DO IN THE NEXT PHASES");
         preview = new JTextArea("TO DO IN THE NEXT PHASES");
         json = new JTextArea("TO DO IN THE NEXT PHASES");
+        JScrollPane scroll = new JScrollPane(raw);
+        JScrollPane previewScroll = new JScrollPane(preview);
+        JScrollPane jsonScroll = new JScrollPane(json);
+        raw.setLineWrap(true);
+        preview.setLineWrap(true);
+        json.setLineWrap(true);
+        raw.setAutoscrolls(true);
         reference.setLayout(new BorderLayout());
         reference.add(jTabbedPane1, BorderLayout.CENTER);
         ArrayList<JPanel> rightBodyPanels = new ArrayList<>();
@@ -226,9 +233,9 @@ public class View extends JFrame {
         rightBodyPanels.get(0).setName("Raw");
         rightBodyPanels.get(1).setName("Preview");
         rightBodyPanels.get(2).setName("JSON");
-        rightBodyPanels.get(0).add(raw, BorderLayout.CENTER);
-        rightBodyPanels.get(1).add(json, BorderLayout.CENTER);
-        rightBodyPanels.get(2).add(preview, BorderLayout.CENTER);
+        rightBodyPanels.get(0).add(scroll, BorderLayout.CENTER);
+        rightBodyPanels.get(1).add(jsonScroll, BorderLayout.CENTER);
+        rightBodyPanels.get(2).add(previewScroll, BorderLayout.CENTER);
         raw.setEditable(false);
         preview.setEditable(false);
         json.setEditable(false);

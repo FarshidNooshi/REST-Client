@@ -1,6 +1,6 @@
 300
 Multiple Choices
-4
+5
 --body 
 NOT SUCCESSFUL
 300 Multiple Choices
@@ -9,5 +9,5 @@ Key: Transfer-Encoding ,Value: [chunked]
 Key: null ,Value: [HTTP/1.1 300 Multiple Choices]
 Key: Server ,Value: [nginx/1.16.0]
 Key: Connection ,Value: [keep-alive]
-Key: Date ,Value: [Sat, 13 Jun 2020 19:34:42 GMT]
+Key: Date ,Value: [Sat, 13 Jun 2020 20:58:56 GMT]
 Key: X-Powered-By ,Value: [Express]

@@ -119,11 +119,14 @@ public class Controller {
                     final JFileChooser fileChooser = new JFileChooser("OrbitProject\\src" + File.separator + folders.get(index));
                     fileChooser.showOpenDialog(view);
                     fileChooser.setMultiSelectionEnabled(false);
-                    // TODO request entekhab shode ro ersal kon
                     try {
                         Reader reader = new Reader(fileChooser.getSelectedFile().getAbsolutePath());
                         request = (Request) reader.ReadFromFile();
                         reader.close();
+                        view.getSaveURL().setEnabled(false);
+                        view.getUrlTextField().setEnabled(false);
+                        Worker worker = new Worker();
+                        worker.execute();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -133,7 +136,8 @@ public class Controller {
     }
 
     private void executeService(Request request) throws IOException {
-        request.SaveRequest();
+        if (!request.getMp().get("save").equals("false"))
+            request.SaveRequest();
         String base = (new File("OrbitProject\\src\\OutputFolder").getAbsolutePath());
         String name = "output" + ".txt";
         try (PrintStream writer = new PrintStream(base + File.separator + name)) {
@@ -164,7 +168,12 @@ public class Controller {
             return null;
         }
 
-        private void initRequest() throws InterruptedException, IOException {
+        private void initRequest() throws IOException {
+            if (request.getMp().get("i").equals("true")) {
+                request.getMp().replace("save", "false");
+                executeService(request);
+                return;
+            }
             request.getMp().replace("url", view.getUrlTextField().getText());
             request.getMp().replace("method", Objects.requireNonNull(view.getComboBox().getSelectedItem()).toString());
             {
@@ -185,9 +194,9 @@ public class Controller {
             request.getMp().replace("i", "true");
             if (view.getOptions().getFollowRedirectBox().isSelected())
                 request.getMp().replace("f", "true");
-            while (view.getList().getSelectedIndex() == -1) {
+            if (view.getList().getSelectedIndex() < 1) {
                 JOptionPane.showMessageDialog(view, "choose or create a folder to save your request from the left panel", "Save Error", JOptionPane.ERROR_MESSAGE);
-                Thread.sleep(5000);
+                done();
             }
             String name = view.getList().getSelectedValue().toString();
             File base = new File("OrbitProject\\src").getAbsoluteFile();
@@ -223,8 +232,8 @@ public class Controller {
             view.getSaveURL().setEnabled(true);
             view.getUrlTextField().setEnabled(true);
             request = new Request();
-            File base = new File("OrbitProject\\src\\OutputFolder\\output.txt").getAbsoluteFile();
             view.getRaw().setText("");
+            File base = new File("OrbitProject\\src\\OutputFolder\\output.txt").getAbsoluteFile();
             try (FileReader fileReader = new FileReader(base.getAbsolutePath());
                  Scanner scanner = new Scanner(fileReader)) {
                 initTopRight(scanner, base);
@@ -237,8 +246,8 @@ public class Controller {
                     JPanel panel = View.getRightPanels().get(1);
                     int counter = 0;
                     for (int i = 0; i < 15; i++) {
-                        ((JTextArea)panel.getComponent(i * 3 + 1)).setText("");
-                        ((JTextArea)panel.getComponent(i * 3 + 2)).setText("");
+                        ((JTextArea) panel.getComponent(i * 3 + 1)).setText("");
+                        ((JTextArea) panel.getComponent(i * 3 + 2)).setText("");
                     }
                     while (!(read = scanner.nextLine()).isEmpty()) {
                         String value = "", key = "";
@@ -251,8 +260,8 @@ public class Controller {
                         while (read.charAt(i) != ':')
                             i--;
                         key = read.substring(i + 2, j);
-                        ((JTextArea)panel.getComponent(counter * 3 + 1)).setText(key);
-                        ((JTextArea)panel.getComponent(counter * 3 + 2)).setText(value);
+                        ((JTextArea) panel.getComponent(counter * 3 + 1)).setText(key);
+                        ((JTextArea) panel.getComponent(counter * 3 + 2)).setText(value);
                         counter++;
                     }
                 }
@@ -274,8 +283,10 @@ public class Controller {
                 temp = new Color(83, 255, 119);
             else if (responseCode / 100 == 3)
                 temp = new Color(255, 217, 38);
-            else
+            else if (responseCode / 100 == 4)
                 temp = new Color(255, 1, 13);
+            else
+                temp = new Color(54, 201, 255);
             ((JLabel) panel.getComponent(0)).setText("" + responseCode + " " + responseMessage);
             panel.getComponent(0).setBackground(temp);
             ((JLabel) panel.getComponent(1)).setText("" + milis + " ms");
