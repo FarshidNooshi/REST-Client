@@ -14,7 +14,7 @@ import java.util.Objects;
 
 import static java.awt.event.InputEvent.ALT_MASK;
 
-enum requests {
+enum Requests {
     PATCH, PUT, POST, DELETE, GET
 }
 
@@ -27,6 +27,7 @@ public class View extends JFrame {
     private final Options options; // options panel that should be opened in another frame
     private JButton selectItem, resetItem;
     private JLabel fileSelected;
+    private JComboBox<Requests> comboBox;
     private boolean fullScreen = false; // say if it's in the fullscreen mode or not
     private JMenuBar menuBar; // for the menu of the frame
     private ArrayList<JMenu> menus; // menus of the program
@@ -68,6 +69,7 @@ public class View extends JFrame {
         submenus = new ArrayList<>();
         urlTextField = new JTextField();
         rightPanels = new ArrayList<>();
+        comboBox = new JComboBox<>(Requests.values());
         saveURL = new JButton("Send");
         tabbedPane = new JTabbedPane();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -135,12 +137,15 @@ public class View extends JFrame {
         return selectItem;
     }
 
+    public JComboBox<Requests> getComboBox() {
+        return comboBox;
+    }
+
     /**
      * this method initializes the center panel for our GUI
      */
     private void initCenterPanel() {
         center.setLayout(new BorderLayout());
-        JComboBox<requests> comboBox = new JComboBox<>(requests.values());
         comboBox.setPreferredSize(new Dimension(80, 41));
         JPanel temporary = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         urlTextField.setPreferredSize(new Dimension(607, 41));
@@ -392,7 +397,7 @@ public class View extends JFrame {
         for (int i = 0; i < 20; i++) {
             JTextField header = new JTextField("New Header"), value = new JTextField("New Value");
             JButton trash = new JButton(new ImageIcon("OrbitProject/Data/trash_32px.png"));
-            JCheckBox active = new JCheckBox("active");
+            JCheckBox active = new JCheckBox("activate Header");
             header.addFocusListener(focus);
             header.setName(header.getText());
             value.setName(value.getText());
@@ -404,6 +409,7 @@ public class View extends JFrame {
             reference.add(trash);
             active.setName("" + i);
             trash.setName("" + i);
+            active.doClick();
         }
         for (int i = numberOfHeaders[id]; i < 20; i++)
             for (int j = 0; j < 5; j++)
@@ -454,7 +460,7 @@ public class View extends JFrame {
     }
 
     void setToTray() {
-        if (options.isExitable()) {
+        if (options.getExitBox().isSelected()) {
             try {
                 tray.add(trayIcon);
             } catch (AWTException ex) {

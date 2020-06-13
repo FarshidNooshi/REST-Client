@@ -5,24 +5,37 @@ import Phase2.Reader;
 import Phase2.Request;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Controller {
     private View view;
     private Request request;
+    ActionListener actionListener;
 
     public Controller(View view) {
         request = new Request();
         this.view = view;
-        view.getSaveURL().addActionListener(e -> {
-            view.getSaveURL().setEnabled(false);
-            view.getUrlTextField().setEnabled(false);
-            view.getTabbedPane().getSelectedComponent().setVisible(false);
-        });
+        actionListener = new ActionListener() {
+            /**
+             * Invoked when an action occurs.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ((JButton)e.getSource()).setEnabled(false);
+                view.getUrlTextField().setEnabled(false);
+                Worker worker = new Worker();
+                worker.execute();
+            }
+        };
     }
 
     public void establish() {
@@ -32,6 +45,7 @@ public class Controller {
         addTrashListener(View.getFormDataPanel());
         initBinaryBody();
         initBodyListeners();
+        view.getSaveURL().addActionListener(actionListener);
     }
 
     private void initBodyListeners() {
@@ -70,6 +84,8 @@ public class Controller {
             trash.addActionListener(e -> {
                 JTextField header = (JTextField) panel.getComponent(finalI * 5 + 1);
                 JTextField value = (JTextField) panel.getComponent(finalI * 5 + 2);
+                JCheckBox checkBox = (JCheckBox) panel.getComponent(finalI * 5 + 3);
+                checkBox.setSelected(true);
                 header.setText(header.getName());
                 value.setText(value.getName());
             });
@@ -111,24 +127,55 @@ public class Controller {
             }
         });
     }
-}
 
-class Worker extends SwingWorker<Integer, Object> {
+    private class Worker extends SwingWorker<String, Object> {
 
-    /**
-     * Computes a result, or throws an exception if unable to do so.
-     *
-     * <p>
-     * Note that this method is executed only once.
-     *
-     * <p>
-     * Note: this method is executed in a background thread.
-     *
-     * @return the computed result
-     * @throws Exception if unable to compute a result
-     */
-    @Override
-    protected Integer doInBackground() throws Exception {
-        return null;
+        /**
+         * Computes a result, or throws an exception if unable to do so.
+         *
+         * <p>
+         * Note that this method is executed only once.
+         *
+         * <p>
+         * Note: this method is executed in a background thread.
+         *
+         * @return the computed result
+         * @throws Exception if unable to compute a result
+         */
+        @Override
+        protected String doInBackground() throws Exception {
+            request.getMp().replace("url", view.getUrlTextField().getText());
+            request.getMp().replace("method", Objects.requireNonNull(view.getComboBox().getSelectedItem()).toString());
+            StringBuilder builder = new StringBuilder();
+            {
+                JPanel panel = View.getCenterPanels().get(0);
+                for (int i = 0; i < View.getNumberOfHeaders()[0]; i++) {
+                    JTextField header = (JTextField) panel.getComponent(i * 5 + 1);
+                    JTextField value = (JTextField) panel.getComponent(i * 5 + 2);
+                    JCheckBox checkBox = (JCheckBox) panel.getComponent(i * 5 + 3);
+                    if (checkBox.isSelected())
+                        builder.append(header.getText()).append(":").append(value.getText()).append(";");
+                }
+                if (builder.length() != 0) {
+                    String headers = builder.toString();
+                    request.getMp().replace("header", headers.substring(0, headers.length() - 1));
+                }
+            }
+            request.getMp().replace("i", "true");
+            if (view.getOptions().getFollowRedirectBox().isSelected())
+                request.getMp().replace("f", "true");
+            while (view.getList().getSelectedIndex() == -1) {
+                JOptionPane.showMessageDialog(view, (String)"choose or create a folder to save your request from the left panel", "Save Error", JOptionPane.ERROR_MESSAGE);
+                Thread.sleep(5000);
+            }
+            String name = view.getList().getSelectedValue().toString();
+            request.getMp().replace("save", "OrbitProject\\src" + File.separator + name);
+            JTextField textField = (JTextField) View.getJsonPanel().getComponents()[0];
+            JTabbedPane bodyTabbedPane = view.getBodyTabbedPane();
+            if (bodyTabbedPane.getSelectedComponent().getName().contains("json")) {
+                
+            }
+            return null;
+        }
     }
 }

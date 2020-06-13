@@ -107,10 +107,11 @@ public class Main {
                 }
             }
             if (!request.getMp().get("upload").equals("")) {
-                Reader tmp = new Reader(request.getMp().get("upload"));
-                request = (Request) tmp.ReadFromFile();
-                tmp.close();
-                System.out.println("Request renewed.");
+//                Reader tmp = new Reader(request.getMp().get("upload"));// TODO check beshe
+//                request = (Request) tmp.ReadFromFile();
+//                tmp.close();
+//                System.out.println("Request renewed.");
+                request.getMp().replace("uploadBinary", request.getMp().get("upload"));
             }
             HTTpService service = new HTTpService(request);
             if (!request.getMp().get("save").equals("false"))
@@ -131,7 +132,7 @@ public class Main {
     private static void SaveRequest() throws IOException {
         String basePath = new File("").getAbsolutePath();
         Path path = Paths.get(basePath + File.separator + request.getMp().get("save"));
-        String name = String.valueOf(Objects.requireNonNull(new File(path.toString()).list()).length + 1) + ".AUT";
+        String name = (Objects.requireNonNull(new File(path.toString()).list()).length + 1) + ".AUT";
         Writer writer = new Writer(path.toString() + File.separator + name);
         writer.WriteToFile(request);
     }

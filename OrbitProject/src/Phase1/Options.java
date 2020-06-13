@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Options extends JFrame {
-    private boolean isDarkMode, isExitable;
-    private boolean followRedirect;
     private JCheckBox followRedirectBox, darkModeBox, exitBox;
     private View view;
 
@@ -17,9 +15,6 @@ public class Options extends JFrame {
         setPreferredSize(new Dimension(400, 200));
         setIconImage(new ImageIcon("OrbitProject/Data/Insomnia.png").getImage());
         setLayout(new GridLayout(3, 1));
-        isDarkMode = false;
-        isExitable = false;
-        followRedirect = false;
         followRedirectBox = new JCheckBox("Follow Redirect");
         darkModeBox = new JCheckBox("Dark Mode");
         exitBox = new JCheckBox("Exit&go to system tray ?");
@@ -28,29 +23,22 @@ public class Options extends JFrame {
         add(exitBox);
 
         darkModeBox.addActionListener(e -> {
-            isDarkMode = !isDarkMode;
-            if (isDarkMode)
+            if (darkModeBox.isSelected())
                 view.setToDark();
             else
                 view.setToLight();
         });
 
         followRedirectBox.addActionListener(e -> {
-            followRedirect = !followRedirect;
-            System.out.println(followRedirect ? "follow" : "don't follow");
+            System.out.println(followRedirectBox.isSelected() ? "follow" : "don't follow");
         });
 
         exitBox.addActionListener(e -> {
-            isExitable = !isExitable;
-            System.out.println(isExitable ? "exit" : "get out");
+            System.out.println(exitBox.isSelected() ? "exit" : "get out");
             view.setToTray();
-            if (isExitable)
+            if (exitBox.isSelected())
                 dispose();
         });
-    }
-
-    public boolean isExitable() {
-        return isExitable;
     }
 
     /**
@@ -59,6 +47,18 @@ public class Options extends JFrame {
     public void showGUI() {
         pack();
         setVisible(true);
+    }
+
+    public JCheckBox getDarkModeBox() {
+        return darkModeBox;
+    }
+
+    public JCheckBox getExitBox() {
+        return exitBox;
+    }
+
+    public JCheckBox getFollowRedirectBox() {
+        return followRedirectBox;
     }
 
     /**
