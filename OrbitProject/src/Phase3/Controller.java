@@ -6,15 +6,15 @@ import Phase2.Request;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -22,8 +22,11 @@ public class Controller {
     ActionListener actionListener;
     private View view;
     private Request request;
+    private StringBuilder headersBuilder = new StringBuilder();
+    private HashMap<String, String> headerMap;
 
     public Controller(View view) {
+        headerMap = new HashMap<>();
         request = new Request();
         this.view = view;
         actionListener = new ActionListener() {
@@ -50,6 +53,12 @@ public class Controller {
         initBinaryBody();
         initBodyListeners();
         view.getSaveURL().addActionListener(actionListener);
+        view.getCopy().addActionListener(e -> {
+            String myString = headersBuilder.toString();
+            StringSelection stringSelection = new StringSelection(myString);
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+        });
     }
 
     private void initBodyListeners() {
@@ -239,9 +248,8 @@ public class Controller {
                 initTopRight(scanner, base);
                 scanner.nextLine();
                 String read;
-                while (!(read = scanner.nextLine()).equals("--headers ")) {
+                while (!(read = scanner.nextLine()).equals("--headers "))
                     view.getRaw().append(read + '\n');
-                }
                 {
                     JPanel panel = View.getRightPanels().get(1);
                     int counter = 0;
@@ -249,7 +257,8 @@ public class Controller {
                         ((JTextArea) panel.getComponent(i * 3 + 1)).setText("");
                         ((JTextArea) panel.getComponent(i * 3 + 2)).setText("");
                     }
-                    while (!(read = scanner.nextLine()).isEmpty()) {
+                    while (scanner.hasNext()) {
+                        read = scanner.nextLine();
                         String value = "", key = "";
                         int j = read.length() - 1;
                         while (read.charAt(j) != ':')
@@ -263,11 +272,18 @@ public class Controller {
                         ((JTextArea) panel.getComponent(counter * 3 + 1)).setText(key);
                         ((JTextArea) panel.getComponent(counter * 3 + 2)).setText(value);
                         counter++;
+                        headersBuilder.append(key + ": " + value + "\n");
+                        headerMap.put(key, value);
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            initRight();
+        }
+
+        private void initRight() {
+
         }
 
         private void initTopRight(Scanner scanner, File base) {
@@ -291,7 +307,6 @@ public class Controller {
             panel.getComponent(0).setBackground(temp);
             ((JLabel) panel.getComponent(1)).setText("" + milis + " ms");
             ((JLabel) panel.getComponent(2)).setText("" + sz + " bytes");
-
         }
 
     }

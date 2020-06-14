@@ -9,6 +9,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -39,11 +40,12 @@ public class View extends JFrame {
     private JList<Object> list; // for making folders in the left panel
     private TrayIcon trayIcon; // this two are for tray closing system
     private SystemTray tray;
-    private JButton createNode = new JButton("create");
+    private JButton createNode = new JButton("create"), copy;
     private ArrayList<String> folders = new ArrayList<>();
     private JTabbedPane bodyTabbedPane;
     private JPanel status;
-    private JTextArea raw, preview, json;
+    private JTextArea raw, json;
+    private JEditorPane preview;
 
 
     /**
@@ -55,7 +57,7 @@ public class View extends JFrame {
      * @throws InstantiationException          if the exception occurs.
      * @throws IllegalAccessException          if we wanted an illegal access to something in the system
      */
-    View(Options options) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+    View(Options options) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
         this.options = options;
         setTitle("Farshid Nooshi Midterm project-term2(98-99)");
         UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -171,7 +173,7 @@ public class View extends JFrame {
      * also i separated parts of the code for better readability
      * each separated part is used for one panel
      */
-    private void initRightPanel() {
+    private void initRightPanel() throws IOException {
         right.setLayout(new BorderLayout(5, 0));
         JTabbedPane jTabbedPane = new JTabbedPane();
         GridLayout layout = new GridLayout(1, 3);
@@ -202,29 +204,26 @@ public class View extends JFrame {
         for (int i = 0; i < 15; i++) {
             JTextArea key = new JTextArea(), value = new JTextArea();
             reference.add(new JLabel(new ImageIcon("OrbitProject/Data/menu_32px.png")));
-            reference.add(key);
-            reference.add(value);
             key.setEditable(false);
             value.setEditable(false);
             value.setLineWrap(true);
             key.setLineWrap(true);
+            reference.add(key);
+            reference.add(value);
         }
-        JButton copy = new JButton("Copy to Clipboard");
-        copy.addActionListener(e -> System.out.println("copy button got action event."));
+        copy = new JButton("Copy to Clipboard");
         reference.add(copy);
 //**********************************************************************************************************************
         reference = rightPanels.get(0);//Body
         JTabbedPane jTabbedPane1 = new JTabbedPane();
-        raw = new JTextArea("TO DO IN THE NEXT PHASES");
-        preview = new JTextArea("TO DO IN THE NEXT PHASES");
-        json = new JTextArea("TO DO IN THE NEXT PHASES");
+        raw = new JTextArea("");
+        preview = new JEditorPane();
+        json = new JTextArea("");
         JScrollPane scroll = new JScrollPane(raw);
         JScrollPane previewScroll = new JScrollPane(preview);
         JScrollPane jsonScroll = new JScrollPane(json);
         raw.setLineWrap(true);
-        preview.setLineWrap(true);
         json.setLineWrap(true);
-        raw.setAutoscrolls(true);
         reference.setLayout(new BorderLayout());
         reference.add(jTabbedPane1, BorderLayout.CENTER);
         ArrayList<JPanel> rightBodyPanels = new ArrayList<>();
@@ -234,11 +233,11 @@ public class View extends JFrame {
         rightBodyPanels.get(1).setName("Preview");
         rightBodyPanels.get(2).setName("JSON");
         rightBodyPanels.get(0).add(scroll, BorderLayout.CENTER);
-        rightBodyPanels.get(1).add(jsonScroll, BorderLayout.CENTER);
-        rightBodyPanels.get(2).add(previewScroll, BorderLayout.CENTER);
+        rightBodyPanels.get(1).add(previewScroll, BorderLayout.CENTER);
+        rightBodyPanels.get(2).add(jsonScroll, BorderLayout.CENTER);
         raw.setEditable(false);
-        preview.setEditable(false);
         json.setEditable(false);
+        preview.setEditable(false);
         for (JPanel panel : rightBodyPanels)
             jTabbedPane1.add(panel.getName(), panel);
     }
@@ -491,6 +490,10 @@ public class View extends JFrame {
         }
     }
 
+    public JButton getCopy() {
+        return copy;
+    }
+
     public ArrayList<ArrayList<JMenuItem>> getSubmenus() {
         return submenus;
     }
@@ -521,6 +524,10 @@ public class View extends JFrame {
 
     public JPanel getCenter() {
         return center;
+    }
+
+    public JEditorPane getPreview() {
+        return preview;
     }
 
     public JPanel getLeft() {
