@@ -34,6 +34,10 @@ public class Controller {
     private StringBuilder headersBuilder = new StringBuilder();
     private HashMap<String, String> headerMap;
 
+    /**
+     * constructor is this
+     * @param view
+     */
     public Controller(View view) {
         headerMap = new HashMap<>();
         request = new Request();
@@ -54,6 +58,9 @@ public class Controller {
         };
     }
 
+    /**
+     * initializing the settings
+     */
     public void establish() {
         initLeftListeners();
         addTrashListener(View.getCenterPanels().get(0));
@@ -70,6 +77,9 @@ public class Controller {
         });
     }
 
+    /**
+     * this method inits the listener for bodyTabbedPane
+     */
     private void initBodyListeners() {
         JTabbedPane bodyTabbedPane = view.getBodyTabbedPane();
         bodyTabbedPane.addChangeListener(e -> {
@@ -80,6 +90,9 @@ public class Controller {
         });
     }
 
+    /**
+     * initializing buttons for uploading binary
+     */
     private void initBinaryBody() {
         JButton choose = view.getSelectItem();
         choose.addActionListener(e -> {
@@ -99,6 +112,10 @@ public class Controller {
         });
     }
 
+    /**
+     * initializing trash buttons listeners
+     * @param panel is the panel to be initialized
+     */
     private void addTrashListener(JPanel panel) {
         for (int i = 0; i < 20; i++) {
             int finalI = i;
@@ -114,6 +131,9 @@ public class Controller {
         }
     }
 
+    /**
+     * initializing the left panel
+     */
     private void initLeftListeners() {
         JButton createNode = view.getCreateNode();
         JList<Object> list = view.getList();
@@ -153,6 +173,11 @@ public class Controller {
         });
     }
 
+    /**
+     * executes the services.
+     * @param request
+     * @throws IOException
+     */
     private void executeService(Request request) throws IOException {
         if (!request.getMp().get("save").equals("false"))
             request.SaveRequest();
@@ -166,6 +191,9 @@ public class Controller {
         }
     }
 
+    /**
+     * swing worker is this.
+     */
     private class Worker extends SwingWorker<String, Object> {
 
         /**
@@ -182,10 +210,17 @@ public class Controller {
          */
         @Override
         protected String doInBackground() throws Exception {
+            view.getRaw().setText("");
+            view.getJson().setText("");
+            view.getBufferedPic().setIcon(null);
             initRequest();
             return null;
         }
 
+        /**
+         * initializing the Request.
+         * @throws IOException
+         */
         private void initRequest() throws IOException {
             if (request.getMp().get("i").equals("true")) {
                 request.getMp().replace("save", "false");
@@ -291,6 +326,9 @@ public class Controller {
             initRight();
         }
 
+        /**
+         * initializing the right panels
+         */
         private void initRight() {
             if (headerMap.get("Content-Type").contains("json")) {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -311,6 +349,11 @@ public class Controller {
             }
         }
 
+        /**
+         * initializing the topRight panel
+         * @param scanner
+         * @param base
+         */
         private void initTopRight(Scanner scanner, File base) {
             JPanel panel = view.getStatus();
             int responseCode = scanner.nextInt();

@@ -251,7 +251,10 @@ public class View extends JFrame {
     public JTextArea getRaw() {
         return raw;
     }
-    public JTextArea getJson() {return json;}
+
+    public JTextArea getJson() {
+        return json;
+    }
 
     public JLabel getBufferedPic() {
         return bufferedPic;
