@@ -3,7 +3,12 @@ package Phase3;
 import Phase1.View;
 import Phase2.Reader;
 import Phase2.Request;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -12,7 +17,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -231,7 +240,7 @@ public class Controller {
                     String headers = builder.toString();
                     request.getMp().replace("data", headers);
                 }
-            } else if (bodyTabbedPane.getSelectedComponent().getName().contains("binary")) {//TODO
+            } else if (bodyTabbedPane.getSelectedComponent().getName().contains("binary")) {
                 request.getMp().replace("type", "binary");
             }
             executeService(request);
@@ -283,7 +292,23 @@ public class Controller {
         }
 
         private void initRight() {
-
+            if (headerMap.get("Content-Type").contains("json")) {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                JsonParser jp = new JsonParser();
+                JsonElement je = jp.parse(view.getRaw().getText());
+                String prettyJsonString = gson.toJson(je);
+                view.getJson().setText(prettyJsonString);
+            }
+            try {
+                view.getPreview().setPage(view.getUrlTextField().getText());
+                if (headerMap.get("Content-Type").contains("image")) {
+                    URL url = new URL(view.getUrlTextField().getText());
+                    Image image = ImageIO.read(url);
+                    view.getBufferedPic().setIcon(new ImageIcon(image));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         private void initTopRight(Scanner scanner, File base) {

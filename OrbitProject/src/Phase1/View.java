@@ -46,6 +46,7 @@ public class View extends JFrame {
     private JPanel status;
     private JTextArea raw, json;
     private JEditorPane preview;
+    private JLabel bufferedPic = new JLabel();
 
 
     /**
@@ -156,7 +157,7 @@ public class View extends JFrame {
         center.setLayout(new BorderLayout());
         comboBox.setPreferredSize(new Dimension(80, 41));
         JPanel temporary = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        urlTextField.setPreferredSize(new Dimension(607, 41));
+        urlTextField.setPreferredSize(new Dimension(600, 41));
         saveURL.setPreferredSize(new Dimension(70, 41));
         temporary.add(comboBox);
         temporary.add(urlTextField);
@@ -173,7 +174,7 @@ public class View extends JFrame {
      * also i separated parts of the code for better readability
      * each separated part is used for one panel
      */
-    private void initRightPanel() throws IOException {
+    private void initRightPanel() {
         right.setLayout(new BorderLayout(5, 0));
         JTabbedPane jTabbedPane = new JTabbedPane();
         GridLayout layout = new GridLayout(1, 3);
@@ -216,34 +217,44 @@ public class View extends JFrame {
 //**********************************************************************************************************************
         reference = rightPanels.get(0);//Body
         JTabbedPane jTabbedPane1 = new JTabbedPane();
+        reference.setMaximumSize(new Dimension(400, 45));
         raw = new JTextArea("");
         preview = new JEditorPane();
         json = new JTextArea("");
         JScrollPane scroll = new JScrollPane(raw);
         JScrollPane previewScroll = new JScrollPane(preview);
         JScrollPane jsonScroll = new JScrollPane(json);
+        previewScroll.setPreferredSize(new Dimension(400, 45));
         raw.setLineWrap(true);
         json.setLineWrap(true);
         reference.setLayout(new BorderLayout());
         reference.add(jTabbedPane1, BorderLayout.CENTER);
         ArrayList<JPanel> rightBodyPanels = new ArrayList<>();
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 4; i++)
             rightBodyPanels.add(new JPanel(new BorderLayout())); // default in bashe ta too phase 2&3 avaz beshe
         rightBodyPanels.get(0).setName("Raw");
         rightBodyPanels.get(1).setName("Preview");
         rightBodyPanels.get(2).setName("JSON");
+        rightBodyPanels.get(3).setName("Picture");
         rightBodyPanels.get(0).add(scroll, BorderLayout.CENTER);
         rightBodyPanels.get(1).add(previewScroll, BorderLayout.CENTER);
         rightBodyPanels.get(2).add(jsonScroll, BorderLayout.CENTER);
+        rightBodyPanels.get(3).add(bufferedPic, BorderLayout.CENTER);
         raw.setEditable(false);
         json.setEditable(false);
         preview.setEditable(false);
+        preview.setPreferredSize(new Dimension(400, 45));
         for (JPanel panel : rightBodyPanels)
             jTabbedPane1.add(panel.getName(), panel);
     }
 
     public JTextArea getRaw() {
         return raw;
+    }
+    public JTextArea getJson() {return json;}
+
+    public JLabel getBufferedPic() {
+        return bufferedPic;
     }
 
     /**
