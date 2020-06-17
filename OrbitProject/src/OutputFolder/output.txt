@@ -1,15 +1,18 @@
-200
-OK
+301
+Moved Permanently
 0
 --body 
-<html><body><h1 style="color:undefined">undefined</h1><br><p style="color:undefined">undefined</p></body></html>
-
+NOT SUCCESSFUL
+301 Moved Permanently
 --headers 
-Key: null ,Value: [HTTP/1.1 200 OK]
-Key: Server ,Value: [nginx/1.16.0]
-Key: ETag ,Value: [W/"70-3KG3NyTWy/hxprLk6wmTYUXeV5E"]
+Key: X-Frame-Options ,Value: [SAMEORIGIN]
+Key: null ,Value: [HTTP/1.1 301 Moved Permanently]
+Key: Server ,Value: [gws]
+Key: Cache-Control ,Value: [public, max-age=2592000]
 Key: Connection ,Value: [keep-alive]
-Key: Content-Length ,Value: [112]
-Key: Date ,Value: [Sun, 14 Jun 2020 18:43:09 GMT]
-Key: X-Powered-By ,Value: [Express]
-Key: Content-Type ,Value: [text/html; charset=utf-8]
+Key: Expires ,Value: [Thu, 16 Jul 2020 08:09:24 GMT]
+Key: X-XSS-Protection ,Value: [0]
+Key: Content-Length ,Value: [219]
+Key: Date ,Value: [Tue, 16 Jun 2020 08:09:24 GMT]
+Key: Content-Type ,Value: [text/html; charset=UTF-8]
+Key: Location ,Value: [http://www.google.com/]
