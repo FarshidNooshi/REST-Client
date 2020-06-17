@@ -20,7 +20,6 @@ public class Main {
      * @param args is the inputs of this HTTPCLIENT service
      */
     public static void main(String[] args) throws IOException {
-        PrintStream writer = System.out;
         String basePath = new File("").getAbsolutePath();
         if (args.length == 0)
             new Exception("INVALID INPUT").printStackTrace();
@@ -33,7 +32,7 @@ public class Main {
             Reader tmp = new Reader(dir.getAbsolutePath() + File.separator + args[2]);
             request = (Request) tmp.ReadFromFile();
             tmp.close();
-            HTTpService service = new HTTpService(request, writer);
+            HTTpService service = new HTTpService(request);
             try {
                 service.runService();
             } catch (Exception e) {
@@ -128,11 +127,11 @@ public class Main {
                 tmp.close();
                 System.out.println("Request renewed.");
             }
-            HTTpService service = new HTTpService(request, writer);
+            HTTpService service = new HTTpService(request);
             if (!request.getMp().get("save").equals("false"))
                 request.SaveRequest();
             try {
-                service.runService();
+                System.out.println(service.runService());
             } catch (Exception e) {
                 e.printStackTrace();
             }

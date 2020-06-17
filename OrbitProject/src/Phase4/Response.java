@@ -9,8 +9,10 @@ public class Response implements Serializable {
     private HashMap<String, List<String>> headers;
     private String body, responseMessage;
     private int responseCode, millis, sz;
+    private boolean showHeader;
 
-    public Response() {
+    public Response(boolean showHeader) {
+        this.showHeader = showHeader;
         headers = new HashMap<>();
         body = "";
     }
@@ -27,8 +29,20 @@ public class Response implements Serializable {
         return headers;
     }
 
-    public void setHeaders(Map<String, List<String>> headers) {
-        this.headers = (HashMap<String, List<String>>) headers;
+    public void setHeaders(HashMap<String, List<String>> headers) {
+        this.headers = headers;
+    }
+
+    public void setMillis(int millis) {
+        this.millis = millis;
+    }
+
+    public void setResponseCode(int responseCode) {
+        this.responseCode = responseCode;
+    }
+
+    public void setResponseMessage(String responseMessage) {
+        this.responseMessage = responseMessage;
     }
 
     @Override

@@ -18,20 +18,15 @@ public class HTTpService {
     private HttpURLConnection connection;
     private String boundary;
     private Request request;
-    private PrintStream writer;
-    private Response response;
-
 
     /**
      * is the constructor for our service
      *
      * @param req is the request that we wanna execute
      */
-    public HTTpService(Request req, PrintStream out) {
-        writer = out;
+    public HTTpService(Request req) {
         request = req;
         boundary = "" + System.currentTimeMillis();
-        response = new Response();
     }
 
     /**
@@ -71,7 +66,8 @@ public class HTTpService {
      *
      * @throws MalformedURLException for the url connection
      */
-    public void runService() throws Exception {
+    public Response runService() throws Exception {
+        Response response = new Response(Boolean.parseBoolean(request.getMp().get("i")));
         StringBuilder builder = new StringBuilder();
         long dif = System.currentTimeMillis();
         if (!request.getMp().get("data").equals("") && !request.getMp().get("json").equals("")) {
@@ -88,7 +84,7 @@ public class HTTpService {
                 connection = (HttpsURLConnection) url.openConnection();
             } else {
                 System.err.println("UNSUPPORTED PROTOCOL!");
-                return;
+                throw new Exception("UNSUPPORTED PROTOCOL!");
             }
             connection.setRequestMethod(request.getMp().get("method"));
             connection.setInstanceFollowRedirects(false);
@@ -96,15 +92,16 @@ public class HTTpService {
             initHeaders(connection);
             initBody(connection);
             dif = System.currentTimeMillis() - dif;
-            writer.println(connection.getResponseCode() + "\n" + connection.getResponseMessage() + "\n" + dif);
+            response.setMillis((int)dif);
+            response.setResponseCode(connection.getResponseCode());
+            response.setResponseMessage(connection.getResponseMessage());
             while (connection.getResponseCode() / 100 == 3 && request.getMp().get("f").equals("true")) {
                 String location = connection.getHeaderField("Location");
-                writer.println("--redirect redirected to " + location);
                 connection = (HttpURLConnection) (new URL(location)).openConnection();
-                builder.append("--redirect redirected to ").append(location).append("\n");
+                builder.append("--redirect: redirected to ").append(location).append("\n");
             }
             String ret = getResponse(connection);
-            writer.println("--body \n" + ret);
+            builder.append("\n").append(ret);
             if (!request.getMp().get("output").equals("")) {
                 File base = new File("").getAbsoluteFile();
                 File file = new File(base + File.separator + "OutputFolder");
@@ -118,15 +115,16 @@ public class HTTpService {
             }
             builder.append(ret);
             response.setBody(builder.toString());
-            response.setHeaders(connection.getHeaderFields());
-            if (request.getMp().get("i").equals("true")) {
-                writer.println("--headers ");
-                for (Map.Entry<String, List<String>> entry : connection.getHeaderFields().entrySet())
-                    writer.println("Key: " + entry.getKey() + " ,Value: " + entry.getValue());
-            }
+            response.setHeaders((HashMap<String, List<String>>) connection.getHeaderFields());
+//            if (request.getMp().get("i").equals("true")) {
+//                writer.println("--headers ");
+//                for (Map.Entry<String, List<String>> entry : connection.getHeaderFields().entrySet())
+//                    writer.println("Key: " + entry.getKey() + " ,Value: " + entry.getValue());
+//            }
         } catch (IOException ex) {
             System.err.println("FAILED TO OPEN CONNECTION!" + ex);
         }
+        return response;
     }
 
     /**
