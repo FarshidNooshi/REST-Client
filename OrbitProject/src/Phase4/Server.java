@@ -21,7 +21,7 @@ public class Server {
                 pool.execute(new ClientHandler(socket, cnt));
             }
             pool.shutdown();
-            System.out.println("Server Closed.");
+            System.out.println("Server Closed."); 
         } catch (Exception e) {
             e.printStackTrace();
         }
