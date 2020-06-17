@@ -1,5 +1,7 @@
 package Phase2;
 
+import Phase4.Response;
+
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -17,6 +19,7 @@ public class HTTpService {
     private String boundary;
     private Request request;
     private PrintStream writer;
+    private Response response;
 
 
     /**
@@ -28,6 +31,7 @@ public class HTTpService {
         writer = out;
         request = req;
         boundary = "" + System.currentTimeMillis();
+        response = new Response();
     }
 
     /**
@@ -68,6 +72,7 @@ public class HTTpService {
      * @throws MalformedURLException for the url connection
      */
     public void runService() throws Exception {
+        StringBuilder builder = new StringBuilder();
         long dif = System.currentTimeMillis();
         if (!request.getMp().get("data").equals("") && !request.getMp().get("json").equals("")) {
             System.err.println("Program terminated.");
@@ -96,6 +101,7 @@ public class HTTpService {
                 String location = connection.getHeaderField("Location");
                 writer.println("--redirect redirected to " + location);
                 connection = (HttpURLConnection) (new URL(location)).openConnection();
+                builder.append("--redirect redirected to ").append(location).append("\n");
             }
             String ret = getResponse(connection);
             writer.println("--body \n" + ret);
@@ -110,6 +116,9 @@ public class HTTpService {
                 bufferedWriter.write(ret);
                 bufferedWriter.flush();
             }
+            builder.append(ret);
+            response.setBody(builder.toString());
+            response.setHeaders(connection.getHeaderFields());
             if (request.getMp().get("i").equals("true")) {
                 writer.println("--headers ");
                 for (Map.Entry<String, List<String>> entry : connection.getHeaderFields().entrySet())

@@ -1,8 +1,9 @@
 package Phase2;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
+import Phase4.Response;
+
+import java.io.*;
+import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -107,6 +108,20 @@ public class Main {
                     }
                 }
             }
+            if (request.getMp().get("proxy").equals("true")) {
+                try (Socket socket = new Socket(request.getMp().get("ip"), Integer.parseInt(request.getMp().get("port")))) {
+                    ObjectOutputStream out = (ObjectOutputStream) socket.getOutputStream();
+                    out.writeObject(request);
+                    ObjectInputStream in = (ObjectInputStream) socket.getInputStream();
+                    try {
+                        Response response = (Response) in.readObject();
+                        System.out.println(response);
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return;
+            }
             if (!request.getMp().get("upload").equals("")) {
                 Reader tmp = new Reader(request.getMp().get("upload"));
                 request = (Request) tmp.ReadFromFile();
@@ -143,6 +158,9 @@ public class Main {
         arr.add(new Pair<>("output", true));//done
         arr.add(new Pair<>("type", true));//done
         arr.add(new Pair<>("uploadBinary", true));//done
+        arr.add(new Pair<>("proxy", false));
+        arr.add(new Pair<>("ip", true));
+        arr.add(new Pair<>("port", true));
     }
 
     /**

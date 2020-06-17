@@ -30,6 +30,9 @@ public class Request implements Serializable {
         mp.put("upload", "");
         mp.put("type", "");
         mp.put("uploadBinary", "");
+        mp.put("proxy", "false");
+        mp.put("ip", "127.0.0.1");
+        mp.put("port", "1726");
     }
 
     /**

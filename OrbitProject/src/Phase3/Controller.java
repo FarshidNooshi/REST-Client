@@ -28,7 +28,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Controller {
-    ActionListener actionListener;
+    private ActionListener actionListener;
     private View view;
     private Request request;
     private StringBuilder headersBuilder = new StringBuilder();
@@ -36,6 +36,7 @@ public class Controller {
 
     /**
      * constructor is this
+     *
      * @param view
      */
     public Controller(View view) {
@@ -114,6 +115,7 @@ public class Controller {
 
     /**
      * initializing trash buttons listeners
+     *
      * @param panel is the panel to be initialized
      */
     private void addTrashListener(JPanel panel) {
@@ -175,6 +177,7 @@ public class Controller {
 
     /**
      * executes the services.
+     *
      * @param request
      * @throws IOException
      */
@@ -219,6 +222,7 @@ public class Controller {
 
         /**
          * initializing the Request.
+         *
          * @throws IOException
          */
         private void initRequest() throws IOException {
@@ -351,6 +355,7 @@ public class Controller {
 
         /**
          * initializing the topRight panel
+         *
          * @param scanner
          * @param base
          */
@@ -359,7 +364,7 @@ public class Controller {
             int responseCode = scanner.nextInt();
             scanner.nextLine();
             String responseMessage = scanner.nextLine();
-            int milis = scanner.nextInt();
+            int millis = scanner.nextInt();
             scanner.nextLine();
             long sz = base.length();
             Color temp;
@@ -373,7 +378,7 @@ public class Controller {
                 temp = new Color(54, 201, 255);
             ((JLabel) panel.getComponent(0)).setText("" + responseCode + " " + responseMessage);
             panel.getComponent(0).setBackground(temp);
-            ((JLabel) panel.getComponent(1)).setText("" + milis + " ms");
+            ((JLabel) panel.getComponent(1)).setText("" + millis + " ms");
             ((JLabel) panel.getComponent(2)).setText("" + sz + " bytes");
         }
 
