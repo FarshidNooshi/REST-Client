@@ -4,8 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Options extends JFrame {
-    private JCheckBox followRedirectBox, darkModeBox, exitBox;
+    private JCheckBox followRedirectBox, darkModeBox, exitBox, proxy;
+    private JTextField ip, port;
     private View view;
+    private JPanel panel;
 
     /**
      * it's the constructor of the options frame
@@ -14,13 +16,27 @@ public class Options extends JFrame {
         setTitle("Options");
         setPreferredSize(new Dimension(400, 200));
         setIconImage(new ImageIcon("OrbitProject/Data/Insomnia.png").getImage());
-        setLayout(new GridLayout(3, 1));
+        setLayout(new GridLayout(4, 1, 10, 20));
+        panel = new JPanel(new GridLayout(1, 3, 10, 10));
         followRedirectBox = new JCheckBox("Follow Redirect");
         darkModeBox = new JCheckBox("Dark Mode");
         exitBox = new JCheckBox("Exit&go to system tray ?");
+        proxy = new JCheckBox("use a proxy");
+        ip = new JTextField();
+        port = new JTextField();
         add(followRedirectBox);
         add(darkModeBox);
         add(exitBox);
+        add(panel);
+        panel.add(proxy);
+        panel.add(ip);
+        panel.add(port);
+        ip.setEnabled(false);
+        port.setEnabled(false);
+        ip.setText("ip:");
+        port.setText("port:");
+        port.setToolTipText("port");
+        ip.setToolTipText("ip");
 
         darkModeBox.addActionListener(e -> {
             if (darkModeBox.isSelected())
@@ -38,6 +54,20 @@ public class Options extends JFrame {
             view.setToTray();
             if (exitBox.isSelected())
                 dispose();
+        });
+
+        proxy.addActionListener(e -> {
+            if (!proxy.isSelected()) {
+                ip.setEnabled(false);
+                port.setEnabled(false);
+                ip.setText("ip:");
+                port.setText("port:");
+            } else {
+                ip.setText("");
+                port.setText("");
+                ip.setEnabled(true);
+                port.setEnabled(true);
+            }
         });
     }
 
