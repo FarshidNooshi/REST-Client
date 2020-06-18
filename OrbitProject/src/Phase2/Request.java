@@ -3,8 +3,6 @@ package Phase2;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -41,9 +39,9 @@ public class Request implements Serializable {
      * @throws IOException if the exception occurred
      */
     public void SaveRequest() throws IOException {
-        Path path = Paths.get(this.mp.get("save"));
-        String name = (Objects.requireNonNull(new File(path.toString()).list()).length + 1) + ".AUT";
-        Writer writer = new Writer(path.toString() + File.separator + name);
+        String path = new File(mp.get("save")).getAbsolutePath();
+        String name = (Objects.requireNonNull(new File(path).list()).length + 1) + ".AUT";
+        Writer writer = new Writer(path + File.separator + name);
         writer.WriteToFile(this);
     }
 

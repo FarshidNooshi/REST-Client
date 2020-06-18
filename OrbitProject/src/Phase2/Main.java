@@ -27,13 +27,14 @@ public class Main {
         init(arrayList);
         initArgs(args);
         if (args[0].equalsIgnoreCase("fire")) {
-            File dir = new File(basePath + File.separator + args[1]);
-            Reader tmp = new Reader(dir.getAbsolutePath() + File.separator + args[2]);
+            String dir = new File(args[1]).getAbsolutePath();
+            Reader tmp = new Reader(dir + File.separator + args[2]);
             request = (Request) tmp.ReadFromFile();
             tmp.close();
             HTTpService service = new HTTpService(request);
+            System.out.println(request.getMp().get("output"));
             try {
-                service.runService();
+                System.out.println(service.runService());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -106,6 +107,8 @@ public class Main {
                     }
                 }
             }
+            if (!request.getMp().get("save").equals("false"))
+                request.SaveRequest();
             if (request.getMp().get("proxy").equals("true")) {
                 try (Socket socket = new Socket(request.getMp().get("ip"), Integer.parseInt(request.getMp().get("port")))) {
                     ObjectOutputStream out =  new ObjectOutputStream(socket.getOutputStream());

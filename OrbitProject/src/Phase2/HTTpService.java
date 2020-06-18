@@ -101,7 +101,7 @@ public class HTTpService {
             String ret = getResponse(connection);
             builder.append(ret);
             if (!request.getMp().get("output").equals("")) {
-                File base = new File("OutPutFolder").getAbsoluteFile();
+                File base = new File("OutputFolder").getAbsoluteFile();
                 String name = request.getMp().get("output");
                 File actualFile = new File(base, name);
                 BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(actualFile));
