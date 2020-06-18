@@ -7,7 +7,6 @@ public class Options extends JFrame {
     private JCheckBox followRedirectBox, darkModeBox, exitBox, proxy;
     private JTextField ip, port;
     private View view;
-    private JPanel panel;
 
     /**
      * it's the constructor of the options frame
@@ -17,7 +16,7 @@ public class Options extends JFrame {
         setPreferredSize(new Dimension(400, 200));
         setIconImage(new ImageIcon("OrbitProject/Data/Insomnia.png").getImage());
         setLayout(new GridLayout(4, 1, 10, 20));
-        panel = new JPanel(new GridLayout(1, 3, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(1, 3, 10, 10));
         followRedirectBox = new JCheckBox("Follow Redirect");
         darkModeBox = new JCheckBox("Dark Mode");
         exitBox = new JCheckBox("Exit and Go to system tray");
@@ -45,9 +44,7 @@ public class Options extends JFrame {
                 view.setToLight();
         });
 
-        followRedirectBox.addActionListener(e -> {
-            System.out.println(followRedirectBox.isSelected() ? "follow" : "don't follow");
-        });
+        followRedirectBox.addActionListener(e -> System.out.println(followRedirectBox.isSelected() ? "follow" : "don't follow"));
 
         exitBox.addActionListener(e -> {
             System.out.println(exitBox.isSelected() ? "exit" : "get out");
@@ -74,16 +71,12 @@ public class Options extends JFrame {
     /**
      * showing the gui of this frame to the user
      */
-    public void showGUI() {
+    void showGUI() {
         pack();
         setVisible(true);
     }
 
-    public JCheckBox getDarkModeBox() {
-        return darkModeBox;
-    }
-
-    public JCheckBox getExitBox() {
+    JCheckBox getExitBox() {
         return exitBox;
     }
 
@@ -108,7 +101,7 @@ public class Options extends JFrame {
      *
      * @param view is the program view class
      */
-    public void setView(View view) {
+    void setView(View view) {
         this.view = view;
     }
 }

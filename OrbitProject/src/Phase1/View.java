@@ -9,7 +9,6 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -24,7 +23,8 @@ public class View extends JFrame {
     private static final int NUMBER_OF_SUBMENUS = 2; // its the number of submenus of each menu
     private static int[] numberOfHeaders = {1, 1, 1}; // an index holder for the headers that are visible at the moment
     private static ArrayList<JPanel> centerPanels, rightPanels;
-    private static JPanel binaryDataPanel, jsonPanel, formDataPanel;
+    private static JPanel jsonPanel;
+    private static JPanel formDataPanel;
     private final Options options; // options panel that should be opened in another frame
     private JButton selectItem, resetItem;
     private JLabel fileSelected;
@@ -58,7 +58,7 @@ public class View extends JFrame {
      * @throws InstantiationException          if the exception occurs.
      * @throws IllegalAccessException          if we wanted an illegal access to something in the system
      */
-    View(Options options) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException, IOException {
+    View(Options options) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         this.options = options;
         setTitle("Farshid Nooshi Midterm project-term2(98-99)");
         UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -122,16 +122,8 @@ public class View extends JFrame {
         return formDataPanel;
     }
 
-    public static JPanel getBinaryDataPanel() {
-        return binaryDataPanel;
-    }
-
     public static JPanel getJsonPanel() {
         return jsonPanel;
-    }
-
-    public JPanel getRight() {
-        return right;
     }
 
     public JButton getResetItem() {
@@ -266,7 +258,7 @@ public class View extends JFrame {
      * @param help  is a panel to adding to
      * @throws NullPointerException checking for not being null in help
      */
-    public void createSpecificLabelRightPanel(String text, Color color, JPanel help) throws NullPointerException {
+    private void createSpecificLabelRightPanel(String text, Color color, JPanel help) throws NullPointerException {
         JLabel memory = new JLabel(text, SwingConstants.CENTER);
         memory.setPreferredSize(new Dimension(70, 30));
         memory.setBackground(color);
@@ -460,7 +452,7 @@ public class View extends JFrame {
         JPanel reference = centerPanels.get(3);
         formDataPanel = new JPanel();
         jsonPanel = new JPanel();
-        binaryDataPanel = new JPanel();
+        JPanel binaryDataPanel = new JPanel();
         jsonPanel.setName("jsonPanel");
         formDataPanel.setName("formDataPanel");
         binaryDataPanel.setName("binaryDataPanel");
@@ -511,14 +503,6 @@ public class View extends JFrame {
         return copy;
     }
 
-    public ArrayList<ArrayList<JMenuItem>> getSubmenus() {
-        return submenus;
-    }
-
-    public ArrayList<JMenu> getMenus() {
-        return menus;
-    }
-
     public JButton getSendURL() {
         return sendURL;
     }
@@ -539,16 +523,8 @@ public class View extends JFrame {
         return list;
     }
 
-    public JPanel getCenter() {
-        return center;
-    }
-
     public JEditorPane getPreview() {
         return preview;
-    }
-
-    public JPanel getLeft() {
-        return left;
     }
 
     public JTextField getUrlTextField() {
@@ -557,10 +533,6 @@ public class View extends JFrame {
 
     public Options getOptions() {
         return options;
-    }
-
-    public JTabbedPane getTabbedPane() {
-        return tabbedPane;
     }
 
     public JButton getCreateNode() {

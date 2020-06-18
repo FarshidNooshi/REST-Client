@@ -11,7 +11,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Main {
-    private static Request request;
 
     /**
      * //--url, -M(--method), -H(--headers), -i, -h(--help), -f, -O(--output), -S(--save), -d(--data), -j(--json),
@@ -23,7 +22,7 @@ public class Main {
         String basePath = new File("").getAbsolutePath();
         if (args.length == 0)
             new Exception("INVALID INPUT").printStackTrace();
-        request = new Request();
+        Request request = new Request();
         ArrayList<Pair<String, Boolean>> arrayList = new ArrayList<>();
         init(arrayList);
         initArgs(args);

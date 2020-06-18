@@ -24,23 +24,23 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
 
-public class Controller {
+class Controller {
     private ActionListener actionListener;
     private View view;
     private Request request;
     private StringBuilder headersBuilder = new StringBuilder();
-    private HashMap<String, String> headerMap;
 
     /**
      * constructor is this
      *
-     * @param view
+     * @param view is the program gui
      */
-    public Controller(View view) {
-        headerMap = new HashMap<>();
+    Controller(View view) {
         request = new Request();
         this.view = view;
         actionListener = new ActionListener() {
@@ -62,7 +62,7 @@ public class Controller {
     /**
      * initializing the settings
      */
-    public void establish() {
+    void establish() {
         initLeftListeners();
         addTrashListener(View.getCenterPanels().get(0));
         addTrashListener(View.getCenterPanels().get(2));
@@ -180,8 +180,8 @@ public class Controller {
     /**
      * executes the services.
      *
-     * @param request
-     * @throws IOException
+     * @param request is the request to be handled.
+     * @throws Exception if occurs
      */
     private Response executeService(Request request) throws Exception {
         if (!request.getMp().get("save").equals("false"))
@@ -230,7 +230,7 @@ public class Controller {
         /**
          * initializing the Request.
          *
-         * @throws Exception
+         * @throws Exception if occurs
          */
         private Response initRequest() throws Exception {
             if (request.getMp().get("i").equals("true")) {
@@ -334,7 +334,9 @@ public class Controller {
         private void initRight(Response response) {
             if (response.getHeaders().get("Content-Type").get(0).contains("json")) {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                //noinspection deprecation
                 JsonParser jp = new JsonParser();
+                //noinspection deprecation
                 JsonElement je = jp.parse(view.getRaw().getText());
                 String prettyJsonString = gson.toJson(je);
                 view.getJson().setText(prettyJsonString);
@@ -353,7 +355,6 @@ public class Controller {
 
         /**
          * initializing the topRight panel
-         *
          */
         private void initTopRight(Response response) {
             JPanel panel = view.getStatus();

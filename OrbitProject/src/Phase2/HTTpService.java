@@ -8,8 +8,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * this class represents a service for the user http requests and stuff.
@@ -92,7 +90,7 @@ public class HTTpService {
             initHeaders(connection);
             initBody(connection);
             dif = System.currentTimeMillis() - dif;
-            response.setMillis((int)dif);
+            response.setMillis((int) dif);
             response.setResponseCode(connection.getResponseCode());
             response.setResponseMessage(connection.getResponseMessage());
             while (connection.getResponseCode() / 100 == 3 && request.getMp().get("f").equals("true")) {

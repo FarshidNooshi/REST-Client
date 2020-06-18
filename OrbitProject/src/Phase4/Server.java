@@ -10,8 +10,8 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Server {
-    public static void run(int maximumNumberOfThreads) {
+class Server {
+    static void run(int maximumNumberOfThreads) {
         ExecutorService pool = Executors.newCachedThreadPool();
         try (ServerSocket serverSocket = new ServerSocket(1726)) {
             System.out.println("Server is started and waiting for clients.");
