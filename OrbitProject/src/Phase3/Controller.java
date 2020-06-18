@@ -61,7 +61,7 @@ class Controller {
     }
 
     /**
-     * initializing the settings
+     * initializing the settings and getting the preferred listeners to the components.
      */
     void establish() {
         initLeftListeners();
@@ -231,7 +231,7 @@ class Controller {
         }
 
         /**
-         * initializing the Request.
+         * initializing the Request. and building it with the user inputs to the gui.
          *
          * @throws Exception if occurs
          */
@@ -303,6 +303,9 @@ class Controller {
             return executeService(request);
         }
 
+        /**
+         * like the done of the SwingWorker this is a method to do the final job after finishing the doInBackground
+         */
         public void done() {
             view.getSendURL().setEnabled(true);
             view.getUrlTextField().setEnabled(true);
@@ -346,7 +349,7 @@ class Controller {
         }
 
         /**
-         * initializing the right panels
+         * initializing the right panels such as headers and bodies. this method doesn't initializes the topRight frame.
          */
         private void initRight(Response response) {
             if (response.getHeaders().get("Content-Type").get(0).contains("json")) {
@@ -371,7 +374,7 @@ class Controller {
         }
 
         /**
-         * initializing the topRight panel
+         * initializing the topRight panel and adding the colors with theme.
          */
         private void initTopRight(Response response) {
             JPanel panel = view.getStatus();

@@ -1,0 +1,16 @@
+Hello.
+As the programmer of this project i hope you a good time.
+in the top menu bar you can see three options.
+first option from left is for browsing into program options such as using a proxy with ip&port or setting redirection true and ...
+the middle option is for toggling into FS or disable the left panel.
+you can write your address with http|https(http prefferred) and select the request method and with the first menu in the 
+center panel you can choose youre headers to send and with selecting body you can browse among the options available in the app
+also note that before using urlencoded & formData the program asks you about your prefferred body type.
+for activating a field to be send either in body or header or else you must ckeck the ckeckbox for the field to be enabled.
+with trash icon you can smoothly delete the line fields next to it.
+for the json body the indentation must be hold and you should write your body like : {a:b,c:d}
+for selecting a binary file and uploading it please note that this app is not built for uploading huge files.
+in the app you will see 3 fields in the right top corner that represents the recieved body size& connection time spent&
+responseCode&message.
+please email me your notes after using this app.
+thank you. :)

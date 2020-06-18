@@ -11,6 +11,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 class Server {
+    /**
+     * this static method runs the server for our app.
+     * i wrote it for helping to test and run the proxy feature.
+     * @param maximumNumberOfThreads is the max number of threads to be run in the threadPool.
+     */
     static void run(int maximumNumberOfThreads) {
         ExecutorService pool = Executors.newCachedThreadPool();
         try (ServerSocket serverSocket = new ServerSocket(1726)) {

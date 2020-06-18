@@ -13,6 +13,9 @@ public class Request implements Serializable {
     private static final long serialVersionUID = 2724937972241616654L;
     private HashMap<String, String> mp;
 
+    /**
+     * it's the constructor of the class
+     */
     public Request() {
         mp = new HashMap<>();
         mp.put("url", "www.google.com");

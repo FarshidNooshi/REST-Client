@@ -11,6 +11,10 @@ public class Response implements Serializable {
     private int responseCode, millis, sz;
     private boolean showHeader;
 
+    /**
+     * the constructor of the class
+     * @param showHeader says to us that we must print the headers or not. (in toString method)
+     */
     public Response(boolean showHeader) {
         this.showHeader = showHeader;
         headers = new HashMap<>();
@@ -65,6 +69,9 @@ public class Response implements Serializable {
         this.body = body;
     }
 
+    /**
+     * @return an String for printing the response to the console or wherever we want.
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
