@@ -20,8 +20,8 @@ public class Options extends JFrame {
         panel = new JPanel(new GridLayout(1, 3, 10, 10));
         followRedirectBox = new JCheckBox("Follow Redirect");
         darkModeBox = new JCheckBox("Dark Mode");
-        exitBox = new JCheckBox("Exit&go to system tray ?");
-        proxy = new JCheckBox("use a proxy");
+        exitBox = new JCheckBox("Exit and Go to system tray");
+        proxy = new JCheckBox("Proxy");
         ip = new JTextField();
         port = new JTextField();
         add(followRedirectBox);

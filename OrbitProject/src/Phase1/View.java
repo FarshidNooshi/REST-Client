@@ -157,7 +157,7 @@ public class View extends JFrame {
         center.setLayout(new BorderLayout());
         comboBox.setPreferredSize(new Dimension(80, 41));
         JPanel temporary = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        urlTextField.setPreferredSize(new Dimension(600, 41));
+        urlTextField.setPreferredSize(new Dimension(602, 41));
         sendURL.setPreferredSize(new Dimension(70, 41));
         temporary.add(comboBox);
         temporary.add(urlTextField);
@@ -359,10 +359,13 @@ public class View extends JFrame {
                 setExtendedState(JFrame.NORMAL);
         });
         submenus.get(1).get(1).addActionListener(e -> {
-            if (left.isVisible())
+            if (left.isVisible()) {
+                urlTextField.setPreferredSize(new Dimension(707, 41));
                 left.setVisible(false);
-            else
+            } else {
+                urlTextField.setPreferredSize(new Dimension(602, 41));
                 left.setVisible(true);
+            }
         });
         submenus.get(2).get(0).addActionListener(e -> JOptionPane.showMessageDialog(null, "Farshid Nooshi\nStudent ID: 9831068\nEmail: FarshidNooshi726@aut.ac.ir", "About", JOptionPane.INFORMATION_MESSAGE));
         submenus.get(2).get(1).addActionListener(e -> JOptionPane.showMessageDialog(null, "see the help folder in phase 3", "Help", JOptionPane.INFORMATION_MESSAGE));
