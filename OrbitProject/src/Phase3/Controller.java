@@ -101,12 +101,15 @@ public class Controller {
             label.setText("File selected: " + fileChooser.getSelectedFile().getName());
             label.setIcon(new ImageIcon("OrbitProject/Data/save_close_100px.png"));
             request.getMp().replace("uploadBinary", fileChooser.getSelectedFile().getAbsolutePath());
+            request.getMp().replace("type", "binary");
         });
         JButton reset = view.getResetItem();
         reset.addActionListener(e -> {
             JLabel label = view.getFileSelected();
             label.setText("File selected: " + "Nothing");
             label.setIcon(new ImageIcon("OrbitProject/Data/file_100px.png"));
+            request.getMp().replace("uploadBinary", "");
+            request.getMp().replace("type", "");
         });
     }
 
@@ -267,6 +270,10 @@ public class Controller {
                     String headers = builder.toString();
                     request.getMp().replace("data", headers);
                 }
+                if (request.getMp().get("type").equals("")) {
+                    String str = JOptionPane.showInputDialog(view, "Type encoded if you want to send urlEncoded or formData otherwise", JOptionPane.INPUT_VALUE_PROPERTY);
+                    request.getMp().replace("type", str);
+                }
             } else if (bodyTabbedPane.getSelectedComponent().getName().contains("binary")) {
                 request.getMp().replace("type", "binary");
             }
@@ -276,6 +283,7 @@ public class Controller {
         public void done() {
             view.getSendURL().setEnabled(true);
             view.getUrlTextField().setEnabled(true);
+            view.getUrlTextField().setText(request.getMp().get("url"));
             request = new Request();
             view.getRaw().setText("");
             try {
@@ -304,7 +312,7 @@ public class Controller {
          * initializing the right panels
          */
         private void initRight(Response response) {
-            if (response.getHeaders().get("Content-Type").contains("json")) {
+            if (response.getHeaders().get("Content-Type").get(0).contains("json")) {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 JsonParser jp = new JsonParser();
                 JsonElement je = jp.parse(view.getRaw().getText());
@@ -313,7 +321,7 @@ public class Controller {
             }
             try {
                 view.getPreview().setPage(view.getUrlTextField().getText());
-                if (response.getHeaders().get("Content-Type").contains("image")) {
+                if (response.getHeaders().get("Content-Type").get(0).contains("image")) {
                     URL url = new URL(view.getUrlTextField().getText());
                     Image image = ImageIO.read(url);
                     view.getBufferedPic().setIcon(new ImageIcon(image));

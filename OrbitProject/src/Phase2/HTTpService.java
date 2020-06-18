@@ -112,6 +112,7 @@ public class HTTpService {
             }
             response.setBody(builder.toString());
             response.setHeaders(connection.getHeaderFields());
+            response.setSz(response.getBody().length() * 4);
         } catch (IOException ex) {
             System.err.println("FAILED TO OPEN CONNECTION!" + ex);
         }
