@@ -97,7 +97,8 @@ class Controller {
     private void initBinaryBody() {
         JButton choose = view.getSelectItem();
         choose.addActionListener(e -> {
-            final JFileChooser fileChooser = new JFileChooser();
+            final JFileChooser fileChooser = new JFileChooser("OrbitProject\\src");
+            fileChooser.setPreferredSize(new Dimension(750, 750));
             fileChooser.showOpenDialog(view);
             fileChooser.setMultiSelectionEnabled(false);
             JLabel label = view.getFileSelected();
@@ -159,6 +160,7 @@ class Controller {
                 if (evt.getClickCount() > 1) {
                     int index = list.locationToIndex(evt.getPoint());
                     final JFileChooser fileChooser = new JFileChooser("OrbitProject\\src" + File.separator + folders.get(index));
+                    fileChooser.setPreferredSize(new Dimension(1000, 1000));
                     fileChooser.showOpenDialog(view);
                     fileChooser.setMultiSelectionEnabled(false);
                     try {
