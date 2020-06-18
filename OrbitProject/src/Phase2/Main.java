@@ -109,9 +109,9 @@ public class Main {
             }
             if (request.getMp().get("proxy").equals("true")) {
                 try (Socket socket = new Socket(request.getMp().get("ip"), Integer.parseInt(request.getMp().get("port")))) {
-                    ObjectOutputStream out = (ObjectOutputStream) socket.getOutputStream();
+                    ObjectOutputStream out =  new ObjectOutputStream(socket.getOutputStream());
                     out.writeObject(request);
-                    ObjectInputStream in = (ObjectInputStream) socket.getInputStream();
+                    ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                     try {
                         Response response = (Response) in.readObject();
                         System.out.println(response);

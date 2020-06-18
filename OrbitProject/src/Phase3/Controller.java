@@ -20,6 +20,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.net.URL;
 import java.util.List;
 import java.util.*;
@@ -183,6 +186,18 @@ public class Controller {
     private Response executeService(Request request) throws Exception {
         if (!request.getMp().get("save").equals("false"))
             request.SaveRequest();
+        if (request.getMp().get("proxy").equals("true")) {
+            try (Socket socket = new Socket(request.getMp().get("ip"), Integer.parseInt(request.getMp().get("port")))) {
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                out.writeObject(request);
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                try {
+                    return (Response) in.readObject();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         Phase2.HTTpService service = new Phase2.HTTpService(request);
         return service.runService();
     }
@@ -276,6 +291,11 @@ public class Controller {
                 }
             } else if (bodyTabbedPane.getSelectedComponent().getName().contains("binary")) {
                 request.getMp().replace("type", "binary");
+            }
+            if (view.getOptions().getProxy().isSelected()) {
+                request.getMp().replace("proxy", "true");
+                request.getMp().replace("ip", view.getOptions().getIp().getText());
+                request.getMp().replace("port", view.getOptions().getPort().getText());
             }
             return executeService(request);
         }

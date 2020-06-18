@@ -91,6 +91,18 @@ public class Options extends JFrame {
         return followRedirectBox;
     }
 
+    public JTextField getIp() {
+        return ip;
+    }
+
+    public JTextField getPort() {
+        return port;
+    }
+
+    public JCheckBox getProxy() {
+        return proxy;
+    }
+
     /**
      * setting the view for the users
      *

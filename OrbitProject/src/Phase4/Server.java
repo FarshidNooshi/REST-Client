@@ -16,7 +16,7 @@ public class Server {
         try (ServerSocket serverSocket = new ServerSocket(1726)) {
             System.out.println("Server is started and waiting for clients.");
             int cnt = 0;
-            while (cnt++ < maximumNumberOfThreads) { // TODO should check.
+            while (cnt++ < maximumNumberOfThreads) {
                 Socket socket = serverSocket.accept();
                 pool.execute(new ClientHandler(socket, cnt));
             }
@@ -50,16 +50,18 @@ class ClientHandler implements Runnable {
      */
     @Override
     public void run() {
+        System.out.println("Request " + id + " is running.");
         try {
-            ObjectInputStream in = (ObjectInputStream) socket.getInputStream();
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
             Request request = (Request) in.readObject();
-            //Todo HttpService should return a Response for a request.
             HTTpService service = new HTTpService(request);
             Response response = service.runService();
-            ObjectOutputStream out = (ObjectOutputStream) socket.getOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             out.writeObject(response);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("Request " + id + " is closed.");
+
     }
 }
