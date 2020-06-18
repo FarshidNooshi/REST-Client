@@ -19,14 +19,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.List;
+import java.util.*;
 
 public class Controller {
     private ActionListener actionListener;
@@ -191,7 +187,7 @@ public class Controller {
     /**
      * swing worker is this.
      */
-    private class Worker extends SwingWorker<String, Object> {
+    private class Worker extends SwingWorker<Response, Object> {
 
         /**
          * Computes a result, or throws an exception if unable to do so.
@@ -206,25 +202,22 @@ public class Controller {
          * @throws Exception if unable to compute a result
          */
         @Override
-        protected String doInBackground() throws Exception {
+        protected Response doInBackground() throws Exception {
             view.getRaw().setText("");
             view.getJson().setText("");
             view.getBufferedPic().setIcon(null);
-            initRequest();
-            return null;
+            return initRequest();
         }
 
         /**
          * initializing the Request.
          *
-         * @throws IOException
+         * @throws Exception
          */
-        private void initRequest() throws Exception {
-            Response response = new Response(true);
+        private Response initRequest() throws Exception {
             if (request.getMp().get("i").equals("true")) {
                 request.getMp().replace("save", "false");
-                response = executeService(request);
-                return;
+                return executeService(request);
             }
             request.getMp().replace("url", view.getUrlTextField().getText());
             request.getMp().replace("method", Objects.requireNonNull(view.getComboBox().getSelectedItem()).toString());
@@ -277,7 +270,7 @@ public class Controller {
             } else if (bodyTabbedPane.getSelectedComponent().getName().contains("binary")) {
                 request.getMp().replace("type", "binary");
             }
-            executeService(request);
+            return executeService(request);
         }
 
         public void done() {
@@ -285,51 +278,33 @@ public class Controller {
             view.getUrlTextField().setEnabled(true);
             request = new Request();
             view.getRaw().setText("");
-            File base = new File("OrbitProject\\src\\OutputFolder\\output.txt").getAbsoluteFile();
-            try (FileReader fileReader = new FileReader(base.getAbsolutePath());
-                 Scanner scanner = new Scanner(fileReader)) {
-                initTopRight(scanner, base);
-                scanner.nextLine();
-                String read;
-                while (!(read = scanner.nextLine()).equals("--headers "))
-                    view.getRaw().append(read + '\n');
-                {
-                    JPanel panel = View.getRightPanels().get(1);
-                    int counter = 0;
-                    for (int i = 0; i < 15; i++) {
-                        ((JTextArea) panel.getComponent(i * 3 + 1)).setText("");
-                        ((JTextArea) panel.getComponent(i * 3 + 2)).setText("");
-                    }
-                    while (scanner.hasNext()) {
-                        read = scanner.nextLine();
-                        String value = "", key = "";
-                        int j = read.length() - 1;
-                        while (read.charAt(j) != ':')
-                            j--;
-                        value = read.substring(j + 2);
-                        j -= 7;
-                        int i = j;
-                        while (read.charAt(i) != ':')
-                            i--;
-                        key = read.substring(i + 2, j);
-                        ((JTextArea) panel.getComponent(counter * 3 + 1)).setText(key);
-                        ((JTextArea) panel.getComponent(counter * 3 + 2)).setText(value);
-                        counter++;
-                        headersBuilder.append(key + ": " + value + "\n");
-                        headerMap.put(key, value);
-                    }
+            try {
+                Response response = get();
+                initTopRight(response);
+                view.getRaw().setText(response.getBody());
+                JPanel panel = View.getRightPanels().get(1);
+                int counter = 0;
+                for (int i = 0; i < 15; i++) {
+                    ((JTextArea) panel.getComponent(i * 3 + 1)).setText("");
+                    ((JTextArea) panel.getComponent(i * 3 + 2)).setText("");
                 }
-            } catch (IOException e) {
+                for (Map.Entry<String, List<String>> entry : response.getHeaders().entrySet()) {
+                    ((JTextArea) panel.getComponent(counter * 3 + 1)).setText(entry.getKey());
+                    ((JTextArea) panel.getComponent(counter * 3 + 2)).setText(entry.getValue().toString());
+                    counter++;
+                    headersBuilder.append(entry.getKey()).append(": ").append(entry.getValue()).append('\n');
+                }
+                initRight(response);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            initRight();
         }
 
         /**
          * initializing the right panels
          */
-        private void initRight() {
-            if (headerMap.get("Content-Type").contains("json")) {
+        private void initRight(Response response) {
+            if (response.getHeaders().get("Content-Type").contains("json")) {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 JsonParser jp = new JsonParser();
                 JsonElement je = jp.parse(view.getRaw().getText());
@@ -338,7 +313,7 @@ public class Controller {
             }
             try {
                 view.getPreview().setPage(view.getUrlTextField().getText());
-                if (headerMap.get("Content-Type").contains("image")) {
+                if (response.getHeaders().get("Content-Type").contains("image")) {
                     URL url = new URL(view.getUrlTextField().getText());
                     Image image = ImageIO.read(url);
                     view.getBufferedPic().setIcon(new ImageIcon(image));
@@ -351,17 +326,13 @@ public class Controller {
         /**
          * initializing the topRight panel
          *
-         * @param scanner
-         * @param base
          */
-        private void initTopRight(Scanner scanner, File base) {
+        private void initTopRight(Response response) {
             JPanel panel = view.getStatus();
-            int responseCode = scanner.nextInt();
-            scanner.nextLine();
-            String responseMessage = scanner.nextLine();
-            int millis = scanner.nextInt();
-            scanner.nextLine();
-            long sz = base.length();
+            int responseCode = response.getResponseCode();
+            String responseMessage = response.getResponseMessage();
+            int millis = response.getMillis();
+            long sz = response.getSz();
             Color temp;
             if (responseCode / 100 == 2)
                 temp = new Color(83, 255, 119);

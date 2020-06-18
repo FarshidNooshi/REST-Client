@@ -17,28 +17,52 @@ public class Response implements Serializable {
         body = "";
     }
 
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
+    public Map<String, List<String>> getHeaders() {
+        return headers;
     }
 
     public void setHeaders(Map<String, List<String>> headers) {
         this.headers = headers;
     }
 
+    public int getMillis() {
+        return millis;
+    }
+
     public void setMillis(int millis) {
         this.millis = millis;
+    }
+
+    public int getResponseCode() {
+        return responseCode;
     }
 
     public void setResponseCode(int responseCode) {
         this.responseCode = responseCode;
     }
 
+    public int getSz() {
+        return sz;
+    }
+
+    public void setSz(int sz) {
+        this.sz = sz;
+    }
+
+    public String getResponseMessage() {
+        return responseMessage;
+    }
+
     public void setResponseMessage(String responseMessage) {
         this.responseMessage = responseMessage;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 
     @Override
