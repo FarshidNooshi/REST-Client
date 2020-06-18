@@ -32,7 +32,6 @@ public class Main {
             request = (Request) tmp.ReadFromFile();
             tmp.close();
             HTTpService service = new HTTpService(request);
-            System.out.println(request.getMp().get("output"));
             try {
                 System.out.println(service.runService());
             } catch (Exception e) {
@@ -120,6 +119,8 @@ public class Main {
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
+                    in.close();
+                    out.close();
                 }
                 return;
             }
@@ -130,8 +131,6 @@ public class Main {
                 System.out.println("Request renewed.");
             }
             HTTpService service = new HTTpService(request);
-            if (!request.getMp().get("save").equals("false"))
-                request.SaveRequest();
             try {
                 System.out.println(service.runService());
             } catch (Exception e) {
