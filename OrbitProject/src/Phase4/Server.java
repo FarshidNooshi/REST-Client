@@ -58,6 +58,8 @@ class ClientHandler implements Runnable {
             Response response = service.runService();
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             out.writeObject(response);
+            in.close();
+            out.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

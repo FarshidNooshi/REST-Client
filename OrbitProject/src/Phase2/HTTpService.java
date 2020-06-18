@@ -107,6 +107,7 @@ public class HTTpService {
                 BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(actualFile));
                 bufferedWriter.write(ret);
                 bufferedWriter.flush();
+                bufferedWriter.close();
             }
             response.setBody(builder.toString());
             response.setHeaders(connection.getHeaderFields());

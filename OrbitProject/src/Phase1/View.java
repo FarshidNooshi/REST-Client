@@ -14,10 +14,6 @@ import java.util.Objects;
 
 import static java.awt.event.InputEvent.ALT_MASK;
 
-enum Requests {
-    PUT, POST, DELETE, GET
-}
-
 public class View extends JFrame {
     private static final int NUMBER_OF_MENUS = 3; // number of menus of the program
     private static final int NUMBER_OF_SUBMENUS = 2; // its the number of submenus of each menu

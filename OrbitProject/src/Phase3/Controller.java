@@ -1,5 +1,6 @@
 package Phase3;
 
+import Phase1.Requests;
 import Phase1.View;
 import Phase2.Reader;
 import Phase2.Request;
@@ -306,8 +307,20 @@ class Controller {
             view.getSendURL().setEnabled(true);
             view.getUrlTextField().setEnabled(true);
             view.getUrlTextField().setText(request.getMp().get("url"));
-            request = new Request();
             view.getRaw().setText("");
+            switch (request.getMp().get("method")) {
+                case "PUT" :
+                    view.getComboBox().setSelectedIndex(0);
+                    break;
+                case "POST":
+                    view.getComboBox().setSelectedIndex(1);
+                    break;
+                case "DELETE":
+                    view.getComboBox().setSelectedIndex(2);
+                    break;
+                case "GET":
+                    view.getComboBox().setSelectedIndex(3);
+            }
             try {
                 Response response = get();
                 initTopRight(response);
@@ -318,6 +331,7 @@ class Controller {
                     ((JTextArea) panel.getComponent(i * 3 + 1)).setText("");
                     ((JTextArea) panel.getComponent(i * 3 + 2)).setText("");
                 }
+                headersBuilder = new StringBuilder();
                 for (Map.Entry<String, List<String>> entry : response.getHeaders().entrySet()) {
                     ((JTextArea) panel.getComponent(counter * 3 + 1)).setText(entry.getKey());
                     ((JTextArea) panel.getComponent(counter * 3 + 2)).setText(entry.getValue().toString());
@@ -328,6 +342,7 @@ class Controller {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            request = new Request();
         }
 
         /**
