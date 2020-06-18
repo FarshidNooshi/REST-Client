@@ -3,6 +3,7 @@ package Phase3;
 import Phase1.View;
 import Phase2.Reader;
 import Phase2.Request;
+import Phase4.Response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -69,7 +70,7 @@ public class Controller {
         addTrashListener(View.getFormDataPanel());
         initBinaryBody();
         initBodyListeners();
-        view.getSaveURL().addActionListener(actionListener);
+        view.getSendURL().addActionListener(actionListener);
         view.getCopy().addActionListener(e -> {
             String myString = headersBuilder.toString();
             StringSelection stringSelection = new StringSelection(myString);
@@ -155,7 +156,6 @@ public class Controller {
             public void mouseClicked(MouseEvent evt) {
                 if (evt.getClickCount() > 1) {
                     int index = list.locationToIndex(evt.getPoint());
-                    System.out.println(folders.get(index));
                     final JFileChooser fileChooser = new JFileChooser("OrbitProject\\src" + File.separator + folders.get(index));
                     fileChooser.showOpenDialog(view);
                     fileChooser.setMultiSelectionEnabled(false);
@@ -163,7 +163,7 @@ public class Controller {
                         Reader reader = new Reader(fileChooser.getSelectedFile().getAbsolutePath());
                         request = (Request) reader.ReadFromFile();
                         reader.close();
-                        view.getSaveURL().setEnabled(false);
+                        view.getSendURL().setEnabled(false);
                         view.getUrlTextField().setEnabled(false);
                         Worker worker = new Worker();
                         worker.execute();
@@ -181,17 +181,11 @@ public class Controller {
      * @param request
      * @throws IOException
      */
-    private void executeService(Request request) throws IOException {
+    private Response executeService(Request request) throws Exception {
         if (!request.getMp().get("save").equals("false"))
             request.SaveRequest();
-        String base = (new File("OrbitProject\\src\\OutputFolder").getAbsolutePath());
-        String name = "output" + ".txt";
-        try (PrintStream writer = new PrintStream(base + File.separator + name)) {
-            Phase2.HTTpService service = new Phase2.HTTpService(request, writer);
-            service.runService();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Phase2.HTTpService service = new Phase2.HTTpService(request);
+        return service.runService();
     }
 
     /**
@@ -225,10 +219,11 @@ public class Controller {
          *
          * @throws IOException
          */
-        private void initRequest() throws IOException {
+        private void initRequest() throws Exception {
+            Response response = new Response(true);
             if (request.getMp().get("i").equals("true")) {
                 request.getMp().replace("save", "false");
-                executeService(request);
+                response = executeService(request);
                 return;
             }
             request.getMp().replace("url", view.getUrlTextField().getText());
@@ -286,7 +281,7 @@ public class Controller {
         }
 
         public void done() {
-            view.getSaveURL().setEnabled(true);
+            view.getSendURL().setEnabled(true);
             view.getUrlTextField().setEnabled(true);
             request = new Request();
             view.getRaw().setText("");

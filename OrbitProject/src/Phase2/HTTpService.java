@@ -101,26 +101,17 @@ public class HTTpService {
                 builder.append("--redirect: redirected to ").append(location).append("\n");
             }
             String ret = getResponse(connection);
-            builder.append("\n").append(ret);
+            builder.append(ret);
             if (!request.getMp().get("output").equals("")) {
-                File base = new File("").getAbsoluteFile();
-                File file = new File(base + File.separator + "OutputFolder");
-                //noinspection ResultOfMethodCallIgnored
-                file.mkdir();
+                File base = new File("OutPutFolder").getAbsoluteFile();
                 String name = request.getMp().get("output");
-                File actualFile = new File(file, name);
+                File actualFile = new File(base, name);
                 BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(actualFile));
                 bufferedWriter.write(ret);
                 bufferedWriter.flush();
             }
-            builder.append(ret);
             response.setBody(builder.toString());
-            response.setHeaders((HashMap<String, List<String>>) connection.getHeaderFields());
-//            if (request.getMp().get("i").equals("true")) {
-//                writer.println("--headers ");
-//                for (Map.Entry<String, List<String>> entry : connection.getHeaderFields().entrySet())
-//                    writer.println("Key: " + entry.getKey() + " ,Value: " + entry.getValue());
-//            }
+            response.setHeaders(connection.getHeaderFields());
         } catch (IOException ex) {
             System.err.println("FAILED TO OPEN CONNECTION!" + ex);
         }

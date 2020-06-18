@@ -36,7 +36,7 @@ public class View extends JFrame {
     private JPanel center, left, right; // three panels for left center and right side of the program
     private JTabbedPane tabbedPane; // used for center panel (4 possibilities)
     private JTextField urlTextField; // url textField for writing a url
-    private JButton saveURL; // a button for saving the url
+    private JButton sendURL; // a button for saving the url
     private JList<Object> list; // for making folders in the left panel
     private TrayIcon trayIcon; // this two are for tray closing system
     private SystemTray tray;
@@ -75,7 +75,7 @@ public class View extends JFrame {
         urlTextField = new JTextField();
         rightPanels = new ArrayList<>();
         comboBox = new JComboBox<>(Requests.values());
-        saveURL = new JButton("Send");
+        sendURL = new JButton("Send");
         tabbedPane = new JTabbedPane();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         initMenuBar();
@@ -158,10 +158,10 @@ public class View extends JFrame {
         comboBox.setPreferredSize(new Dimension(80, 41));
         JPanel temporary = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         urlTextField.setPreferredSize(new Dimension(600, 41));
-        saveURL.setPreferredSize(new Dimension(70, 41));
+        sendURL.setPreferredSize(new Dimension(70, 41));
         temporary.add(comboBox);
         temporary.add(urlTextField);
-        temporary.add(saveURL);
+        temporary.add(sendURL);
         temporary.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
         center.add(temporary, BorderLayout.NORTH);
         center.add(tabbedPane, BorderLayout.CENTER);
@@ -516,8 +516,8 @@ public class View extends JFrame {
         return menus;
     }
 
-    public JButton getSaveURL() {
-        return saveURL;
+    public JButton getSendURL() {
+        return sendURL;
     }
 
     public JTabbedPane getBodyTabbedPane() {
