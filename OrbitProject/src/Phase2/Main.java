@@ -159,9 +159,9 @@ public class Main {
         arr.add(new Pair<>("output", true));//done
         arr.add(new Pair<>("type", true));//done
         arr.add(new Pair<>("uploadBinary", true));//done
-        arr.add(new Pair<>("proxy", false));
-        arr.add(new Pair<>("ip", true));
-        arr.add(new Pair<>("port", true));
+        arr.add(new Pair<>("proxy", false));//done
+        arr.add(new Pair<>("ip", true));//done
+        arr.add(new Pair<>("port", true));//done
     }
 
     /**
